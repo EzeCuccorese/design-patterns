@@ -90,9 +90,9 @@ export const studyGuide: StudySection[] = [
   },
   {
     id: "testing",
-    title: "Estrategias de Testing",
+    title: "Estrategias de Testing & TDD",
     icon: "CheckCircle",
-    introduction: "Conceptos esenciales para garantizar que la suite de pruebas automatizadas sea confiable, veloz y robusta.",
+    introduction: "Conceptos esenciales de aserción de calidad y pruebas unitarias que definen la modularidad y desacoplamiento en el diseño de componentes.",
     subsections: [
       {
         title: technicalDefinitions.stubVsMock.title,
@@ -112,9 +112,9 @@ export const studyGuide: StudySection[] = [
   },
   {
     id: "resilience-eda",
-    title: "Resiliencia y Arquitecturas Distribuidas",
+    title: "Resiliencia & Arquitecturas Distribuidas",
     icon: "Activity",
-    introduction: "Patrones arquitectónicos avanzados diseñados para asegurar la alta disponibilidad, tolerancia a fallos y escalabilidad horizontal de sistemas distribuidos.",
+    introduction: "Patrones arquitectónicos avanzados diseñados para asegurar la alta disponibilidad, tolerancia a fallos y consistencia de datos en sistemas distribuidos.",
     subsections: [
       {
         title: technicalDefinitions.circuitBreaker.title,
@@ -140,6 +140,19 @@ export const studyGuide: StudySection[] = [
               "                                     [Apache Kafka]"
       },
       {
+        title: technicalDefinitions.capTheorem.title,
+        description: technicalDefinitions.capTheorem.description,
+        details: technicalDefinitions.capTheorem.details
+      }
+    ]
+  },
+  {
+    id: "sre-devops",
+    title: "SRE, DevOps e Infraestructura",
+    icon: "Terminal",
+    introduction: "Pautas de observabilidad, cultura de análisis de fallos y despliegues sin interrupciones en la nube.",
+    subsections: [
+      {
         title: "Zero-Downtime Database Migrations (Expand / Contract)",
         description: "Permite actualizar esquemas de bases de datos compartidas (como renombrar una columna) sin interrumpir el funcionamiento del código viejo en despliegues Blue-Green.",
         details: [
@@ -153,19 +166,6 @@ export const studyGuide: StudySection[] = [
               "Fase 2 (Transition): [DB] <--- Lee de nuevo / Escribe dual ---> [App V2 (BG)]\n" +
               "                     * Proceso asíncrono migra datos históricos.\n\n" +
               "Fase 3 (Contract):   [DB elimina campo viejo] <--- Lee/Escribe en nuevo ---> [App V3]"
-      }
-    ]
-  },
-  {
-    id: "sre-devops",
-    title: "SRE, DevOps e Infraestructura",
-    icon: "Terminal",
-    introduction: "Pautas de observabilidad, cultura de análisis de fallos y prácticas recomendadas de contenedores en la nube.",
-    subsections: [
-      {
-        title: technicalDefinitions.capTheorem.title,
-        description: technicalDefinitions.capTheorem.description,
-        details: technicalDefinitions.capTheorem.details
       },
       {
         title: "4 Señales de Oro de SRE (Golden Signals)",
@@ -182,7 +182,7 @@ export const studyGuide: StudySection[] = [
         description: "Cómo diagnosticar fallos cíclicos en pods (CrashLoopBackOff) disponiendo únicamente de acceso mediante kubectl y restricciones de seguridad de red:",
         details: [
           "Paso 1: kubectl describe pod <pod-name> -n <namespace>. Inspeccionar la sección 'Events' al final para identificar si fue matado por falta de memoria (OOMKilled - Exit Code 137) o fallos de sonda.",
-          "Paso 2: kubectl logs <pod-name> -n <namespace> --previous. El flag '--previous' es fundamental: trae los logs del contenedor justo antes de que colapsara en el ciclo anterior, revelando excepciones de arranque.",
+          "Paso 2: kubectl logs <pod-name> -n <namespace> --previous. El flag '--previous' es fundamental: trae los logs del contenedor justo antes de que colapsara en el ciclo anterior, revealing excepciones de arranque.",
           "Paso 3: kubectl get events -n <namespace> --sort-by='.metadata.creationTimestamp'. Útil si el pod se queda en 'Pending' o 'ContainerCreating' sin escribir logs, revelando fallos de almacenamiento o falta de CPU en nodos."
         ]
       },

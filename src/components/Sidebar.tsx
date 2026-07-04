@@ -39,9 +39,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
   useEffect(() => {
     if (activeView === 'pattern' || activeView === 'category') {
       setShowPatternsSubmenu(true);
-    } else if (activeView === 'solid-clean' || activeView === 'grasp' || activeView === 'refactor') {
+    } else if (activeView === 'solid-clean' || activeView === 'grasp' || activeView === 'refactor' || activeView === 'testing') {
       setShowPrinciplesSubmenu(true);
-    } else if (activeView === 'testing' || activeView === 'resilience-eda' || activeView === 'sre-devops') {
+    } else if (activeView === 'resilience-eda' || activeView === 'sre-devops') {
       setShowArchitectureSubmenu(true);
     }
   }, [activeView]);
@@ -125,15 +125,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         )}
 
-        {/* SECCIÓN: PRINCIPIOS DE DISEÑO (SOLID/GRASP/REFACTOR) */}
+        {/* SECCIÓN: PRINCIPIOS DE DISEÑO (SOLID/GRASP/REFACTOR/TESTING) */}
         <button
           onClick={() => {
             setShowPrinciplesSubmenu(!showPrinciplesSubmenu);
-            if (activeView !== 'solid-clean' && activeView !== 'grasp' && activeView !== 'refactor') {
+            if (activeView !== 'solid-clean' && activeView !== 'grasp' && activeView !== 'refactor' && activeView !== 'testing') {
               onSelectTopic('solid-clean');
             }
           }}
-          className={`pattern-item ${(activeView === 'solid-clean' || activeView === 'grasp' || activeView === 'refactor') ? 'active' : ''}`}
+          className={`pattern-item ${(activeView === 'solid-clean' || activeView === 'grasp' || activeView === 'refactor' || activeView === 'testing') ? 'active' : ''}`}
           style={{ 
             fontWeight: '600', 
             border: '1px solid var(--border-color)',
@@ -170,6 +170,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
               Principios GRASP
             </button>
             <button
+              onClick={() => onSelectTopic('testing')}
+              className={`pattern-item ${activeView === 'testing' ? 'active' : ''}`}
+              style={{ fontSize: '13px', padding: '6px 10px' }}
+            >
+              Estrategias de Testing
+            </button>
+            <button
               onClick={onSelectRefactor}
               className={`pattern-item ${activeView === 'refactor' ? 'active' : ''}`}
               style={{ fontSize: '13px', padding: '6px 10px' }}
@@ -183,11 +190,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <button
           onClick={() => {
             setShowArchitectureSubmenu(!showArchitectureSubmenu);
-            if (activeView !== 'testing' && activeView !== 'resilience-eda' && activeView !== 'sre-devops') {
-              onSelectTopic('testing');
+            if (activeView !== 'resilience-eda' && activeView !== 'sre-devops') {
+              onSelectTopic('resilience-eda');
             }
           }}
-          className={`pattern-item ${(activeView === 'testing' || activeView === 'resilience-eda' || activeView === 'sre-devops') ? 'active' : ''}`}
+          className={`pattern-item ${(activeView === 'resilience-eda' || activeView === 'sre-devops') ? 'active' : ''}`}
           style={{ 
             fontWeight: '600', 
             border: '1px solid var(--border-color)',
@@ -209,13 +216,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {showArchitectureSubmenu && (
           <div style={{ paddingLeft: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <button
-              onClick={() => onSelectTopic('testing')}
-              className={`pattern-item ${activeView === 'testing' ? 'active' : ''}`}
-              style={{ fontSize: '13px', padding: '6px 10px' }}
-            >
-              Estrategias de Testing
-            </button>
             <button
               onClick={() => onSelectTopic('resilience-eda')}
               className={`pattern-item ${activeView === 'resilience-eda' ? 'active' : ''}`}
