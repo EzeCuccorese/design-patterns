@@ -11,10 +11,10 @@ import { ThemeToggle } from './components/ThemeToggle';
 import { Pattern } from './data/types';
 import { QuizSimulator } from './components/QuizSimulator';
 import { Flashcards } from './components/Flashcards';
-import { StudyGuide } from './components/StudyGuide';
+import { TopicDetail } from './components/TopicDetail';
 
 export const App: React.FC = () => {
-  const [activeView, setActiveView] = useState<'pattern' | 'category' | 'refactor' | 'sources' | 'quiz' | 'flashcards' | 'guide'>('pattern');
+  const [activeView, setActiveView] = useState<string>('pattern');
   const [selectedPattern, setSelectedPattern] = useState<Pattern | null>(patterns[0]);
   const [selectedCategory, setSelectedCategory] = useState<'creational' | 'structural' | 'behavioral' | null>(null);
 
@@ -58,10 +58,10 @@ export const App: React.FC = () => {
     setActiveView('flashcards');
   };
 
-  const handleSelectGuide = () => {
+  const handleSelectTopic = (topicId: string) => {
     setSelectedCategory(null);
     setSelectedPattern(null);
-    setActiveView('guide');
+    setActiveView(topicId);
   };
 
   // Determinar título de cabecera
@@ -71,8 +71,16 @@ export const App: React.FC = () => {
         return "Introducción a la Refactorización";
       case 'sources':
         return "Fuentes de Estudio Consolidadas";
-      case 'guide':
-        return "Guía de Estudio Técnica y SRE";
+      case 'solid-clean':
+        return "SOLID & Código Limpio";
+      case 'grasp':
+        return "Principios GRASP";
+      case 'testing':
+        return "Estrategias de Testing & TDD";
+      case 'resilience-eda':
+        return "Resiliencia & Arquitecturas Distribuidas";
+      case 'sre-devops':
+        return "SRE, DevOps e Infraestructura";
       case 'flashcards':
         return "Mazo de Flashcards de Ingeniería";
       case 'quiz':
@@ -99,7 +107,7 @@ export const App: React.FC = () => {
         onSelectSources={handleSelectSources}
         onSelectQuiz={handleSelectQuiz}
         onSelectFlashcards={handleSelectFlashcards}
-        onSelectGuide={handleSelectGuide}
+        onSelectTopic={handleSelectTopic}
       />
 
       {/* Panel de Contenido Principal */}
@@ -130,8 +138,8 @@ export const App: React.FC = () => {
             <SourcesDetail />
           )}
 
-          {activeView === 'guide' && (
-            <StudyGuide />
+          {['solid-clean', 'grasp', 'testing', 'resilience-eda', 'sre-devops'].includes(activeView) && (
+            <TopicDetail topicId={activeView} />
           )}
 
           {activeView === 'flashcards' && (

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pattern } from '../data/types';
 import { Lightbulb } from 'lucide-react';
+import { PatternDiagram } from './PatternDiagram';
 
 interface AnalogyCardProps {
   pattern: Pattern;
@@ -21,7 +22,7 @@ export const AnalogyCard: React.FC<AnalogyCardProps> = ({ pattern }) => {
           </p>
         </div>
         
-        {pattern.graphicAsset && (
+        {pattern.graphicAsset ? (
           <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', width: '100%' }}>
             <img 
               src={pattern.graphicAsset} 
@@ -35,6 +36,10 @@ export const AnalogyCard: React.FC<AnalogyCardProps> = ({ pattern }) => {
                 objectFit: 'contain'
               }}
             />
+          </div>
+        ) : (
+          <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', width: '100%', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
+            <PatternDiagram patternId={pattern.id} />
           </div>
         )}
       </div>

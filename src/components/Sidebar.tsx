@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Pattern } from '../data/types';
 import { CategoryAccordion } from './CategoryAccordion';
-import { Layers, Activity, Settings, Code, ChevronDown, ChevronRight, Hammer, BookOpen, Terminal, HelpCircle, Award } from 'lucide-react';
+import { Layers, Activity, Settings, Code, ChevronDown, ChevronRight, Hammer, BookOpen, Terminal, HelpCircle, Award, Shield, Cpu } from 'lucide-react';
 
 interface SidebarProps {
   patterns: Pattern[];
   selectedPattern: Pattern | null;
   selectedCategory: 'creational' | 'structural' | 'behavioral' | null;
-  activeView: 'pattern' | 'category' | 'refactor' | 'sources' | 'quiz' | 'flashcards' | 'guide';
+  activeView: string;
   onSelectPattern: (pattern: Pattern) => void;
   onSelectCategory: (category: 'creational' | 'structural' | 'behavioral') => void;
   onSelectRefactor: () => void;
   onSelectSources: () => void;
   onSelectQuiz: () => void;
   onSelectFlashcards: () => void;
-  onSelectGuide: () => void;
+  onSelectTopic: (topicId: string) => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -28,15 +28,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectSources,
   onSelectQuiz,
   onSelectFlashcards,
-  onSelectGuide,
+  onSelectTopic,
 }) => {
-  // Estados de acordeón global para submenú de patrones
+  // Estados de acordeón colapsables
   const [showPatternsSubmenu, setShowPatternsSubmenu] = useState(true);
+  const [showPrinciplesSubmenu, setShowPrinciplesSubmenu] = useState(false);
+  const [showArchitectureSubmenu, setShowArchitectureSubmenu] = useState(false);
 
-  // Asegura que el submenú de Patrones esté abierto si estamos viendo un patrón o categoría
+  // Auto-expande acordeones basándose en la vista activa
   useEffect(() => {
     if (activeView === 'pattern' || activeView === 'category') {
       setShowPatternsSubmenu(true);
+    } else if (activeView === 'solid-clean' || activeView === 'grasp') {
+      setShowPrinciplesSubmenu(true);
+    } else if (activeView === 'testing' || activeView === 'resilience-eda' || activeView === 'sre-devops') {
+      setShowArchitectureSubmenu(true);
     }
   }, [activeView]);
 
@@ -52,7 +58,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       
       <div className="sidebar-content" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         
-        {/* BOTÓN PRINCIPAL DE PATRONES */}
+        {/* SECCIÓN: PATRONES DE DISEÑO */}
         <button
           onClick={() => {
             setShowPatternsSubmenu(!showPatternsSubmenu);
@@ -79,10 +85,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </span>
         </button>
 
-        {/* SUBMENÚ COLAPSABLE DE CATEGORÍAS */}
         {showPatternsSubmenu && (
           <div style={{ paddingLeft: '6px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            
             <CategoryAccordion
               category="creational"
               label="Creacionales"
@@ -118,7 +122,107 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onSelectPattern={onSelectPattern}
               onSelectCategory={onSelectCategory}
             />
+          </div>
+        )}
 
+        {/* SECCIÓN: PRINCIPIOS DE DISEÑO (SOLID/GRASP) */}
+        <button
+          onClick={() => {
+            setShowPrinciplesSubmenu(!showPrinciplesSubmenu);
+            if (activeView !== 'solid-clean' && activeView !== 'grasp') {
+              onSelectTopic('solid-clean');
+            }
+          }}
+          className={`pattern-item ${(activeView === 'solid-clean' || activeView === 'grasp') ? 'active' : ''}`}
+          style={{ 
+            fontWeight: '600', 
+            border: '1px solid var(--border-color)',
+            boxShadow: 'var(--shadow-sm)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginTop: '4px'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Shield size={16} />
+            <span>Principios de Diseño</span>
+          </div>
+          <span style={{ color: 'var(--text-muted)' }}>
+            {showPrinciplesSubmenu ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+          </span>
+        </button>
+
+        {showPrinciplesSubmenu && (
+          <div style={{ paddingLeft: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <button
+              onClick={() => onSelectTopic('solid-clean')}
+              className={`pattern-item ${activeView === 'solid-clean' ? 'active' : ''}`}
+              style={{ fontSize: '13px', padding: '6px 10px' }}
+            >
+              SOLID & Código Limpio
+            </button>
+            <button
+              onClick={() => onSelectTopic('grasp')}
+              className={`pattern-item ${activeView === 'grasp' ? 'active' : ''}`}
+              style={{ fontSize: '13px', padding: '6px 10px' }}
+            >
+              Principios GRASP
+            </button>
+          </div>
+        )}
+
+        {/* SECCIÓN: ARQUITECTURA & DEVOPS */}
+        <button
+          onClick={() => {
+            setShowArchitectureSubmenu(!showArchitectureSubmenu);
+            if (activeView !== 'testing' && activeView !== 'resilience-eda' && activeView !== 'sre-devops') {
+              onSelectTopic('testing');
+            }
+          }}
+          className={`pattern-item ${(activeView === 'testing' || activeView === 'resilience-eda' || activeView === 'sre-devops') ? 'active' : ''}`}
+          style={{ 
+            fontWeight: '600', 
+            border: '1px solid var(--border-color)',
+            boxShadow: 'var(--shadow-sm)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginTop: '4px'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Cpu size={16} />
+            <span>Arquitectura & DevOps</span>
+          </div>
+          <span style={{ color: 'var(--text-muted)' }}>
+            {showArchitectureSubmenu ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+          </span>
+        </button>
+
+        {showArchitectureSubmenu && (
+          <div style={{ paddingLeft: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <button
+              onClick={() => onSelectTopic('testing')}
+              className={`pattern-item ${activeView === 'testing' ? 'active' : ''}`}
+              style={{ fontSize: '13px', padding: '6px 10px' }}
+            >
+              Estrategias de Testing
+            </button>
+            <button
+              onClick={() => onSelectTopic('resilience-eda')}
+              className={`pattern-item ${activeView === 'resilience-eda' ? 'active' : ''}`}
+              style={{ fontSize: '13px', padding: '6px 10px' }}
+            >
+              Resiliencia Distribuida
+            </button>
+            <button
+              onClick={() => onSelectTopic('sre-devops')}
+              className={`pattern-item ${activeView === 'sre-devops' ? 'active' : ''}`}
+              style={{ fontSize: '13px', padding: '6px 10px' }}
+            >
+              SRE & Infraestructura
+            </button>
           </div>
         )}
 
@@ -162,20 +266,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
         }}>
           Autoevaluación
         </div>
-
-        {/* BOTÓN GLOBAL: GUÍA DE ESTUDIO */}
-        <button
-          onClick={onSelectGuide}
-          className={`pattern-item ${activeView === 'guide' ? 'active' : ''}`}
-          style={{ 
-            fontWeight: '600', 
-            border: '1px solid var(--border-color)',
-            boxShadow: 'var(--shadow-sm)'
-          }}
-        >
-          <BookOpen size={16} />
-          <span>Guía de Estudio</span>
-        </button>
 
         {/* BOTÓN GLOBAL: FLASHCARDS */}
         <button
