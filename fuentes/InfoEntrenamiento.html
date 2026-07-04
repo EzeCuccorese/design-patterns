@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.6">
+  <style type="text/css">
+    p.p2 {margin: 0.0px 0.0px 12.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000}
+    p.p5 {margin: 0.0px 0.0px 12.0px 72.0px; text-indent: -72.0px; font: 12.0px Times; -webkit-text-stroke: #000000; min-height: 14.0px}
+    p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; -webkit-text-stroke: #000000}
+    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; -webkit-text-stroke: #000000; min-height: 16.0px}
+    p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000}
+    li.li2 {margin: 0.0px 0.0px 12.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000}
+    li.li6 {margin: 0.0px 0.0px 12.0px 0.0px; font: 13.0px Courier; -webkit-text-stroke: #000000}
+    li.li10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier}
+    li.li11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times}
+    li.li12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+    span.s2 {-webkit-text-stroke: 0px #000000}
+    span.s3 {font: 13.0px Courier; font-kerning: none}
+    span.s4 {font: 12.0px Times; -webkit-text-stroke: 0px #000000}
+    span.s5 {font: 12.0px Times; font-kerning: none}
+    span.s6 {font: 13.0px Courier; -webkit-text-stroke: 0px #000000}
+    ol.ol1 {list-style-type: decimal}
+    ul.ul1 {list-style-type: disc}
+    ul.ul2 {list-style-type: circle}
+  </style>
+</head>
+<body>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>Guía de Estudio de Ingeniería de Software y Arquitectura de Sistemas</b></span></h1>
+<p class="p2"><span class="s1"><b>Subject:</b> Preparación para Evaluación Técnica y Entrevistas (Flux IT) <b>Topics:</b><b></b></span></p>
+<ul class="ul1">
+  <li class="li2"><span class="s2"></span><span class="s1">Buenas Prácticas de Código y Principios de Diseño (SOLID, DRY, YAGNI, Cohesión/Acoplamiento)</span></li>
+  <li class="li2"><span class="s2"></span><span class="s1">Patrones de Diseño Clásicos (Creacionales, Estructurales y de Comportamiento) en Java, Node.js y Python</span></li>
+  <li class="li2"><span class="s2"></span><span class="s1">Olores de Código (Code Smells) y Técnicas de Refactorización Críticas (Reemplazar condicional con polimorfismo)</span></li>
+  <li class="li2"><span class="s2"></span><span class="s1">Los Principios GRASP y Patrones Corporativos JEE (DAO, DTO, Facade)</span></li>
+  <li class="li2"><span class="s2"></span><span class="s1">Estrategias de Testing Automatizado y Mocking (Unit Testing, Mocks vs Stubs, TDD)</span></li>
+  <li class="li2"><span class="s2"></span><span class="s1">Patrones de Resiliencia y Arquitectura Dirigida por Eventos (Circuit Breaker, Saga, Rate Limiting, Event-Driven/EDA)</span></li>
+</ul>
+<p class="p2"><span class="s1"><b>Summary:</b> Esta guía de estudio sintetiza los pilares fundamentales para el diseño, desarrollo y mantenimiento de software escalable, modular y tolerante a fallos, asimilando conceptos clave de la popular academia de diseño y del blog "Mi Granito de Java". Está estructurada para resolver de manera ágil exámenes de screening técnico (como TestGorilla) y proveer un marco conceptual impecable para discutir decisiones de arquitectura en sistemas de alto impacto (típicos de Flux IT en industrias como finanzas y seguros).</span></p>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>1. Pilares de Diseño y Código Limpio</b><b></b></span></h3>
+<ul class="ul1">
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Cohesión y Acoplamiento:</b> La arquitectura ideal busca <i>alta cohesión</i> (que cada módulo tenga una responsabilidad única y muy enfocada) y <i>bajo acoplamiento</i> (independencia entre módulos para que los cambios en uno no impacten en otros).</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Inyección de Dependencias (DI) vs Inversión de Dependencias (DIP):</b> DIP es el <i>principio de diseño</i> abstracto de SOLID (los módulos de alto nivel no deben depender de los de bajo nivel, ambos deben depender de abstracciones). La Inyección de Dependencias (DI) es un <i>patrón de diseño técnico</i> que implementa DIP pasando las dependencias desde afuera (usualmente por constructor).</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Polimorfismo:</b> Pilar de la programación orientada a objetos (POO) que permite a distintos objetos responder al mismo mensaje o firma de método de maneras completamente diferentes de acuerdo a su implementación concreta.</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>SOLID (Conceptos Rápidos):</b><b></b></span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>SRP (Responsabilidad Única):</b> Una clase debe hacer solo una cosa (un solo actor/razón para cambiar).</span></li>
+    <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>OCP (Abierto/Cerrado):</b> Extensible sin modificar el archivo original. Se logra programando interfaces o clases abstractas.</span></li>
+    <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>LSP (Sustitución de Liskov):</b> Las subclases deben poder sustituir a sus clases base sin romper el programa. <i>No lanzar excepciones imprevistas o restringir comportamientos.</i><i></i></span></li>
+    <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>ISP (Segregación de Interfaces):</b> Es mejor tener muchas interfaces delgadas y específicas que una sola interfaz gigantesca que obligue a implementar métodos vacíos.</span></li>
+    <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>DIP (Inversión de Dependencias):</b> Depender de abstracciones (interfaces), nunca de implementaciones concretas.</span></li>
+  </ul>
+</ul>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>2. Los Principios GRASP (General Responsibility Assignment Software Patterns)</b><b></b></span></h3>
+<p class="p2"><span class="s1">A diferencia de SOLID, GRASP se centra en la asignación básica de responsabilidades de las clases en el modelado de dominio. Es sumamente evaluado en entrevistas presenciales de Flux IT:</span></p>
+<ul class="ul1">
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Experto en Información (Information Expert):</b> ¿Quién debe tener la responsabilidad de calcular o hacer una acción? Aquella clase que tenga la <i>información necesaria</i> para hacerlo (ej. el </span><span class="s3">Carrito</span><span class="s1"> debe calcular el total, no el </span><span class="s3">ServicioDePago</span><span class="s1">).</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Creador (Creator):</b> ¿Quién debe encargarse de instanciar la clase </span><span class="s3">B</span><span class="s1">? La clase </span><span class="s3">A</span><span class="s1"> si: </span><span class="s3">A</span><span class="s1"> contiene o agrega a </span><span class="s3">B</span><span class="s1">, usa estrechamente a </span><span class="s3">B</span><span class="s1"> o tiene los datos para inicializar a </span><span class="s3">B</span><span class="s1">.</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Controlador (Controller):</b> El primer objeto más allá de la capa de interfaz gráfica que recibe y coordina un mensaje del sistema (ej. controla el flujo del caso de uso).</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Bajo Acoplamiento y Alta Cohesión:</b> Principios evaluadores permanentes para mantener la modularidad y facilidad de cambio del sistema.</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Polimorfismo:</b> Asignar responsabilidades de comportamiento variable a tipos polimórficos en lugar de usar condicionales.</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Fabricación Pura (Pure Fabrication):</b> Crear una clase altamente cohesiva que no represente un concepto real delheader del dominio, sino que se cree únicamente para mantener el acoplamiento bajo y la cohesión alta (ej. un </span><span class="s3">DataExporter</span><span class="s1"> o </span><span class="s3">Logger</span><span class="s1">).</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Indirección (Indirection):</b> Asignar la responsabilidad a un objeto intermediario para evitar el acoplamiento directo entre otros dos componentes (ej. un Adapter o un Broker).</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Variaciones Protegidas (Protected Variations):</b> Proteger el sistema de cambios externos envolviendo los puntos de inestabilidad con una interfaz estable.</span></li>
+</ul>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>3. Code Smells (Olores de Código) y Refactorización</b><b></b></span></h3>
+<p class="p2"><span class="s1">Un fuerte de la escuela de "Mi Granito de Java". Detectar problemas en el código legacy te da un perfil técnico extremadamente pulido:</span></p>
+<ul class="ul1">
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Switch Statements (Condicionales Múltiples):</b> Estructuras condicionales enormes que toman decisiones según el tipo de objeto.</span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>Refactorización:</i> <b>Replace Conditional with Polymorphism</b>. Crear subclases polimórficas o aplicar los patrones <b>Strategy</b> o <b>State</b>.</span></li>
+  </ul>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Feature Envy (Envidia de Funciones):</b> Un método que accede más a los getters de otro objeto que a los métodos de su propia clase.</span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>Refactorización:</i> <b>Move Method</b> (Mover el método) a la clase donde están los datos que se codician.</span></li>
+  </ul>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Primitive Obsession (Obsesión Primitiva):</b> Usar tipos de datos primitivos (</span><span class="s3">String</span><span class="s1">, </span><span class="s3">int</span><span class="s1">) para modelar conceptos del negocio (ej. guardar un Email en un String sin validar).</span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>Refactorización:</i> <b>Replace Data Value with Object</b> creando Value Objects dedicados con comportamiento y validación interna.</span></li>
+  </ul>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Long Method (Método Largo):</b> Un método que supera las 15-20 líneas, haciendo sumamente difícil su testing y lectura.</span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>Refactorización:</i> <b>Extract Method</b> (Extraer método) delegando el flujo lógico a métodos privados cohesivos con nombres expresivos.</span></li>
+  </ul>
+</ul>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>4. Patrones de Diseño Clásicos y JEE Corporativos</b><b></b></span></h3>
+<h4 style="margin: 0.0px 0.0px 16.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>Facade / Fachada (Estructural)</b><b></b></span></h4>
+<p class="p2"><span class="s1">Proporciona una interfaz unificada y simplificada sobre un conjunto complejo de subsistemas para ocultarle los detalles técnicos y flujos internos al cliente. Muy usado para simplificar servicios core heredados.</span></p>
+<h4 style="margin: 0.0px 0.0px 16.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>Proxy (Estructural)</b><b></b></span></h4>
+<p class="p2"><span class="s1">Actúa como un intermediario o sustituto para controlar el acceso a otro objeto. Permite inyectar lógica de auditoría, control de accesos, seguridad de roles, o implementar <i>lazy loading</i> (carga perezosa) y caché.</span></p>
+<h4 style="margin: 0.0px 0.0px 16.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>Command / Comando (Comportamiento)</b><b></b></span></h4>
+<p class="p2"><span class="s1">Encapsula una solicitud de acción dentro de un objeto con un único método (</span><span class="s3">execute()</span><span class="s1">). Facilita el encolamiento de tareas, la parametrización de clientes de forma dinámica y la implementación de operaciones reversibles (Undo/Redo).</span></p>
+<h4 style="margin: 0.0px 0.0px 16.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>Patrones JEE Clásicos:</b><b></b></span></h4>
+<ul class="ul1">
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>DAO (Data Access Object):</b> Separa la lógica de acceso a la base de datos de la lógica de negocio, encapsulando las consultas SQL o JPA.</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>DTO (Data Transfer Object):</b> Objeto plano inmutable diseñado exclusivamente para transportar datos entre capas (o servicios mediante red), evitando exponer la entidad de persistencia real de la base de datos.</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Business Delegate:</b> Actúa como un intermediario para desacoplar la capa de presentación de los servicios de negocio distribuidos.</span></li>
+</ul>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>5. Estrategias de Testing y Mocking</b><b></b></span></h3>
+<ul class="ul1">
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>El Ciclo TDD (Test-Driven Development):</b><b></b></span></li>
+  <ol class="ol1">
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>Red (Rojo):</i> Escribir una prueba unitaria que falle para una funcionalidad aún no implementada.</span></li>
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>Green (Verde):</i> Escribir el código mínimo indispensable para que la prueba pase exitosamente.</span></li>
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>Refactor (Refactorizar):</i> Limpiar, optimizar y estructurar el código sin romper el comportamiento ya validado.</span></li>
+  </ol>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Diferencia Fundamental entre Mock y Stub:</b><b></b></span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Stub (Doble Pasivo):</b> Sirve para alimentar al código bajo prueba con respuestas preconfiguradas fijas (ej. forzar que una llamada a base de datos devuelva un usuario falso). No hace aserciones sobre llamadas.</span></li>
+    <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Mock (Doble Activo):</b> Simula el comportamiento pero se enfoca en verificar <i>cómo</i> se usó la dependencia (ej. asertar que el método </span><span class="s3">enviarEmail()</span><span class="s1"> fue invocado exactamente una vez con los parámetros correctos).</span></li>
+  </ul>
+</ul>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>6. Arquitectura de Resiliencia y Event-Driven (EDA)</b><b></b></span></h3>
+<ul class="ul1">
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Circuit Breaker (Cortocircuito):</b> Patrón que protege llamadas a servicios externos inestables. Posees tres estados: <i>Cerrado</i> (peticiones fluyen normalmente), <i>Abierto</i> (intercepta las llamadas e inicia un retorno rápido <i>fail-fast</i> local), y <i>Semi-abierto</i> (peticiones mínimas de prueba).</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Saga Pattern:</b> Gestiona transacciones de negocio distribuidas mediante secuencias locales y transacciones compensatorias. Puede ser mediante <i>Coreografía</i> (coordinación asincrónica reactiva) o <i>Orquestación</i> (un orquestador central comanda).</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Event-Driven Architecture (EDA):</b> Comunicación asincrónica desacoplada impulsada por la publicación de hechos históricos inmutables (<b>eventos</b>).</span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>Diferencia en DevOps:</i> <b>RabbitMQ</b> maneja colas efímeras inteligentes (mensajes eliminados tras el ack), mientras que <b>Apache Kafka</b> funciona como un log persistente de eventos inmutables donde los consumidores gestionan de manera independiente su puntero de lectura (<i>offset</i>).</span></li>
+  </ul>
+</ul>
+<p class="p5"><span class="s1"></span><br></p>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>DevOps Reality Check: TestGorilla vs. La Entrevista en Flux IT</b></span></h1>
+<p class="p2"><span class="s1">Es muy común (y de hecho es una excelente señal de tu seniority) que la sección de DevOps de TestGorilla te haya parecido "bastante obvia". Sin embargo, hay un doble filo en esto que tenés que conocer antes de rendir el examen oficial.</span></p>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>1. El "porqué" de la obviedad en TestGorilla</b></span></h3>
+<p class="p2"><span class="s1">TestGorilla es una herramienta de <b>screening masivo</b>. No está diseñada para evaluar si sos un SRE especialista que puede configurar un clúster de Kubernetes de cero con los ojos cerrados, sino para <b>filtrar candidatos que no tienen las bases mínimas</b>.</span></p>
+<p class="p2"><span class="s1">Para un desarrollador con perfil de arquitectura o sólida experiencia en backend, preguntas sobre:</span></p>
+<ul class="ul1">
+  <li class="li2"><span class="s2"></span><span class="s1">La diferencia entre </span><span class="s3">COPY</span><span class="s1"> y </span><span class="s3">ADD</span><span class="s1"> en Docker.</span></li>
+  <li class="li2"><span class="s2"></span><span class="s1">Qué es un Pod o una Liveness Probe en Kubernetes.</span></li>
+  <li class="li6"><span class="s4"></span><span class="s5">Un </span><span class="s1">git stash</span><span class="s5"> o un </span><span class="s1">git rebase</span><span class="s5">.</span></li>
+</ul>
+<p class="p2"><span class="s1">Son conceptos del día a día. Si te parecieron obvios, significa que <b>tu base conceptual está perfecta</b> y que vas a pasar este filtro sin transpirar.</span></p>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>2. Las verdaderas "trampas" del test de DevOps</b></span></h3>
+<p class="p2"><span class="s1">Aunque las preguntas sean conceptualmente sencillas, el examen real tiene dos factores de riesgo que no debes subestimar:</span></p>
+<ul class="ul1">
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>El tiempo (30 segundos por pregunta):</b> Es el módulo más rápido de todos. No hay tiempo para interpretar enunciados ambiguos. Un error de lectura por apurado te puede costar un punto.</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>La semántica de los comandos:</b> A veces meten preguntas con opciones muy parecidas sobre flags específicos de Git o Docker (ej. la diferencia exacta entre </span><span class="s3">docker image prune</span><span class="s1"> y </span><span class="s3">docker system prune -a</span><span class="s1">, o cómo resolver un conflicto de rebase paso a paso).</span></li>
+</ul>
+<blockquote style="margin: 0.0px 0.0px 12.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>Consejo para el test:</b> Mantené la concentración al 100%. Que te parezca fácil no te haga bajar la guardia con el reloj.</span></blockquote>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>3. La realidad en Flux IT (La entrevista técnica en vivo)</b></span></h3>
+<p class="p2"><span class="s1">Acá es donde el panorama cambia drásticamente. Flux IT trabaja con clientes pesados del sector bancario y de seguros (como Banco Galicia o San Cristóbal Seguros), donde las migraciones a la nube y el uptime son críticos.</span></p>
+<p class="p2"><span class="s1">En la <b>entrevista técnica con los arquitectos</b>, esa "obviedad" de TestGorilla se transforma en problemas reales de diseño de infraestructura:</span></p>
+<ol class="ol1">
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Zero-Downtime Database Migrations:</b><b></b></span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>La pregunta de Flux:</i> "Si hacemos un despliegue Blue-Green, ¿cómo migramos el esquema de la base de datos SQL (por ejemplo, renombrar una columna) sin romper la versión vieja (Azul) que sigue activa recibiendo tráfico?" <i>(Patrón Expand/Contract).</i><i></i></span></li>
+  </ul>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Troubleshooting de K8s bajo presión:</b><b></b></span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>La pregunta de Flux:</i> "Tenés un pod en </span><span class="s3">CrashLoopBackOff</span><span class="s1"> en el entorno de producción de un cliente de alta demanda y no tenés permisos para acceder a la consola de AWS. ¿Cómo investigás el problema usando únicamente </span><span class="s3">kubectl</span><span class="s1">?"</span></li>
+  </ul>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Monitoreo y Alertas reales:</b><b></b></span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>La pregunta de Flux:</i> "Configuramos Prometheus y Grafana. ¿Qué métricas específicas (Golden Signals de SRE) elegirías para disparar una alerta al equipo de guardia ante una degradación del servicio de pagos?"</span></li>
+  </ul>
+</ol>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>Resumen Estratégico</b></span></h3>
+<ul class="ul1">
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Para el TestGorilla:</b> Sigue confiando en tu instinto. Tu nivel técnico es más que suficiente para pasar este bloque caminando. Solo cuida el reloj.</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Para la entrevista con los líderes:</b> Prepárate para justificar cómo tus decisiones de diseño de software (Fase 1 y 2) interactúan directamente con la infraestructura en la nube (Fase 3).</span></li>
+</ul>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>Teoría de Arquitectura Avanzada y SRE: Preparación de Mesa Técnica</b></span></h1>
+<p class="p2"><span class="s1"><b>Candidato:</b> Ezequiel</span></p>
+<p class="p2"><span class="s1"><b>Target:</b> Flux IT (Mesa de Arquitectos &amp; Líderes Técnicos)</span></p>
+<p class="p2"><span class="s1"><b>Foco:</b> Sistemas de alta disponibilidad, entornos bancarios/seguros y resiliencia.</span></p>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>Escenario 1: Zero-Downtime Database Migrations (Expand/Contract)</b><b></b></span></h3>
+<h4 style="margin: 0.0px 0.0px 16.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>El Problema en Producción</b><b></b></span></h4>
+<p class="p2"><span class="s1">En arquitecturas monolíticas o de microservicios que comparten bases de datos relacionales, actualizar el esquema (ej. renombrar una columna, cambiar un tipo de datos de </span><span class="s3">int</span><span class="s1"> a </span><span class="s3">UUID</span><span class="s1">, o dividir una tabla) típicamente requiere una ventana de mantenimiento (sistema caído) porque la versión activa del código fallaría al no encontrar la estructura vieja. Para clientes de Flux IT (como Banco Galicia), la ventana de mantenimiento de 00:00 a 04:00 hs ya no es viable para actualizaciones continuas.</span></p>
+<h4 style="margin: 0.0px 0.0px 16.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>La Solución: El Patrón Expand &amp; Contract (Expandir y Contraer)</b><b></b></span></h4>
+<p class="p2"><span class="s1">Es un patrón de migración de base de datos en fases que permite desacoplar los despliegues de base de datos de los despliegues de código de aplicación.</span></p>
+<p class="p7"><span class="s1">Fase 1 (Expand): [DB con Columna_Vieja] &lt;--- Escribe/Lee ---&gt; [App Versión 1]</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                 </span>[DB agrega Columna_Nueva] (Se replica la escritura en ambas)</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1">Fase 2 (Transition): [DB] &lt;--- Lee de Vieja / Escribe en ambas ---&gt; [App Versión 2 (Blue-Green)]</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                     </span>* Se ejecuta un script en background para migrar datos históricos.</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1">Fase 3 (Contract): [DB elimina Columna_Vieja] &lt;--- Lee/Escribe en Nueva ---&gt; [App Versión 3 (Verde)]</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<h5 style="margin: 0.0px 0.0px 16.6px 0.0px; font: 10.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>Paso a Paso de Ejecución Técnica:</b><b></b></span></h5>
+<ol class="ol1">
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Fase de Expansión (Expand):</b><b></b></span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"></span><span class="s1">Se altera la base de datos para agregar la nueva columna o tabla (ej. </span><span class="s3">email_nuevo</span><span class="s1">), pero <b>se conserva la vieja</b> (</span><span class="s3">email_viejo</span><span class="s1">). El esquema se expande.</span></li>
+    <li class="li2"><span class="s2"></span><span class="s1">Se despliega la nueva versión de la aplicación. Esta versión debe ser <b>tolerante al esquema dual</b>: escribe en ambas columnas (</span><span class="s3">email_viejo</span><span class="s1"> y </span><span class="s3">email_nuevo</span><span class="s1">) para asegurar la retrocompatibilidad, pero lee de la vieja.</span></li>
+  </ul>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Fase de Sincronización:</b><b></b></span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"></span><span class="s1">Se ejecuta un job asincrónico (o un proceso batch liviano) que migra los datos históricos del campo viejo al nuevo únicamente para los registros antiguos que no fueron actualizados por la app en tiempo real.</span></li>
+  </ul>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Fase de Transición:</b><b></b></span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"></span><span class="s1">Se despliega una actualización que cambia el puntero de lectura de la aplicación al nuevo campo (</span><span class="s3">email_nuevo</span><span class="s1">). Las escrituras continúan en ambos campos por precaución de rollback.</span></li>
+  </ul>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Fase de Contracción (Contract):</b><b></b></span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"></span><span class="s1">Una vez verificado que el sistema está 100% estable y leyendo del nuevo campo, se elimina la columna vieja (</span><span class="s3">email_viejo</span><span class="s1">) del motor SQL. El esquema se contrae.</span></li>
+  </ul>
+</ol>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>Escenario 2: Diagnóstico de K8s bajo restricción de privilegios</b><b></b></span></h3>
+<h4 style="margin: 0.0px 0.0px 16.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>El Problema en Producción</b><b></b></span></h4>
+<p class="p2"><span class="s1">En entornos bancarios hiper-regulados, los desarrolladores (e incluso los arquitectos) tienen accesos IAM sumamente restringidos debido al principio de mínimo privilegio. No tenés acceso a la consola de AWS (EKS), ni a logs centralizados (Splunk/Datadog) si el agente de logs está caído, ni permisos para entrar al nodo por SSH. Tu Pod está en </span><span class="s3">CrashLoopBackOff</span><span class="s1">.</span></p>
+<h4 style="margin: 0.0px 0.0px 16.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>Flujo de Triage Técnico usando únicamente </b></span><span class="s3"><b>kubectl</b></span><span class="s1"><b>:</b><b></b></span></h4>
+<ol class="ol1">
+  <li class="li6"><span class="s4"><b></b></span><span class="s5"><b>Paso 1: Inspección de Metadatos del Pod</b><br>
+</span><span class="s1">kubectl describe pod &lt;nombre-del-pod&gt; -n &lt;namespace&gt;</span></li>
+  <li class="li10"></li>
+  <li class="li11"></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>Qué buscar:</i> La sección </span><span class="s3">Events</span><span class="s1"> al final del output. Si el pod fue matado por falta de memoria RAM por el kernel de Linux (OOMKilled), verás el evento </span><span class="s3">OOMKilled: true</span><span class="s1"> o un código de salida </span><span class="s3">Exit Code: 137</span><span class="s1"> (la CPU le mandó un </span><span class="s3">SIGKILL</span><span class="s1"> al proceso). Si falló la sonda de supervivencia, verás </span><span class="s3">Liveness probe failed</span><span class="s1">.</span></li>
+  </ul>
+  <li class="li6"><span class="s4"><b></b></span><span class="s5"><b>Paso 2: Inspección de Logs Recientes</b><br>
+</span><span class="s1">kubectl logs &lt;nombre-del-pod&gt; -n &lt;namespace&gt;</span></li>
+  <li class="li10"></li>
+  <li class="li11"></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>Qué buscar:</i> El stacktrace de inicialización de la app (ej. error de conexión de base de datos, credenciales de Spring Boot corruptas).</span></li>
+  </ul>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Paso 3: El truco para pods caídos de forma cíclica (</b></span><span class="s3"><b>--previous</b></span><span class="s1"><b>)</b> Cuando un pod entra en </span><span class="s3">CrashLoopBackOff</span><span class="s1">, Kubernetes lo reinicia constantemente. Al reiniciarse, el comando </span><span class="s3">kubectl logs</span><span class="s1"> por defecto te muestra los logs del contenedor <i>activo</i> (que acaba de levantar y quizás aún no falló).</span></li>
+  <ul class="ul2">
+    <li class="li6"><span class="s4"><i></i></span><span class="s5"><i>El comando de oro:</i><br>
+</span><span class="s1">kubectl logs &lt;nombre-del-pod&gt; -n &lt;namespace&gt; --previous</span></li>
+    <li class="li10"></li>
+    <li class="li12"><span class="s6"></span><span class="s3"><br>
+</span><span class="s1">Este flag le indica al plano de control de Kubernetes que te traiga los logs del contenedor <b>justo antes de que colapsara en el ciclo anterior</b>. Es el 90% del diagnóstico de inicialización fallida.</span></li>
+  </ul>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Paso 4: Auditoría de Eventos del Namespace</b> Si el pod ni siquiera llega a escribir logs (se queda en </span><span class="s3">Pending</span><span class="s1"> o </span><span class="s3">ContainerCreating</span><span class="s1">), el problema no es de tu app, es de la infraestructura del clúster:<br>
+</span><span class="s3">kubectl get events -n &lt;namespace&gt; --sort-by='.metadata.creationTimestamp'</span></li>
+  <li class="li10"></li>
+  <li class="li11"></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>Qué buscar:</i> Errores de aprovisionamiento de volúmenes EBS (EKS StorageClass), o falta de recursos en los nodos (</span><span class="s3">FailedScheduling: 0/5 nodes are available: 5 Insufficient cpu</span><span class="s1">).</span></li>
+  </ul>
+</ol>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>Escenario 3: SRE Golden Signals (Métricas de Alerta Críticas)</b><b></b></span></h3>
+<h4 style="margin: 0.0px 0.0px 16.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>El Concepto Teórico</b><b></b></span></h4>
+<p class="p2"><span class="s1">Basado en el libro de SRE de Google, para servicios altamente transaccionales (como una pasarela de pagos) no sirve alertar al equipo de guardia simplemente con "Consumo de CPU &gt; 80%". La CPU puede estar alta porque el garbage collector de Java está optimizando memoria de forma normal. Debes monitorear y alertar sobre las <b>4 Señales de Oro (Golden Signals)</b>:</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>┌─────────────────────────────────────────┐</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>│<span class="Apple-converted-space">          </span>FOUR SRE GOLDEN SIGNALS<span class="Apple-converted-space">        </span>│</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>└────┬───────────┬───────────┬────────┬───┘</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                       </span>│ <span class="Apple-converted-space">          </span>│ <span class="Apple-converted-space">          </span>│<span class="Apple-converted-space">        </span>│</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                    </span>Latency <span class="Apple-converted-space">    </span>Traffic <span class="Apple-converted-space">    </span>Errors<span class="Apple-converted-space">  </span>Saturation</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<ol class="ol1">
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Latencia (Latency):</b> El tiempo que tarda en resolverse una solicitud.</span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>Métrica de alerta:</i> El <b>Percentil 95 o 99 (P95/P99)</b> de los tiempos de respuesta de la API de pagos (ej. </span><span class="s3">http_request_duration_seconds_bucket</span><span class="s1">). No uses el promedio, ya que oculta "outliers" horribles (usuarios que tardan 30 segundos en pagar).</span></li>
+  </ul>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Tráfico (Traffic):</b> La demanda del sistema medida en peticiones por segundo (RPS).</span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>Métrica de alerta:</i> Caídas abruptas de tráfico en horarios pico (ej. caída de peticiones de pago a 0 RPS), lo que indica un bloqueo de red o caída del DNS general.</span></li>
+  </ul>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Errores (Errors):</b> La tasa de peticiones que fallan.</span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>Métrica de alerta:</i> Tasa de respuestas HTTP </span><span class="s3">5xx</span><span class="s1"> sobre el total de llamadas superiores al $1\%$ en una ventana de 5 minutos.</span></li>
+  </ul>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Saturación (Saturation):</b> Qué tan "lleno" está el servicio (recursos de hardware o software limitados).</span></li>
+  <ul class="ul2">
+    <li class="li2"><span class="s2"><i></i></span><span class="s1"><i>Métrica de alerta:</i> Exhaustión del pool de conexiones de base de datos (ej. HikariCP en Java) o hilos del servidor web (Tomcat Thread Pool Saturation). Al llegar al $100\%$, el sistema colapsa aunque la CPU esté al $10\%$.</span></li>
+  </ul>
+</ol>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>Bonus: El Patrón Outbox (Muy consultado por Arquitectos de Flux IT)</b><b></b></span></h3>
+<h4 style="margin: 0.0px 0.0px 16.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>El Problema en Microservicios</b><b></b></span></h4>
+<p class="p2"><span class="s1">Supongamos que un usuario realiza una compra. Tu microservicio de orden debe:</span></p>
+<ol class="ol1">
+  <li class="li2"><span class="s2"></span><span class="s1">Guardar la orden en su base de datos PostgreSQL local.</span></li>
+  <li class="li2"><span class="s2"></span><span class="s1">Publicar un evento </span><span class="s3">OrdenCreada</span><span class="s1"> en Kafka para que el microservicio de envíos empiece a trabajar.</span></li>
+</ol>
+<p class="p2"><span class="s1"><b>El riesgo de inconsistencia de datos:</b> Si guardas en la DB pero Kafka está caído, el usuario pagó pero el envío jamás se procesará. Si publicas en Kafka primero pero la escritura en la DB falla por un rollback de transacción, procesas un envío de una orden que no existe en el sistema.</span></p>
+<h4 style="margin: 0.0px 0.0px 16.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>La Solución: Transactional Outbox Pattern</b><b></b></span></h4>
+<p class="p2"><span class="s1">Desacopla la escritura en la base de datos de la publicación del mensaje usando una única transacción ACID local.</span></p>
+<p class="p7"><span class="s1">[App] ──(Transacción ACID)──&gt; [DB Transaccional]</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                               </span>├──&gt; Tabla: ORDEN</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                               </span>└──&gt; Tabla: OUTBOX (Inserta Evento)</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                       </span>│</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                </span>(CDC / Debezium)</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                       </span>│</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                       </span>▼</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                             </span>[Apache Kafka Broker]</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<ol class="ol1">
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Paso 1:</b> En lugar de enviar el mensaje directamente a Kafka, la aplicación inserta el registro de la orden en la tabla </span><span class="s3">ORDEN</span><span class="s1"> y <b>al mismo tiempo inserta el evento del mensaje en una tabla auxiliar llamada </b></span><span class="s3"><b>OUTBOX</b></span><span class="s1"> dentro de la misma transacción de base de datos.</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Paso 2:</b> Al estar en la misma transacción ACID local, se garantiza que o se guardan ambos registros, o no se guarda ninguno.</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Paso 3 (Message Relay):</b> Un componente independiente (ej. un conector de <b>CDC - Change Data Capture</b> como <b>Debezium</b>, o un polling worker ligero) lee la tabla </span><span class="s3">OUTBOX</span><span class="s1"> de forma secuencial, publica los eventos en Kafka, y una vez confirmado el envío (<i>ACK</i>), elimina o marca como procesados los registros de la tabla </span><span class="s3">OUTBOX</span><span class="s1">.</span></li>
+</ol>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>Glosario Técnico Avanzado: Preparación Mesa Técnica</b></span></h1>
+<p class="p2"><span class="s1">Este glosario define y desglosa los conceptos teóricos y de infraestructura que suelen aparecer de forma recurrente tanto en el screening de TestGorilla como en la entrevista técnica en vivo con los arquitectos de Flux IT.</span></p>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>1. ¿Qué es el Teorema de CAP? (Teorema de Brewer)</b></span></h3>
+<p class="p2"><span class="s1">El <b>Teorema CAP</b> establece que en cualquier sistema de almacenamiento de datos distribuido, es físicamente imposible garantizar simultáneamente más de dos de las siguientes tres propiedades:</span></p>
+<ul class="ul1">
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Consistencia (</b>$C$<b> - Consistency):</b> Todos los nodos del sistema ven los mismos datos al mismo tiempo. Si escribo un dato en el Nodo A, una lectura inmediata en el Nodo B me debe devolver exactamente ese dato nuevo.</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Disponibilidad (</b>$A$<b> - Availability):</b> Cada petición no fallida recibe una respuesta (que no sea un error), sin la garantía de que contenga la versión más reciente del dato.</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Tolerancia a Particiones (</b>$P$<b> - Partition Tolerance):</b> El sistema continúa funcionando a pesar de que la red se rompa o pierda mensajes entre los nodos.</span></li>
+</ul>
+<h4 style="margin: 0.0px 0.0px 16.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>La regla de oro en redes distribuidas:</b></span></h4>
+<p class="p2"><span class="s1">Dado que en el mundo real las redes fallan de forma inevitable (es decir, la partición $P$ va a ocurrir tarde o temprano), <b>un arquitecto siempre debe elegir entre Consistencia (</b>$C$<b>) o Disponibilidad (</b>$A$<b>) ante una falla</b>:</span></p>
+<ul class="ul1">
+  <li class="li2"><span class="s2"></span><span class="s1">Si elegís <b>Consistencia (Sistemas CP):</b> Bloqueás o rechazás las peticiones de los usuarios en los nodos que quedaron aislados para garantizar que nadie lea un saldo viejo. (Ejemplo: Un banco tradicional).</span></li>
+  <li class="li2"><span class="s2"></span><span class="s1">Si elegís <b>Disponibilidad (Sistemas AP):</b> Permitís que los usuarios sigan operando, aceptando que temporalmente van a leer datos desactualizados hasta que la red se arregle y se propague el cambio (consistencia eventual). (Ejemplo: El feed de Twitter/X o Instagram).</span></li>
+</ul>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>2. ¿Qué es ACID?</b></span></h3>
+<p class="p2"><span class="s1">Es el conjunto de características que garantizan que una transacción en una base de datos relacional (como PostgreSQL, Oracle o MySQL) sea completamente segura y confiable, incluso ante caídas de tensión o fallas del servidor:</span></p>
+<ul class="ul1">
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Atomicidad (Atomicity):</b> La transacción es una unidad indivisible ("todo o nada"). O se ejecutan con éxito todas las operaciones de la transacción, o no se aplica ninguna (ej. si falla la acreditación en la cuenta destino, se cancela el débito en la cuenta origen).</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Consistencia (Consistency):</b> Una transacción solo puede llevar a la base de datos de un estado válido a otro estado válido, respetando todas las reglas y restricciones de integridad.</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Aislamiento (Isolation):</b> Las transacciones que se ejecutan simultáneamente no pueden interferir entre sí. El resultado de una transacción es invisible para otras hasta que se confirma.</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>Durabilidad (Durability):</b> Una vez que la transacción se confirmó (<i>commit</i>), sus efectos persisten en disco de forma permanente y no se perderán aunque el servidor se apague inmediatamente después.</span></li>
+</ul>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>3. ¿Qué es SRE? (Site Reliability Engineering)</b></span></h3>
+<p class="p2"><span class="s1"><b>SRE</b> (Ingeniería de Confiabilidad del Sitio) es una disciplina y un rol que nació en Google. Consiste en <b>aplicar mentalidad y prácticas de ingeniería de software a problemas de infraestructura y operaciones</b>.</span></p>
+<p class="p2"><span class="s1">A diferencia del sysadmin tradicional que resolvía todo de forma manual, un SRE automatiza las tareas repetitivas (<i>toil</i>), diseña la resiliencia de la arquitectura, y define métricas para medir la confiabilidad del servicio en producción:</span></p>
+<ul class="ul1">
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>SLI (Service Level Indicator):</b> La métrica real (ej. el $99\%$ de las peticiones tardan menos de $200\text{ ms}$).</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>SLO (Service Level Objective):</b> El objetivo interno (ej. queremos mantener un SLI del $99.9\%$ este mes).</span></li>
+  <li class="li2"><span class="s2"><b></b></span><span class="s1"><b>SLA (Service Level Agreement):</b> El acuerdo legal con el cliente (ej. si el sistema se cae más de un $0.1\%$ del tiempo al año, el banco nos cobra una multa).</span></li>
+</ul>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>4. ¿Qué es CrashLoopBackOff en Kubernetes?</b></span></h3>
+<p class="p2"><span class="s1">No es una falla en sí misma, sino un <b>estado del Pod de Kubernetes</b> que le indica al clúster lo siguiente: <i>"Este pod intentó arrancar, colapsó inmediatamente por un error interno, lo volví a intentar, volvió a colapsar, y ahora estoy esperando un tiempo prudencial (Backoff) antes de volver a intentar levantarlo para no saturar los nodos"</i>.</span></p>
+<h4 style="margin: 0.0px 0.0px 16.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>Causas comunes en producción:</b></span></h4>
+<ul class="ul1">
+  <li class="li2"><span class="s2"></span><span class="s1">Falta una variable de entorno requerida por la aplicación (ej. la IP de la base de datos).</span></li>
+  <li class="li2"><span class="s2"></span><span class="s1">Fallo en la conexión inicial a la base de datos (tiempo de espera agotado / credenciales incorrectas).</span></li>
+  <li class="li2"><span class="s2"></span><span class="s1">Un error de sintaxis al inicializar el contenedor Docker.</span></li>
+  <li class="li2"><span class="s2"></span><span class="s1">El Pod se quedó sin memoria RAM física y el Kernel de Linux lo mató (</span><span class="s3">OOMKilled: Exit Code 137</span><span class="s1">).</span></li>
+</ul>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>5. ¿Qué significa Liveness Probe Failed?</b></span></h3>
+<p class="p2"><span class="s1">Es una alerta interna de Kubernetes que indica que la <b>Prueba de Supervivencia</b> del contenedor falló.</span></p>
+<p class="p2"><span class="s1">Una <i>Liveness Probe</i> es un chequeo periódico (ej. un ping HTTP a </span><span class="s3">/healthz</span><span class="s1"> cada 10 segundos) que Kubernetes le hace a tu contenedor para saber si el proceso sigue vivo. Si la prueba falla consecutivamente (porque el servidor web se congeló por un <i>deadlock</i> o hilos bloqueados), Kubernetes asume que el proceso está "zombi", destruye el contenedor de forma automática y levanta uno limpio en su lugar.</span></p>
+<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px Times; -webkit-text-stroke: #000000"><span class="s1"><b>El Misterio de la Calculadora: ¿Por qué te dejarían usarla?</b></span></h3>
+<p class="p2"><span class="s1">En la pantalla de instrucciones que viste en la imagen anterior, el texto dice:</span></p>
+<blockquote style="margin: 0.0px 0.0px 12.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000"><span class="s1"><i>"Puedes utilizar papel, bolígrafo y calculadora durante la evaluación..."</i><i></i></span></blockquote>
+<p class="p2"><span class="s1"><b>La realidad es que esta es una advertencia genérica por defecto de TestGorilla.</b> La plataforma le muestra exactamente ese mismo mensaje a todos los candidatos del mundo, sin importar si rinden un examen de Finanzas, de Física o de Arquitectura de Software.</span></p>
+<p class="p2"><span class="s1">En tus tests técnicos de Flux IT <b>no vas a tener que usar una calculadora</b>. Al ser una prueba teórica y de ritmo ágil (30-50 segundos por pregunta), como mucho te podrían pedir calcular una disponibilidad simple relacionada con los "nueves" del SLA:</span></p>
+<p class="p12"><span class="s1">$$\text{Downtime Anual Permitido para } 99.9\% \approx 8.76 \text{ horas}$$$$\text{Downtime Anual Permitido para } 99.99\% \approx 52.56 \text{ minutos}$$</span></p>
+<p class="p2"><span class="s1">Pero esas cuentas, si aparecen, son de opción múltiple y se resuelven de un vistazo por sentido común técnico. No te preocupes por tener que resolver integrales o logaritmos en el test; no viene por ahí la mano.</span></p>
+</body>
+</html>

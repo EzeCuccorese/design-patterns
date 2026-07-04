@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flux IT - Plataforma de Preparación Técnica</title>
+    <!-- Tailwind CSS para diseño moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+
+        .mono-font {
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Glassmorphism card utility */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3b82f6;
+        }
+
+        /* Flashcard flipping effect */
+        .perspective {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card-inner.flipped {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3 flex-shrink-0">
+                    <span class="text-2xl">⚡</span>
+                    <span class="text-xl font-extrabold bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent">Flux IT Prep Suite</span>
+                </div>
+                <!-- Navigation Tabs -->
+                <div class="flex space-x-1 overflow-x-auto py-1 max-w-full">
+                    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn whitespace-nowrap px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium transition duration-200 text-white bg-blue-600">
+                        🏠 Dashboard
+                    </button>
+                    <button onclick="switchTab('gof')" id="tab-gof" class="tab-btn whitespace-nowrap px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium text-slate-400 hover:text-white transition duration-200">
+                        🧩 Patrones GoF
+                    </button>
+                    <button onclick="switchTab('teoria')" id="tab-teoria" class="tab-btn whitespace-nowrap px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium text-slate-400 hover:text-white transition duration-200">
+                        📚 Teoría & GRASP
+                    </button>
+                    <button onclick="switchTab('flashcards')" id="tab-flashcards" class="tab-btn whitespace-nowrap px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium text-slate-400 hover:text-white transition duration-200">
+                        🃏 Flashcards (25)
+                    </button>
+                    <button onclick="switchTab('simulacro')" id="tab-simulacro" class="tab-btn whitespace-nowrap px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium text-slate-400 hover:text-white transition duration-200">
+                        🎯 Simulador Exámenes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <!-- Tab: Dashboard -->
+        <section id="content-dashboard" class="tab-content block space-y-8">
+            <!-- Hero Header -->
+            <div class="bg-gradient-to-r from-blue-900 to-indigo-950 rounded-3xl p-6 sm:p-10 border border-blue-500/20 shadow-xl relative overflow-hidden">
+                <div class="relative z-10 max-w-3xl">
+                    <span class="bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1.5 rounded-full border border-blue-500/30 uppercase tracking-widest">Workspace de Ezequiel</span>
+                    <h1 class="text-3xl sm:text-5xl font-black text-white mt-4 tracking-tight leading-tight">Preparación Flux IT Integrada</h1>
+                    <p class="text-slate-300 mt-4 text-base sm:text-lg leading-relaxed">
+                        Examen técnico dominado de punta a punta. Hemos integrado la base de datos de preguntas del <strong class="text-blue-400">Módulo 2 (Arquitecto)</strong> y el <strong class="text-amber-400">Módulo 3 (DevOps)</strong> de forma nativa e interactiva junto con el set completo de <strong class="text-teal-400">25 Flashcards avanzadas</strong>. Todo bajo una arquitectura estricta libre de errores de JavaScript.
+                    </p>
+                </div>
+                <div class="absolute -right-16 -bottom-16 w-64 h-64 bg-teal-500/10 rounded-full blur-2xl"></div>
+                <div class="absolute -left-16 -top-16 w-64 h-64 bg-blue-500/10 rounded-full blur-2xl"></div>
+            </div>
+
+            <!-- Native Stats Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Timeline/Progress Overview -->
+                <div class="glass-panel rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-xl font-bold text-white">Estructura del Screening</h3>
+                            <span class="bg-blue-500/20 text-blue-300 text-xs font-bold px-2 py-1 rounded border border-blue-500/30">CRONOMETRADO</span>
+                        </div>
+                        <p class="text-slate-400 text-sm mt-3">Visualización del tiempo y cantidad de preguntas por cada módulo oficial.</p>
+                        
+                        <div class="space-y-4 mt-6">
+                            <div class="flex items-center space-x-3 text-sm">
+                                <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center font-bold text-white flex-shrink-0">1</div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between text-xs sm:text-sm">
+                                        <span class="font-semibold text-white">Ingeniería de Software</span>
+                                        <span class="text-slate-400 text-xs">~40s / preg</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 h-1.5 rounded-full mt-1">
+                                        <div class="bg-blue-500 h-1.5 rounded-full" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3 text-sm">
+                                <div class="w-8 h-8 rounded-full bg-teal-600 flex items-center justify-center font-bold text-white flex-shrink-0">2</div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between text-xs sm:text-sm">
+                                        <span class="font-semibold text-white">Arquitecto de Software</span>
+                                        <span class="text-slate-400 text-xs">~50s / preg</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 h-1.5 rounded-full mt-1">
+                                        <div class="bg-teal-500 h-1.5 rounded-full" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3 text-sm">
+                                <div class="w-8 h-8 rounded-full bg-amber-600 flex items-center justify-center font-bold text-white flex-shrink-0">3</div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between text-xs sm:text-sm">
+                                        <span class="font-semibold text-white">Cultura DevOps</span>
+                                        <span class="text-slate-400 text-xs">~30s / preg</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 h-1.5 rounded-full mt-1">
+                                        <div class="bg-amber-500 h-1.5 rounded-full" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Bar Chart (Dynamic Tailwind) -->
+                <div class="glass-panel rounded-2xl p-6 flex flex-col justify-between">
+                    <h3 class="text-lg font-bold text-white mb-2">Tu Rendimiento Histórico</h3>
+                    <p class="text-xs text-slate-400 mb-4">Efectividad promedio alcanzada según las simulaciones completadas.</p>
+                    
+                    <div class="space-y-4 flex-grow flex flex-col justify-center">
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-400 mb-1">
+                                <span>Ing. de Software (Módulo 1)</span>
+                                <span id="dash-score-m1" class="text-blue-400 font-bold font-mono">Sin datos</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-3 rounded-full overflow-hidden">
+                                <div id="dash-bar-m1" class="bg-blue-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-400 mb-1">
+                                <span>Arquitecto de Software (Módulo 2)</span>
+                                <span id="dash-score-m2" class="text-teal-400 font-bold font-mono">Sin datos</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-3 rounded-full overflow-hidden">
+                                <div id="dash-bar-m2" class="bg-teal-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-400 mb-1">
+                                <span>Cultura DevOps (Módulo 3)</span>
+                                <span id="dash-score-m3" class="text-amber-400 font-bold font-mono">Sin datos</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-3 rounded-full overflow-hidden">
+                                <div id="dash-bar-m3" class="bg-amber-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attempts History Panel (Dynamic!) -->
+                <div class="glass-panel rounded-2xl p-6 flex flex-col justify-between">
+                    <h3 class="text-lg font-bold text-white mb-2">Historial de Intentos</h3>
+                    <p class="text-xs text-slate-400 mb-3">Tus últimas marcas registradas en el simulador:</p>
+                    
+                    <div class="overflow-y-auto max-h-36 pr-1 space-y-2" id="attempts-list-container">
+                        <div class="text-center text-xs text-slate-500 py-6">Aún no has completado ningún simulacro.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: GoF Patterns -->
+        <section id="content-gof" class="tab-content hidden space-y-8">
+            <div class="glass-panel rounded-3xl p-6 sm:p-8">
+                <h2 class="text-2xl sm:text-3xl font-black text-white">Catálogo de Patrones GoF (Gang of Four)</h2>
+                <p class="text-slate-400 mt-2">Alterna dinámicamente entre lenguajes (Java, Node.js y Python) para estudiar cómo se implementan de forma idiomática los patrones más consultados en las evaluaciones de Flux IT.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8">
+                    <!-- Patterns Selector List -->
+                    <div class="lg:col-span-4 flex flex-col space-y-2.5 max-h-[580px] overflow-y-auto pr-2">
+                        <button onclick="selectPattern('singleton')" id="btn-singleton" class="pattern-btn text-left p-4 rounded-xl border border-slate-800 hover:border-blue-500 bg-slate-900/50 hover:bg-slate-900 transition duration-150">
+                            <span class="block text-sm text-blue-400 font-semibold uppercase">Creacional</span>
+                            <span class="text-lg">Singleton</span>
+                            <span class="block text-xs text-gray-500 mt-1 font-sans">Garantiza una única instancia global de un objeto.</span>
+                        </button>
+                        <button onclick="selectPattern('factory')" id="btn-factory" class="pattern-btn text-left p-4 rounded-xl border border-slate-800 hover:border-blue-500 bg-slate-900/50 hover:bg-slate-900 transition duration-150">
+                            <span class="block text-sm text-blue-400 font-semibold uppercase">Creacional</span>
+                            <span class="text-lg">Factory Method</span>
+                            <span class="block text-xs text-gray-500 mt-1 font-sans">Delega la creación de instancias a subclases/fábricas.</span>
+                        </button>
+                        <button onclick="selectPattern('adapter')" id="btn-adapter" class="pattern-btn text-left p-4 rounded-xl border border-slate-800 hover:border-blue-500 bg-slate-900/50 hover:bg-slate-900 transition duration-150">
+                            <span class="block text-sm text-emerald-400 font-semibold uppercase">Estructural</span>
+                            <span class="text-lg">Adapter</span>
+                            <span class="block text-xs text-gray-500 mt-1 font-sans">Une interfaces incompatibles mediante un traductor intermedio.</span>
+                        </button>
+                        <button onclick="selectPattern('decorator')" id="btn-decorator" class="pattern-btn text-left p-4 rounded-xl border border-slate-800 hover:border-blue-500 bg-slate-900/50 hover:bg-slate-900 transition duration-150">
+                            <span class="block text-sm text-emerald-400 font-semibold uppercase">Estructural</span>
+                            <span class="text-lg">Decorator</span>
+                            <span class="block text-xs text-gray-500 mt-1 font-sans">Agrega comportamiento dinámico en el enchapado de clases.</span>
+                        </button>
+                        <button onclick="selectPattern('facade')" id="btn-facade" class="pattern-btn text-left p-4 rounded-xl border border-slate-800 hover:border-blue-500 bg-slate-900/50 hover:bg-slate-900 transition duration-150">
+                            <span class="block text-sm text-emerald-400 font-semibold uppercase">Estructural</span>
+                            <span class="text-lg">Facade (Fachada)</span>
+                            <span class="block text-xs text-gray-500 mt-1 font-sans">Interfaz unificada y limpia para subsistemas complejos.</span>
+                        </button>
+                        <button onclick="selectPattern('proxy')" id="btn-proxy" class="pattern-btn text-left p-4 rounded-xl border border-slate-800 hover:border-blue-500 bg-slate-900/50 hover:bg-slate-900 transition duration-150">
+                            <span class="block text-sm text-emerald-400 font-semibold uppercase">Estructural</span>
+                            <span class="text-lg">Proxy</span>
+                            <span class="block text-xs text-gray-500 mt-1 font-sans">Intermediario estricto para control de accesos y cacheado.</span>
+                        </button>
+                        <button onclick="selectPattern('observer')" id="btn-observer" class="pattern-btn text-left p-4 rounded-xl border border-slate-800 hover:border-blue-500 bg-slate-900/50 hover:bg-slate-900 transition duration-150">
+                            <span class="block text-sm text-purple-400 font-semibold uppercase">Comportamiento</span>
+                            <span class="text-lg">Observer</span>
+                            <span class="block text-xs text-gray-500 mt-1 font-sans">Suscripción uno-a-muchos para notificar cambios.</span>
+                        </button>
+                        <button onclick="selectPattern('strategy')" id="btn-strategy" class="pattern-btn text-left p-4 rounded-xl border border-slate-800 hover:border-blue-500 bg-slate-900/50 hover:bg-slate-900 transition duration-150">
+                            <span class="block text-sm text-purple-400 font-semibold uppercase">Comportamiento</span>
+                            <span class="text-lg">Strategy</span>
+                            <span class="block text-xs text-gray-500 mt-1 font-sans">Encapsula familias de algoritmos intercambiables.</span>
+                        </button>
+                        <button onclick="selectPattern('command')" id="btn-command" class="pattern-btn text-left p-4 rounded-xl border border-slate-800 hover:border-blue-500 bg-slate-900/50 hover:bg-slate-900 transition duration-150">
+                            <span class="block text-sm text-purple-400 font-semibold uppercase">Comportamiento</span>
+                            <span class="text-lg">Command</span>
+                            <span class="block text-xs text-gray-500 mt-1 font-sans">Encapsula peticiones como objetos parametrizables.</span>
+                        </button>
+                    </div>
+
+                    <!-- Code & Diagram Viewer -->
+                    <div class="lg:col-span-8 flex flex-col bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+                        <!-- Header del Visualizador -->
+                        <div class="bg-slate-900 p-4 border-b border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div>
+                                <h3 id="display-pattern-title" class="text-xl font-bold text-white">Cargando...</h3>
+                                <p id="display-pattern-desc" class="text-xs text-slate-400 mt-1 font-mono">Espere un instante.</p>
+                            </div>
+                            <!-- Language selector -->
+                            <div class="flex space-x-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
+                                <button onclick="selectLanguage('java')" id="lang-java" class="lang-btn px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition duration-150">Java</button>
+                                <button onclick="selectLanguage('node')" id="lang-node" class="lang-btn px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition duration-150">Node.js</button>
+                                <button onclick="selectLanguage('python')" id="lang-python" class="lang-btn px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition duration-150">Python</button>
+                            </div>
+                        </div>
+
+                        <!-- Diagrama ASCII Simplificado -->
+                        <div class="bg-slate-900/50 p-4 font-mono text-xs border-b border-slate-800 text-blue-400 overflow-x-auto whitespace-pre" id="pattern-diagram">
+                            Cargando esquema estructural...
+                        </div>
+
+                        <!-- Código Real -->
+                        <div class="p-4 sm:p-6 overflow-y-auto max-h-[380px] bg-slate-950">
+                            <pre><code id="pattern-code-block" class="mono-font text-xs text-slate-300 leading-relaxed block whitespace-pre overflow-x-auto">
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: Teoría & GRASP -->
+        <section id="content-teoria" class="tab-content hidden space-y-8">
+            <div class="glass-panel rounded-3xl p-6 sm:p-8">
+                <h2 class="text-2xl sm:text-3xl font-black text-white">Guía de Estudio Avanzada</h2>
+                <p class="text-slate-400 mt-1">Sintetizado directo de "Mi Granito de Java", principios de arquitectura distribuidora y bases teóricas de Flux IT.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8">
+                    <!-- Navigation index for study guide -->
+                    <div class="lg:col-span-3 flex flex-col space-y-2">
+                        <button onclick="scrollToSection('sec-solid')" class="text-left px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800/50 transition">🛡️ Principios SOLID</button>
+                        <button onclick="scrollToSection('sec-grasp')" class="text-left px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800/50 transition">📐 Principios GRASP</button>
+                        <button onclick="scrollToSection('sec-testing')" class="text-left px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800/50 transition">🧪 Testing y Dobles</button>
+                        <button onclick="scrollToSection('sec-resiliencia')" class="text-left px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800/50 transition">🏗️ Resiliencia, EDA y Cloud</button>
+                        <button onclick="scrollToSection('sec-smells')" class="text-left px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800/50 transition">⚠️ Code Smells & Refactoring</button>
+                    </div>
+
+                    <!-- Main Study Guide Text -->
+                    <div class="lg:col-span-9 space-y-12 max-h-[600px] overflow-y-auto pr-4 scroll-smooth">
+                        
+                        <!-- SOLID -->
+                        <div id="sec-solid" class="space-y-4 border-b border-slate-800 pb-8">
+                            <h3 class="text-2xl font-bold text-blue-400">1. Los Principios SOLID</h3>
+                            <p class="text-slate-300 text-sm leading-relaxed font-sans">
+                                Representan las mejores directrices para codificar de manera extensible, permitiendo que la arquitectura sea mantenible ante demandas imprevistas.
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-xs text-slate-400">
+                                <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                                    <strong class="text-white text-sm block mb-1">SRP (Single Responsibility)</strong>
+                                    Una clase tiene solo una razón lógica para sufrir modificaciones. Evita controladores sobrecargados.
+                                </div>
+                                <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                                    <strong class="text-white text-sm block mb-1">OCP (Open/Closed)</strong>
+                                    Abierto a la extensión mediante polimorfismo, cerrado a la modificación de la clase base.
+                                </div>
+                                <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                                    <strong class="text-white text-sm block mb-1">LSP (Liskov Substitution)</strong>
+                                    Las subclases deben poder sustituir a su clase padre sin que falle el sistema. No alterar flujos esperados ni lanzar excepciones ajenas.
+                                </div>
+                                <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                                    <strong class="text-white text-sm block mb-1">ISP (Interface Segregation)</strong>
+                                    Muchos contratos específicos son preferibles a una sola interfaz monolítica gigante que arrastre métodos no utilizados.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- GRASP -->
+                        <div id="sec-grasp" class="space-y-4 border-b border-slate-800 pb-8">
+                            <h3 class="text-2xl font-bold text-teal-400">2. Los Principios GRASP</h3>
+                            <p class="text-slate-300 text-sm leading-relaxed">
+                                A diferencia de SOLID, GRASP se enfoca en asignar responsabilidades y coordinar las interacciones de los objetos de dominio.
+                            </p>
+                            <ul class="space-y-3 text-sm text-slate-300 list-disc list-inside font-sans">
+                                <li><strong>Experto en Información (Information Expert):</strong> Asigna la responsabilidad al objeto que tiene los datos requeridos para efectuar la acción (ej. el Carrito de compras calcula el total, no el PagoService).</li>
+                                <li><strong>Creador (Creator):</strong> Define qué clase es responsable de instanciar un objeto basándose en su composición de vida o uso estrecho.</li>
+                                <li><strong>Fabricación Pura (Pure Fabrication):</strong> Creación de clases artificiales cohesivas sin contraparte física en el dominio real, solo para salvar la modularidad del código (ej. <code class="bg-slate-900 px-1 text-blue-400 rounded">DataExporter</code> o <code class="bg-slate-900 px-1 text-blue-400 rounded">Logger</code>).</li>
+                                <li><strong>Controlador (Controller):</strong> Primer receptor no gráfico de llamadas externas que comanda el flujo de casos de uso del sistema.</li>
+                            </ul>
+                        </div>
+
+                        <!-- TESTING -->
+                        <div id="sec-testing" class="space-y-4 border-b border-slate-800 pb-8">
+                            <h3 class="text-2xl font-bold text-amber-400">3. Testing y Dobles de Prueba</h3>
+                            <p class="text-slate-300 text-sm leading-relaxed">
+                                El núcleo técnico de Flux IT está dominado por el TDD y la cobertura automatizada. Distinguir el rol de las dependencias duplicadas es fundamental:
+                            </p>
+                            <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-800 space-y-3 font-sans">
+                                <p class="text-xs text-slate-300">
+                                    <strong class="text-amber-400">Stub (Doble Pasivo):</strong> Provee datos estáticos controlados y preconfigurados para alimentar una consulta necesaria del test. No aserta llamadas ni flujos.
+                                </p>
+                                <p class="text-xs text-slate-300">
+                                    <strong class="text-amber-400">Mock (Doble Activo):</strong> Registra las interacciones de llamada internas. Valida aserciones sobre cuántas veces y con qué parámetros se invocó un servicio periférico.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- RESILIENCIA -->
+                        <div id="sec-resiliencia" class="space-y-4 border-b border-slate-800 pb-8">
+                            <h3 class="text-2xl font-bold text-purple-400">4. Resiliencia, Event-Driven (EDA) y Cloud</h3>
+                            <p class="text-slate-300 text-sm leading-relaxed font-sans">
+                                Patrones determinantes para asegurar la escalabilidad horizontal infinita y tolerancia al colapso de infraestructuras complejas en nubes como AWS, Azure o GCP.
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-400">
+                                <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                                    <strong class="text-white text-sm block mb-1 font-sans">Saga Pattern</strong>
+                                    Consistencia eventual a lo largo de transacciones distribuidas. Usa transacciones locales secuenciales y ejecuta acciones de reversa (Compensaciones) si ocurre algún error. Puede implementarse por Orquestación (con un bus controlador) o Coreografía (reactiva).
+                                </div>
+                                <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                                    <strong class="text-white text-sm block mb-1 font-sans">Circuit Breaker</strong>
+                                    Protección de APIs que se abren (cortan solicitudes) al encadenar errores temporales en servicios terceros. Posee tres estados: Cerrado (pasa todo), Abierto (falla rápido localmente) y Semi-abierto (pruebas mínimas de salud).
+                                </div>
+                                <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                                    <strong class="text-white text-sm block mb-1 font-sans">Event-Driven Architecture (EDA)</strong>
+                                    Sistemas que reaccionan de manera desacoplada a publicaciones de hechos inmutables (eventos) usando brokers como Apache Kafka o RabbitMQ. Aísla espacial y temporalmente al emisor del receptor.
+                                </div>
+                                <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                                    <strong class="text-white text-sm block mb-1 font-sans">Rate Limiting</strong>
+                                    Regulación del tráfico entrante mediante algoritmos (Token Bucket, Leaky Bucket) para evitar caídas del core y garantizar el SLA ante ráfagas inesperadas de solicitudes.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CODE SMELLS -->
+                        <div id="sec-smells" class="space-y-4 pb-8">
+                            <h3 class="text-2xl font-bold text-rose-400">5. Code Smells & Refactorización</h3>
+                            <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                                "Mi Granito de Java" insiste mucho en la refactorización para sanar código podrido de forma estructurada. Aquí tienes los peores olores del software legacy:
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                                <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 text-slate-400">
+                                    <strong class="text-rose-400 text-sm block mb-1">Primitive Obsession</strong>
+                                    Uso de tipos de datos primitivos nativos para encapsular reglas de negocio complejas (ej. guardar correos electrónicos como <code class="bg-slate-950 px-1 py-0.5 rounded text-red-400">string</code> puro sin validación).
+                                    <span class="block mt-2 text-green-400">Solución: Reemplazar el valor con un Value Object dedicado.</span>
+                                </div>
+                                <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 text-slate-400">
+                                    <strong class="text-rose-400 text-sm block mb-1">Feature Envy (Envidia de Funciones)</strong>
+                                    Un método que consulta intensamente los getters de una clase vecina para calcular su propia lógica.
+                                    <span class="block mt-2 text-green-400">Solución: Aplicar "Move Method" para arrastrar la función a su dueño real.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: Flashcards -->
+        <section id="content-flashcards" class="tab-content hidden space-y-8">
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 max-w-2xl mx-auto text-center font-sans">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-sm font-bold text-blue-400" id="flashcard-counter">Tarjeta 1 de 25</span>
+                    <button onclick="restartFlashcards()" class="text-xs text-slate-400 hover:text-white underline">Reiniciar mazo</button>
+                </div>
+
+                <!-- Flip Card Component -->
+                <div class="w-full h-80 rounded-2xl cursor-pointer perspective mb-6" onclick="flipFlashcard()">
+                    <div id="flashcard-inner" class="flip-card-inner relative w-full h-full text-center rounded-2xl">
+                        <!-- Front of card -->
+                        <div class="flip-card-front absolute w-full h-full bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between items-center">
+                            <div class="text-slate-500 uppercase font-black text-xs tracking-widest mt-2">PREGUNTA / CONCEPTO</div>
+                            <h3 id="flashcard-front-text" class="text-xl sm:text-2xl font-bold text-white max-w-md my-auto leading-relaxed">¿Cargando...?</h3>
+                            <div class="text-blue-400 text-xs font-semibold animate-pulse">Hacer clic para revelar respuesta</div>
+                        </div>
+                        <!-- Back of card -->
+                        <div class="flip-card-back absolute w-full h-full bg-slate-900 border border-blue-500/40 rounded-2xl p-6 flex flex-col justify-between items-center">
+                            <div class="text-emerald-500 uppercase font-black text-xs tracking-widest mt-2">RESPUESTA CONCEPTUAL</div>
+                            <p id="flashcard-back-text" class="text-slate-200 text-base sm:text-lg max-w-md my-auto leading-relaxed font-medium">¿Cargando...?</p>
+                            <div id="flashcard-hint-text" class="text-slate-500 text-xs italic"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex items-center justify-between">
+                    <button onclick="prevFlashcard()" class="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm font-semibold text-white transition">
+                        ◀ Anterior
+                    </button>
+                    <button onclick="nextFlashcard()" class="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-sm font-semibold text-white transition">
+                        Siguiente ▶
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab: Simulacro -->
+        <section id="content-simulacro" class="tab-content hidden space-y-8">
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 max-w-3xl mx-auto font-sans">
+                
+                <!-- Welcome/Module Selection Screen -->
+                <div id="quiz-start-screen" class="text-center space-y-6">
+                    <span class="text-5xl">🎯</span>
+                    <h2 class="text-3xl font-extrabold text-white">Simulador de Screening Completo</h2>
+                    <p class="text-slate-400 max-w-lg mx-auto">
+                        Selecciona el módulo técnico que deseas rendir para medir tus conocimientos bajo el formato cronometrado de TestGorilla.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto pt-4">
+                        <!-- Modulo 1 -->
+                        <button onclick="setupQuiz('modulo1')" class="p-5 bg-slate-900/80 hover:bg-slate-800 border-2 border-slate-800 hover:border-blue-500 text-left rounded-2xl transition duration-150 flex flex-col justify-between">
+                            <div>
+                                <span class="bg-blue-500/20 text-blue-300 text-[10px] font-bold px-2.5 py-1 rounded-full border border-blue-500/30 uppercase tracking-widest">Módulo 1</span>
+                                <h4 class="text-base font-bold text-white mt-3">Ingeniería de Software</h4>
+                                <p class="text-slate-400 text-xs mt-2">15 Preguntas de SOLID, GRASP, patrones creacionales y testing automatizado.</p>
+                            </div>
+                            <span class="text-blue-400 font-bold text-xs mt-4 block">Rendir examen ➜</span>
+                        </button>
+                        
+                        <!-- Modulo 2 -->
+                        <button onclick="setupQuiz('modulo2')" class="p-5 bg-slate-900/80 hover:bg-slate-800 border-2 border-slate-800 hover:border-teal-500 text-left rounded-2xl transition duration-150 flex flex-col justify-between">
+                            <div>
+                                <span class="bg-teal-500/20 text-teal-300 text-[10px] font-bold px-2.5 py-1 rounded-full border border-teal-500/30 uppercase tracking-widest">Módulo 2</span>
+                                <h4 class="text-base font-bold text-white mt-3">Arquitecto de Software</h4>
+                                <p class="text-slate-400 text-xs mt-2">12 Casos reales de diseño distribuido, microservicios, consistencia CAP, Saga y resiliencia.</p>
+                            </div>
+                            <span class="text-teal-400 font-bold text-xs mt-4 block">Rendir examen ➜</span>
+                        </button>
+
+                        <!-- Modulo 3 -->
+                        <button onclick="setupQuiz('modulo3')" class="p-5 bg-slate-900/80 hover:bg-slate-800 border-2 border-slate-800 hover:border-amber-500 text-left rounded-2xl transition duration-150 flex flex-col justify-between">
+                            <div>
+                                <span class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-full border border-amber-500/30 uppercase tracking-widest">Módulo 3</span>
+                                <h4 class="text-base font-bold text-white mt-3">Cultura DevOps</h4>
+                                <p class="text-slate-400 text-xs mt-2">20 Preguntas de Docker, Kubernetes, CI/CD, Git Flow e infraestructura Cloud.</p>
+                            </div>
+                            <span class="text-amber-400 font-bold text-xs mt-4 block">Rendir examen ➜</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Progress & Game Screen -->
+                <div id="quiz-game-screen" class="hidden space-y-6">
+                    <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800 pb-4">
+                        <span id="quiz-module-name-badge" class="font-bold text-blue-400 tracking-wider">MODULO</span>
+                        <span id="quiz-progress-text">Pregunta 1 de 10</span>
+                        <span id="quiz-score-text">Aciertos: 0/0</span>
+                    </div>
+
+                    <!-- Question text -->
+                    <h3 id="quiz-question-text" class="text-xl font-bold text-white leading-relaxed">¿Pregunta?</h3>
+
+                    <!-- Answers Grid -->
+                    <div class="grid grid-cols-1 gap-3 mt-6" id="quiz-answers-container">
+                        <!-- Inyectado dinámicamente -->
+                    </div>
+
+                    <!-- Feedback Panel -->
+                    <div id="quiz-feedback-panel" class="hidden p-4 rounded-xl border text-sm mt-4">
+                        <!-- Inyectado dinámicamente -->
+                    </div>
+
+                    <!-- Next control -->
+                    <div class="flex justify-end pt-4 border-t border-slate-800">
+                        <button onclick="nextQuizQuestion()" id="quiz-next-btn" class="hidden px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-white transition">
+                            Siguiente Pregunta
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Results Screen -->
+                <div id="quiz-results-screen" class="hidden text-center space-y-6">
+                    <span id="quiz-results-icon" class="text-5xl font-sans">🏆</span>
+                    <h2 class="text-3xl font-extrabold text-white">Simulación Finalizada</h2>
+                    <p id="quiz-results-summary" class="text-slate-400 max-w-lg mx-auto leading-relaxed">
+                        Felicidades, lograste responder con éxito.
+                    </p>
+                    <div class="flex justify-center space-x-4">
+                        <button onclick="restartQuiz()" class="px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 font-bold text-white transition">
+                            Volver al inicio
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Global State & Navigation Management -->
+    <script>
+        // Tab switching utility
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('content-' + tabId).classList.remove('hidden');
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('text-slate-400', 'hover:text-white');
+            });
+            document.getElementById('tab-' + tabId).classList.add('bg-blue-600', 'text-white');
+            document.getElementById('tab-' + tabId).classList.remove('text-slate-400', 'hover:text-white');
+        }
+
+        // Smooth scroll
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Historial de Intentos lógicos
+        const appState = {
+            bestScores: {
+                modulo1: null,
+                modulo2: null,
+                modulo3: null
+            },
+            attempts: []
+        };
+
+        function addQuizAttempt(moduleKey, score, total) {
+            const pct = Math.round((score / total) * 100);
+            
+            // Actualizar mejor puntaje
+            if (appState.bestScores[moduleKey] === null || pct > appState.bestScores[moduleKey]) {
+                appState.bestScores[moduleKey] = pct;
+            }
+
+            // Registrar intento
+            const now = new Date();
+            const dateStr = now.getHours() + ":" + (now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes()) + " hs";
+            
+            let mLabel = "";
+            if (moduleKey === 'modulo1') mLabel = 'Módulo 1: Ingeniería';
+            else if (moduleKey === 'modulo2') mLabel = 'Módulo 2: Arquitectura';
+            else mLabel = 'Módulo 3: DevOps';
+
+            appState.attempts.unshift({
+                module: mLabel,
+                score: score + "/" + total,
+                pct: pct,
+                time: dateStr
+            });
+
+            updateDashboardUI();
+        }
+
+        function updateDashboardUI() {
+            // Actualizar Módulo 1 en UI
+            const m1Score = document.getElementById('dash-score-m1');
+            const m1Bar = document.getElementById('dash-bar-m1');
+            if (appState.bestScores.modulo1 !== null) {
+                m1Score.innerText = appState.bestScores.modulo1 + "%";
+                m1Bar.style.width = appState.bestScores.modulo1 + "%";
+            } else {
+                m1Score.innerText = "Sin datos";
+                m1Bar.style.width = "0%";
+            }
+
+            // Actualizar Módulo 2 en UI
+            const m2Score = document.getElementById('dash-score-m2');
+            const m2Bar = document.getElementById('dash-bar-m2');
+            if (appState.bestScores.modulo2 !== null) {
+                m2Score.innerText = appState.bestScores.modulo2 + "%";
+                m2Bar.style.width = appState.bestScores.modulo2 + "%";
+            } else {
+                m2Score.innerText = "Sin datos";
+                m2Bar.style.width = "0%";
+            }
+
+            // Actualizar Módulo 3 en UI
+            const m3Score = document.getElementById('dash-score-m3');
+            const m3Bar = document.getElementById('dash-bar-m3');
+            if (appState.bestScores.modulo3 !== null) {
+                m3Score.innerText = appState.bestScores.modulo3 + "%";
+                m3Bar.style.width = appState.bestScores.modulo3 + "%";
+            } else {
+                m3Score.innerText = "Sin datos";
+                m3Bar.style.width = "0%";
+            }
+
+            // Actualizar listado de intentos
+            const container = document.getElementById('attempts-list-container');
+            if (appState.attempts.length === 0) {
+                container.innerHTML = '<div class="text-center text-xs text-slate-500 py-6">Aún no has completado ningún simulacro.</div>';
+                return;
+            }
+
+            container.innerHTML = "";
+            appState.attempts.slice(0, 5).forEach(att => {
+                const badgeColor = att.pct >= 80 ? 'text-emerald-400 bg-emerald-950/40 border-emerald-800' : 'text-amber-400 bg-amber-950/40 border-amber-800';
+                
+                const card = document.createElement('div');
+                card.className = "flex items-center justify-between bg-slate-900/50 p-2.5 rounded-xl border border-slate-800 text-xs";
+                
+                const leftDiv = document.createElement('div');
+                leftDiv.className = "flex flex-col";
+                const mSpan = document.createElement('span');
+                mSpan.className = "font-bold text-white";
+                mSpan.innerText = att.module;
+                const tSpan = document.createElement('span');
+                tSpan.className = "text-[10px] text-slate-500 mt-0.5";
+                tSpan.innerText = att.time;
+                leftDiv.appendChild(mSpan);
+                leftDiv.appendChild(tSpan);
+
+                const rightDiv = document.createElement('div');
+                rightDiv.className = "flex items-center space-x-2";
+                const sSpan = document.createElement('span');
+                sSpan.className = "text-slate-400 font-mono font-bold";
+                sSpan.innerText = att.score;
+                const pSpan = document.createElement('span');
+                pSpan.className = "px-2 py-0.5 rounded border text-[10px] font-black " + badgeColor;
+                pSpan.innerText = att.pct + "%";
+                rightDiv.appendChild(sSpan);
+                rightDiv.appendChild(pSpan);
+
+                card.appendChild(leftDiv);
+                card.appendChild(rightDiv);
+                container.appendChild(card);
+            });
+        }
+    </script>
+
+    <!-- GoF Code Patterns (Zero backticks, robust concatenations) -->
+    <script>
+        const designPatterns = {
+            singleton: {
+                title: "Singleton Pattern (Creacional)",
+                desc: "Asegura que una clase tenga una única instancia global de acceso a lo largo de toda la aplicación.",
+                diagram: "[Cliente] ---> [SingletonInstance] <-- Punto Global\n" +
+                         "      ▲\n" +
+                         "      └─── Instancia estática privada\n" +
+                         "      └─── Constructor privado (Bloquea instanciación externa)",
+                code: {
+                    java: "public class DatabaseConnection {\n" +
+                          "    private static volatile DatabaseConnection instance;\n" +
+                          "    private String connectionString;\n\n" +
+                          "    private DatabaseConnection() {\n" +
+                          "        this.connectionString = \"jdbc:postgresql://localhost:5432/flux_db\";\n" +
+                          "    }\n\n" +
+                          "    public static DatabaseConnection getInstance() {\n" +
+                          "        if (instance == null) {\n" +
+                          "            synchronized (DatabaseConnection.class) {\n" +
+                          "                if (instance == null) {\n" +
+                          "                    instance = new DatabaseConnection();\n" +
+                          "                }\n" +
+                          "            }\n" +
+                          "        }\n" +
+                          "        return instance;\n" +
+                          "    }\n" +
+                          "}",
+                    node: "class DatabaseConnection {\n" +
+                          "    constructor() {\n" +
+                          "        if (DatabaseConnection.instance) {\n" +
+                          "            return DatabaseConnection.instance;\n" +
+                          "        }\n" +
+                          "        this.connectionString = \"mongodb://localhost:27017/flux_db\";\n" +
+                          "        DatabaseConnection.instance = this;\n" +
+                          "    }\n" +
+                          "}\n\n" +
+                          "const instance = new DatabaseConnection();\n" +
+                          "Object.freeze(instance);\n" +
+                          "export default instance;",
+                    python: "class DatabaseConnection:\n" +
+                            "    _instance = None\n\n" +
+                            "    def __new__(cls):\n" +
+                            "        if cls._instance is None:\n" +
+                            "            cls._instance = super(DatabaseConnection, cls).__new__(cls)\n" +
+                            "            cls._instance.connection_string = \"postgresql://localhost/flux_db\"\n" +
+                            "        return cls._instance"
+                }
+            },
+            factory: {
+                title: "Factory Method Pattern (Creacional)",
+                desc: "Define una interfaz de creación de objetos pero delega en las subclases qué tipo concreto instanciar.",
+                diagram: "[Cliente] ---> [Creador (Interfaz / Método Fábrica)]\n" +
+                         "      ├─── CreadorConcretoA ---> Instancia [ProductoConcretoA]\n" +
+                         "      └─── CreadorConcretoB ---> Instancia [ProductoConcretoB]",
+                code: {
+                    java: "interface Notificador { void enviar(String mensaje); }\n\n" +
+                          "class NotificadorEmail implements Notificador {\n" +
+                          "    public void enviar(String mensaje) { System.out.println(\"Email: \" + mensaje); }\n" +
+                          "}\n\n" +
+                          "abstract class NotificadorFactory {\n" +
+                          "    public abstract Notificador crearNotificador();\n" +
+                          "}",
+                    node: "class NotificadorFactory {\n" +
+                          "    static crearNotificador(tipo) {\n" +
+                          "        switch(tipo.toLowerCase()) {\n" +
+                          "            case 'email': return new NotificadorEmail();\n" +
+                          "            case 'sms': return new NotificadorSMS();\n" +
+                          "            default: throw new Error('Tipo no soportado');\n" +
+                          "        }\n" +
+                          "    }\n" +
+                          "}",
+                    python: "class NotificadorFactory:\n" +
+                            "    @staticmethod\n" +
+                            "    def crear_notificador(tipo: str):\n" +
+                            "        if tipo == 'email': return NotificadorEmail()\n" +
+                            "        elif tipo == 'sms': return NotificadorSMS()\n" +
+                            "        else: raise ValueError('Tipo no soportado')"
+                }
+            },
+            adapter: {
+                title: "Adapter Pattern (Estructural)",
+                desc: "Permite colaborar a interfaces incompatibles actuando como traductor intermedio de firmas técnicas.",
+                diagram: "[Cliente] ---> [InterfazEsperada]\n" +
+                         "                ▲ (Implementa)\n" +
+                         "        [AdapterClase] ---> Traduce e Invoca ---> [ServicioTerceroIncompatible]",
+                code: {
+                    java: "interface ProcesadorPago { void procesarPagoLocal(double monto); }\n\n" +
+                          "class StripeAdapter implements ProcesadorPago {\n" +
+                          "    private StripeSDK stripeSDK;\n" +
+                          "    public StripeAdapter(StripeSDK sdk) { this.stripeSDK = sdk; }\n" +
+                          "    public void procesarPagoLocal(double monto) {\n" +
+                          "        int centavos = (int) (monto * 100);\n" +
+                          "        stripeSDK.charge(centavos);\n" +
+                          "    }\n" +
+                          "}",
+                    node: "class LoggerAdapter extends LoggerModerno {\n" +
+                          "    constructor(loggerLegacy) {\n" +
+                          "        super();\n" +
+                          "        this.legacy = loggerLegacy;\n" +
+                          "    }\n" +
+                          "    logInfo(msg) {\n" +
+                          "        this.legacy.printMessage(msg, 'INFO');\n" +
+                          "    }\n" +
+                          "}",
+                    python: "class Adapter(TargetSistemas):\n" +
+                            "    def __init__(self, adaptee):\n" +
+                            "        self.adaptee = adaptee\n" +
+                            "    def request(self):\n" +
+                            "        original = self.adaptee.specific_request()\n" +
+                            "        return 'Adaptado: ' + original"
+                }
+            },
+            decorator: {
+                title: "Decorator Pattern (Estructural)",
+                desc: "Permite envolver un componente en múltiples capas para adherir dinámicamente responsabilidades estructurales.",
+                diagram: "[ComponenteBase] <-- Envoltorio [DecoradorCompresion] <-- Envoltorio [DecoradorSeguridad]",
+                code: {
+                    java: "interface Cafeteria { String getDescripcion(); double getPrecio(); }\n\n" +
+                          "class CafeSimple implements Cafeteria {\n" +
+                          "    public String getDescripcion() { return \"Café Simple\"; }\n" +
+                          "    public double getPrecio() { return 100.0; }\n" +
+                          "}",
+                    node: "class EncriptarDecorador {\n" +
+                          "    constructor(servicioBase) { this.servicio = servicioBase; }\n" +
+                          "    leer() {\n" +
+                          "        const datos = this.servicio.leer();\n" +
+                          "        return 'Desencriptado(' + datos + ')';\n" +
+                          "    }\n" +
+                          "}",
+                    python: "class DecoradorFiltro:\n" +
+                            "    def __init__(self, componente):\n" +
+                            "        self._componente = componente\n" +
+                            "    def operacion(self):\n" +
+                            "        previo = self._componente.operacion()\n" +
+                            "        return 'Decorado(Limpio -> ' + previo + ')'"
+                }
+            },
+            facade: {
+                title: "Facade / Fachada (Estructural)",
+                desc: "Simplifica el acceso a un sistema complejo proveyendo una fachada unificada de orquestaciones.",
+                diagram: "[Cliente] ---> [Facade (Fachada)] ---> [Sistemas de Inventario]\n" +
+                         "                                ---> [Procesador de Pagos]\n" +
+                         "                                ---> [Sistema de Envíos]",
+                code: {
+                    java: "public class CompraFacade {\n" +
+                          "    private InventarioService inventario = new InventarioService();\n" +
+                          "    private PagoService pago = new PagoService();\n\n" +
+                          "    public boolean comprarArticulo(String productoId, double monto) {\n" +
+                          "        if (inventario.hayStock(productoId)) {\n" +
+                          "            pago.procesarPago(monto);\n" +
+                          "            return true;\n" +
+                          "        }\n" +
+                          "        return false;\n" +
+                          "    }\n" +
+                          "}",
+                    node: "class CompraFacade {\n" +
+                          "    constructor() {\n" +
+                          "        this.inventario = new InventarioService();\n" +
+                          "        this.pago = new PagoService();\n" +
+                          "    }\n" +
+                          "    async comprar(prodId, monto) {\n" +
+                          "        const stock = await this.inventario.validar(prodId);\n" +
+                          "        if (stock) {\n" +
+                          "            await this.pago.pagar(monto);\n" +
+                          "            return true;\n" +
+                          "        }\n" +
+                          "        return false;\n" +
+                          "    }\n" +
+                          "}",
+                    python: "class CompraFacade:\n" +
+                            "    def __init__(self):\n" +
+                            "        self.inventario = InventarioService()\n" +
+                            "        self.pago = PagoService()\n\n" +
+                            "    def comprar(self, prod_id, monto):\n" +
+                            "        if self.inventario.validar(prod_id):\n" +
+                            "            self.pago.pagar(monto)\n" +
+                            "            return True\n" +
+                            "        return False"
+                }
+            },
+            proxy: {
+                title: "Proxy Pattern (Estructural)",
+                desc: "Representa a un intermediario robusto encargado de controlar el acceso o auditorías sobre un objeto de negocio pesado.",
+                diagram: "[Cliente] ---> [ProxyObject] (Auditoría / Permisos) ---> [RealObject]",
+                code: {
+                    java: "interface ServicioDatos { void renderizar(); }\n\n" +
+                          "class ProxyServicio implements ServicioDatos {\n" +
+                          "    private ServicioReal real;\n" +
+                          "    private boolean esAdmin;\n" +
+                          "    public ProxyServicio(boolean esAdmin) { this.esAdmin = esAdmin; }\n" +
+                          "    public void renderizar() {\n" +
+                          "        if (esAdmin) {\n" +
+                          "            if (real == null) real = new ServicioReal();\n" +
+                          "            real.renderizar();\n" +
+                          "        }\n" +
+                          "    }\n" +
+                          "}",
+                    node: "const proxyServicio = new Proxy(servicioReal, {\n" +
+                          "    get(target, prop, receiver) {\n" +
+                          "        console.log('Auditoría: Acceso detectado a: ' + prop);\n" +
+                          "        return Reflect.get(target, prop, receiver);\n" +
+                          "    }\n" +
+                          "});",
+                    python: "class ProxyServicio(ServicioDatos):\n" +
+                            "    def __init__(self, real_service, es_admin):\n" +
+                            "        self._real_service = real_service\n" +
+                            "        self._es_admin = es_admin\n" +
+                            "    def renderizar(self):\n" +
+                            "        if self._es_admin:\n" +
+                            "            self._real_service.renderizar()"
+                }
+            },
+            observer: {
+                title: "Observer Pattern (Comportamiento)",
+                desc: "Notifica de forma desacoplada y asincrónica cambios de estado de un sujeto a sus múltiples observadores.",
+                diagram: "[Sujeto Principal] ── (Notificación) ──> [Observador 1]\n" +
+                         "                                ──> [Observador 2]",
+                code: {
+                    java: "import java.util.ArrayList;\n" +
+                          "import java.util.List;\n\n" +
+                          "interface Observer { void actualizar(String noticia); }\n\n" +
+                          "class CanalDeNoticias {\n" +
+                          "    private List<Observer> obs = new ArrayList<>();\n" +
+                          "    public void setNoticia(String noticia) {\n" +
+                          "        for (Observer o : obs) o.actualizar(noticia);\n" +
+                          "    }\n" +
+                          "}",
+                    node: "import { EventEmitter } from 'events';\n" +
+                          "class CanalDeNoticias extends EventEmitter {\n" +
+                          "    publicar(noticia) { this.emit('nuevaNoticia', noticia); }\n" +
+                          "}\n\n" +
+                          "const canal = new CanalDeNoticias();\n" +
+                          "canal.on('nuevaNoticia', (msg) => { console.log('Recibido: ' + msg); });",
+                    python: "class SujetoNotificador:\n" +
+                            "    def __init__(self):\n" +
+                            "        self._observadores = []\n" +
+                            "    def emitir(self, msg):\n" +
+                            "        for obs in self._observadores:\n" +
+                            "            obs.notificar(msg)"
+                }
+            },
+            strategy: {
+                title: "Strategy Pattern (Comportamiento)",
+                desc: "Encapsula una familia de algoritmos y permite intercambiarlos de forma limpia en tiempo de ejecución.",
+                diagram: "[ClienteContexto] ---> [InterfazEstrategia]\n" +
+                         "                        ├─── PagoEfectivo (Sin recargo)\n" +
+                         "                        └─── PagoTarjeta (5% Recargo)",
+                code: {
+                    java: "interface EstrategiaPago { void pagar(double monto); }\n\n" +
+                          "class PagoEfectivo implements EstrategiaPago {\n" +
+                          "    public void pagar(double m) { System.out.println(\"Pago efectivo: \" + m); }\n" +
+                          "}",
+                    node: "const pagoEfectivo = (monto) => console.log('Pago efectivo: ' + monto);\n" +
+                          "class Carrito {\n" +
+                          "    constructor(estrategia) { this.estrategia = estrategia; }\n" +
+                          "    checkout(monto) { this.estrategia(monto); }\n" +
+                          "}",
+                    python: "def estrategia_efectivo(monto):\n" +
+                            "    print('Pago efectivo: ' + str(monto))\n\n" +
+                            "class Carrito:\n" +
+                            "    def __init__(self, estrategia):\n" +
+                            "        self.estrategia = estrategia\n" +
+                            "    def checkout(self, monto):\n" +
+                            "        self.estrategia(monto)"
+                }
+            },
+            command: {
+                title: "Command Pattern (Comportamiento)",
+                desc: "Convierte solicitudes u operaciones asincrónicas en un objeto contenedor ejecutable y parametrizable.",
+                diagram: "[Cliente] ---> [Invokador] ---> [Comando (Interfaz)] ---> [Receptor (Acción)]",
+                code: {
+                    java: "interface Command { void execute(); }\n\n" +
+                          "class Light {\n" +
+                          "    public void turnOn() { System.out.println(\"Luz Encendida\"); }\n" +
+                          "}\n\n" +
+                          "class TurnOnLightCommand implements Command {\n" +
+                          "    private Light light;\n" +
+                          "    public TurnOnLightCommand(Light l) { this.light = l; }\n" +
+                          "    public void execute() { light.turnOn(); }\n" +
+                          "}",
+                    node: "class RemoteControl {\n" +
+                          "    submit(command) {\n" +
+                          "        command.execute();\n" +
+                          "    }\n" +
+                          "}\n" +
+                          "class TurnOnLightCommand {\n" +
+                          "    constructor(light) { this.light = light; }\n" +
+                          "    execute() { this.light.turnOn(); }\n" +
+                          "}",
+                    python: "class TurnOnLightCommand:\n" +
+                            "    def __init__(self, light):\n" +
+                            "        self.light = light\n" +
+                            "    def execute(self):\n" +
+                            "        self.light.turn_on()"
+                }
+            }
+        };
+
+        let activePattern = 'singleton';
+        let activeLanguage = 'java';
+
+        function selectPattern(patternKey) {
+            activePattern = patternKey;
+            document.querySelectorAll('.pattern-btn').forEach(btn => {
+                btn.classList.remove('border-blue-500', 'bg-slate-900');
+                btn.classList.add('border-slate-800', 'bg-slate-900/50');
+            });
+            const btnEl = document.getElementById('btn-' + patternKey);
+            if (btnEl) {
+                btnEl.classList.add('border-blue-500', 'bg-slate-900');
+                btnEl.classList.remove('border-slate-800', 'bg-slate-900/50');
+            }
+            renderPatternContent();
+        }
+
+        function selectLanguage(langKey) {
+            activeLanguage = langKey;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('text-slate-400');
+            });
+            const langEl = document.getElementById('lang-' + langKey);
+            if (langEl) {
+                langEl.classList.add('bg-blue-600', 'text-white');
+                langEl.classList.remove('text-slate-400');
+            }
+            renderPatternContent();
+        }
+
+        function renderPatternContent() {
+            const patternData = designPatterns[activePattern];
+            if (!patternData) return;
+
+            document.getElementById('display-pattern-title').innerText = patternData.title;
+            document.getElementById('display-pattern-desc').innerText = patternData.desc;
+            document.getElementById('pattern-diagram').textContent = patternData.diagram;
+            document.getElementById('pattern-code-block').textContent = patternData.code[activeLanguage];
+        }
+
+        window.onload = function() {
+            selectPattern('singleton');
+            selectLanguage('java');
+            updateDashboardUI();
+        };
+    </script>
+
+    <!-- Flashcards Controller -->
+    <script>
+        let currentFlashcardIndex = 0;
+        let isFlipped = false;
+
+        function renderFlashcard() {
+            const card = flashcardsDb[currentFlashcardIndex];
+            document.getElementById('flashcard-counter').innerText = 'Tarjeta ' + (currentFlashcardIndex + 1) + ' de ' + flashcardsDb.length;
+            document.getElementById('flashcard-front-text').innerText = card.front;
+            document.getElementById('flashcard-back-text').innerText = card.back;
+            document.getElementById('flashcard-hint-text').innerText = 'Pista: ' + card.hint;
+            
+            isFlipped = false;
+            document.getElementById('flashcard-inner').classList.remove('flipped');
+        }
+
+        function flipFlashcard() {
+            isFlipped = !isFlipped;
+            if (isFlipped) {
+                document.getElementById('flashcard-inner').classList.add('flipped');
+            } else {
+                document.getElementById('flashcard-inner').classList.remove('flipped');
+            }
+        }
+
+        function nextFlashcard() {
+            currentFlashcardIndex = (currentFlashcardIndex + 1) % flashcardsDb.length;
+            renderFlashcard();
+        }
+
+        function prevFlashcard() {
+            currentFlashcardIndex = (currentFlashcardIndex - 1 + flashcardsDb.length) % flashcardsDb.length;
+            renderFlashcard();
+        }
+
+        function restartFlashcards() {
+            currentFlashcardIndex = 0;
+            renderFlashcard();
+        }
+    </script>
+
+    <!-- Quiz Engine with 3 Modules (Módulo 1, 2, and 3 - DevOps) -->
+    <script>
+        // Módulo 1 Bank: Ingeniería de Software
+        const modulo1Questions = [
+            {
+                question: "En el diseño orientado a objetos, ¿qué principio SOLID defiende que las clases dependan de interfaces o contratos y no de implementaciones concretas?",
+                answers: [
+                    "Principio de Responsabilidad Única (SRP).",
+                    "Principio de Inversión de Dependencias (DIP).",
+                    "Principio de Segregación de Interfaces (ISP).",
+                    "Principio Open/Closed (OCP)."
+                ],
+                correctIndex: 1,
+                feedback: "El principio de Inversión de Dependencias (DIP) estipula que las capas de negocio de alto nivel jamás deben depender de implementaciones de infraestructura (bajo nivel). Ambos deben depender de abstracciones lógicas."
+            },
+            {
+                question: "Si una clase heredada lanza una excepción del tipo 'UnsupportedOperationException' para deshabilitar un método heredado de su clase base, ¿qué principio se está vulnerando directamente?",
+                answers: [
+                    "Single Responsibility Principle (SRP).",
+                    "Principio de Sustitución de Liskov (LSP).",
+                    "Principio de Segregación de Interfaces (ISP).",
+                    "Interface Inversion Principle (IIP)."
+                ],
+                correctIndex: 1,
+                feedback: "Liskov (LSP) exige que cualquier subclase pueda usarse indistintamente en lugar de su clase base sin romper el comportamiento esperado ni el contrato preestablecido."
+            },
+            {
+                question: "¿Cuál es la diferencia primordial en el comportamiento entre un Mock y un Stub dentro de una suite de testing automatizada?",
+                answers: [
+                    "El Stub lee datos desde base de datos físicas y el Mock consume datos de archivos planos.",
+                    "El Stub es un doble pasivo que retorna estado simulado; el Mock es un doble activo diseñado para asertar e inspeccionar llamadas y comportamientos lógicos.",
+                    "No hay diferencias; son dos palabras que representan exactamente el mismo concepto en la industria.",
+                    "Los Stubs solo corren en servidores Apache Tomcat y los Mocks son para NodeJS."
+                ],
+                correctIndex: 1,
+                feedback: "El Stub se usa de forma estática para alimentar de datos el flujo del test unitario, mientras que el Mock se enfoca en auditar y asertar de forma activa las llamadas internas."
+            },
+            {
+                question: "¿Qué patrón de diseño creacional delega la responsabilidad de instanciar un tipo de producto específico a sus correspondientes subclases fábricas?",
+                answers: [
+                    "Singleton Pattern.",
+                    "Factory Method Pattern.",
+                    "Facade Pattern.",
+                    "Strategy Pattern."
+                ],
+                correctIndex: 1,
+                feedback: "Factory Method oculta la complejidad del instanciado delegando en métodos o clases fábricas concretas la creación del objeto según el parámetro."
+            },
+            {
+                question: "El patrón estructural 'Decorator' representa una alternativa altamente flexible y elástica frente a qué práctica rígida de POO?",
+                answers: [
+                    "La Inyección de Dependencias.",
+                    "La herencia de clases estricta en tiempo de compilación.",
+                    "El Polimorfismo parametrizado.",
+                    "El desacoplamiento por interfaces."
+                ],
+                correctIndex: 1,
+                feedback: "En lugar de extender clases mediante herencia de forma estática, Decorator te permite envolver clases para adherir nuevos comportamientos dinámicamente en tiempo de ejecución."
+            },
+            {
+                question: "Según los principios GRASP, ¿qué directriz se enfoca en asignar responsabilidades lógicas a la clase que posee la información necesaria para realizar la acción?",
+                answers: [
+                    "Creador (Creator).",
+                    "Experto en Información (Information Expert).",
+                    "Fabricación Pura (Pure Fabrication).",
+                    "Controlador (Controller)."
+                ],
+                correctIndex: 1,
+                feedback: "El Experto en Información minimiza el acoplamiento distribuyendo responsabilidades en las entidades legítimas que controlan y conocen sus propios datos de negocio."
+            },
+            {
+                question: "El patrón de diseño structural 'Adapter' se implementa primordialmente con el fin de:",
+                answers: [
+                    "Monitorear las conexiones activas a base de datos en hilos secundarios.",
+                    "Traducir y mediar entre interfaces lógicas totalmente incompatibles para permitir que colaboren sin modificar las clases originales.",
+                    "Garantizar que una clase posea únicamente un punto de acceso estático global.",
+                    "Cifrar y compilar paquetes de datos binarios transmitidos por sockets TCP."
+                ],
+                correctIndex: 1,
+                feedback: "El Adapter actúa como un traductor entre dos clases incapaces de comunicarse por diferencias en sus firmas técnicas o tipos de datos."
+            },
+            {
+                question: "¿Qué olor de código (Code Smell) se asocia directamente a un método que depende de forma excesiva de los getters y datos internos de una clase ajena?",
+                answers: [
+                    "Primitive Obsession.",
+                    "Feature Envy (Envidia de Funciones).",
+                    "Large Class.",
+                    "Lazy Class."
+                ],
+                correctIndex: 1,
+                feedback: "Feature Envy ocurre cuando un método codicia la información de clases vecinas. La solución de refactorización típica es mover la función ('Move Method') a su verdadera clase."
+            },
+            {
+                question: "El flujo y ciclo de desarrollo iterativo TDD (Test-Driven Development) sigue el orden estricto de pasos denominado:",
+                answers: [
+                    "Compilar -> Testear -> Desplegar.",
+                    "Escribir Código -> Escribir Test -> Modificar firmas.",
+                    "RED (Test que falla) -> GREEN (Código mínimo para que pase) -> REFACTOR (Optimizar el diseño).",
+                    "Mockear dependencias -> Guardar DB -> Confirmar merge."
+                ],
+                correctIndex: 2,
+                feedback: "El flujo clásico 'Red, Green, Refactor' asegura que el software nazca con cobertura nativa de pruebas y sea inmune a roturas durante procesos de optimización del código."
+            },
+            {
+                question: "El patrón de comportamiento 'Observer' establece un vínculo lógico de dependencias entre componentes caracterizado como:",
+                answers: [
+                    "Relación de uno a uno de forma bidireccional.",
+                    "Relación uno a muchos, de modo que cuando el publicador principal cambia de estado, se notifican todos los observadores.",
+                    "Instanciación asincrónica en un pool de hilos locales.",
+                    "Composición física inmutable de clases hijas."
+                ],
+                correctIndex: 1,
+                feedback: "Observer se implementa para desacoplar flujos de eventos. Permite que múltiples observadores independientes escuchen actualizaciones de estado de un sujeto central sin acoplar el código."
+            },
+            {
+                question: "Crear una clase 'PDFExporter' o 'ExcelExporter' representa una implementación directa de qué principio de asignación GRASP?",
+                answers: [
+                    "Experto en Información.",
+                    "Fabricación Pura (Pure Fabrication).",
+                    "Indirección.",
+                    "Controlador."
+                ],
+                correctIndex: 1,
+                feedback: "Al no pertenecer lógicamente al negocio real (un Cliente o un Pedido no tienen por qué saber cómo codificar binarios PDF), la Fabricación Pura inventa una clase cohesiva auxiliar exclusiva para el exportado."
+            },
+            {
+                question: "El principio 'Open/Closed' (OCP) de SOLID indica conceptualmente que las entidades de software deben estructurarse de modo que queden:",
+                answers: [
+                    "Abiertas al público en la nube y cerradas bajo protocolos JWT.",
+                    "Abiertas para su extensión mediante polimorfismo, pero estrictamente cerradas para su modificación directa.",
+                    "Abiertas al testing unitario de caja blanca pero cerradas a pruebas de integración.",
+                    "Abiertas a bases de datos relacionales pero cerradas a NoSQL."
+                ],
+                correctIndex: 1,
+                feedback: "OCP busca evitar riesgos de regresión (romper código que ya funcionaba) obligándote a extender clases o heredar contratos en lugar de editar los archivos originales de lógica."
+            },
+            {
+                question: "El patrón estructural clásico que oculta la altísima complejidad de un subsistema proveyendo una interfaz simplificada y amigable al cliente se denomina:",
+                answers: [
+                    "Proxy Pattern.",
+                    "Facade Pattern (Fachada).",
+                    "Decorator Pattern.",
+                    "Bridge Pattern."
+                ],
+                correctIndex: 1,
+                feedback: "Facade actúa como un punto de entrada sencillo que asocia y orquesta múltiples subsistemas técnicos, aislando la complejidad técnica pesada de la vista del cliente."
+            },
+            {
+                question: "El patrón de diseño 'Strategy' se engloba dentro de qué categoría de la clasificación de Gang of Four (GoF)?",
+                answers: [
+                    "Patrones Creacionales.",
+                    "Patrones Estructurales.",
+                    "Patrones de Comportamiento.",
+                    "Patrones de Arquitectura de Red."
+                ],
+                correctIndex: 2,
+                feedback: "Al encargarse de encapsular y alternar de forma interactiva diferentes algoritmos y flujos en tiempo de ejecución, Strategy clasifica netamente como patrón de Comportamiento."
+            },
+            {
+                question: "El mecanismo de optimización multihilo denominado 'Double-Checked Locking' es una técnica ampliamente utilizada al codificar qué patrón?",
+                answers: [
+                    "Factory Method.",
+                    "Singleton Pattern.",
+                    "Proxy Pattern.",
+                    "Adapter Pattern."
+                ],
+                correctIndex: 1,
+                feedback: "En entornos concurrentes de Java o C#, Double-Checked Locking garantiza la inicialización segura (Thread-Safe) del Singleton controlando que solo el primer hilo instancie la variable bloqueando el recurso."
+            }
+        ];
+
+        // Módulo 2 Bank: Arquitecto de Software
+        const modulo2Questions = [
+            {
+                question: "En el contexto de microservicios, ¿cuál es la principal ventaja de utilizar el patrón API Gateway?",
+                answers: [
+                    "Elimina la necesidad de utilizar bases de datos relacionales en el backend.",
+                    "Centraliza preocupaciones transversales (cross-cutting concerns) como autenticación, limitación de tasa (rate limiting) y enrutamiento, ocultando la topología interna al cliente.",
+                    "Convierte automáticamente solicitudes HTTP sincrónicas en eventos asincrónicos de Kafka.",
+                    "Garantiza transacciones ACID distribuidas entre todos los microservicios subyacentes."
+                ],
+                correctIndex: 1,
+                feedback: "El API Gateway actúa como una fachada que centraliza la seguridad, el ruteo y la agregación de datos, evitando que los clientes frontend conozcan las IPs o estructuras de los microservicios internos."
+            },
+            {
+                question: "Se requiere diseñar un sistema bancario distribuido (core de Flux IT) donde la consistencia absoluta de los saldos no puede bloquear el sistema de reportes de alta demanda. ¿Qué patrón arquitectónico es el más adecuado?",
+                answers: [
+                    "Patrón Singleton distribuido.",
+                    "CQRS (Command Query Responsibility Segregation) separando la base de datos de escritura (saldos) de las vistas de lectura optimizadas (reportes).",
+                    "Two-Phase Commit (2PC) bloqueando las tablas de ambas bases de datos al mismo tiempo.",
+                    "Monolito modular compartiendo un único esquema de base de datos en memoria."
+                ],
+                correctIndex: 1,
+                feedback: "CQRS permite separar físicamente el modelo y base de datos donde se hacen los comandos (escrituras) de donde se hacen las consultas (lecturas), permitiendo escalar el sistema de reportes independientemente."
+            },
+            {
+                question: "Según el Teorema CAP, en un sistema distribuido que sufre una partición de red (Network Partition - P), se debe elegir entre:",
+                answers: [
+                    "Caché (Cache) o Rendimiento (Performance).",
+                    "Consistencia (Consistency) o Disponibilidad (Availability).",
+                    "Concurrencia (Concurrency) o Persistencia (Persistence).",
+                    "Acoplamiento (Coupling) o Cohesión (Cohesion)."
+                ],
+                correctIndex: 1,
+                feedback: "El teorema CAP (Brewer) establece que ante una caída de red (Partición), debés elegir si el sistema sigue respondiendo pero con datos potencialmente desactualizados (Disponibilidad), o si rechaza peticiones para garantizar que nadie lea un dato falso (Consistencia)."
+            },
+            {
+                question: "En una arquitectura Event-Driven utilizando Apache Kafka, ¿qué es y para qué sirve una Dead Letter Queue (DLQ)?",
+                answers: [
+                    "Es una cola secundaria en memoria RAM para consumir eventos más rápido.",
+                    "Es un tópico o cola especial donde se envían los mensajes que no pudieron ser procesados con éxito tras varios reintentos, para su posterior análisis o reprocesamiento manual.",
+                    "Es un patrón de seguridad que borra los eventos inyectados con SQL Injection.",
+                    "Es el log maestro donde Kafka guarda absolutamente todos los eventos saludables del sistema."
+                ],
+                correctIndex: 1,
+                feedback: "La DLQ (Cola de Mensajes Muertos) actúa como un 'tacho de basura inteligente'. Aísla los mensajes 'envenenados' que causan excepciones en el consumidor para no bloquear el procesamiento del resto de la cola."
+            },
+            {
+                question: "Usted debe diseñar la arquitectura para el pico de tráfico de un e-commerce durante el CyberMonday. Para aliviar la carga de lectura en la base de datos SQL principal, la mejor estrategia es:",
+                answers: [
+                    "Implementar escalabilidad vertical agregando discos HDD.",
+                    "Implementar un clúster de caché distribuido en memoria (como Redis o Memcached) aplicando el patrón Cache-Aside.",
+                    "Convertir toda la base de datos SQL a un archivo CSV plano y leerlo desde el servidor Node.js.",
+                    "Crear un Circuit Breaker que apague la base de datos durante el pico de tráfico."
+                ],
+                correctIndex: 1,
+                feedback: "El patrón Cache-Aside busca primero el dato en la memoria RAM hiper-rápida (Redis). Si no está (Cache Miss), va a la DB, lo guarda en Redis y lo devuelve, absorbiendo el 90% del impacto de lectura."
+            },
+            {
+                question: "¿Cuál es la principal diferencia entre el patrón Saga implementado mediante 'Coreografía' vs 'Orquestación'?",
+                answers: [
+                    "La orquestación es sincrónica (REST) y la coreografía es exclusiva de gRPC.",
+                    "En la coreografía los servicios publican y reaccionan a eventos de forma descentralizada; en la orquestación, un microservicio central (Orquestador) comanda explícitamente a los demás qué hacer.",
+                    "La coreografía requiere bases de datos SQL y la orquestación bases de datos NoSQL MongoDB.",
+                    "No hay diferencia, son dos términos para el mismo patrón transaccional."
+                ],
+                correctIndex: 1,
+                feedback: "En la coreografía, los servicios bailan solos escuchando eventos (descentralizado). En la orquestación, hay un 'Director de orquesta' (un servicio controlador central) que mantiene el estado de la saga y lanza los comandos."
+            },
+            {
+                question: "Al aplicar el patrón Strangler Fig (Higuera Estranguladora) para migrar un sistema Legacy monolítico hacia microservicios, el enfoque principal es:",
+                answers: [
+                    "Apagar el sistema Legacy el viernes y encender los microservicios nuevos el lunes (Big Bang Rewrite).",
+                    "Interceptar las llamadas en el borde del sistema (ej. mediante un API Gateway) y redirigir gradualmente el tráfico de las funcionalidades modernizadas a los nuevos microservicios, estrangulando lentamente al legado.",
+                    "Crear una base de datos distribuida y forzar al monolito a usar GraphQL.",
+                    "Borrar el código fuente original del monolito rama por rama en Git."
+                ],
+                correctIndex: 1,
+                feedback: "Es el patrón de modernización más seguro. El Facade/Gateway enruta endpoints específicos a los microservicios nuevos, mientras el resto sigue cayendo en el monolito, reemplazándolo módulo por módulo de forma segura."
+            },
+            {
+                question: "Si su sistema necesita una alta disponibilidad, tiempos de respuesta de lectura ultra bajos y una estructura de datos flexible (sin esquemas rígidos), ¿qué tipo de base de datos es la elección arquitectónica más natural?",
+                answers: [
+                    "Base de datos Relacional (RDBMS) fuertemente normalizada (ej. PostgreSQL).",
+                    "Base de datos orientada a Grafos (ej. Neo4j).",
+                    "Base de datos NoSQL orientada a Documentos o Clave-Valor (ej. MongoDB, DynamoDB).",
+                    "Archivos XML locales guardados en cada contenedor Docker."
+                ],
+                correctIndex: 2,
+                feedback: "Las bases NoSQL están diseñadas para escalar horizontalmente de forma masiva, flexibilizar esquemas (JSON) y priorizar la velocidad y disponibilidad (BASE) por sobre la consistencia transaccional estricta (ACID)."
+            },
+            {
+                question: "El patrón 'Event Sourcing' dicta que:",
+                answers: [
+                    "Se deben enviar notificaciones push a los celulares de los usuarios ante cada click.",
+                    "El estado de las entidades del sistema no se almacena como una foto final en la base de datos, sino como una secuencia inmutable de eventos que, al ser reproducidos (re-played), determinan el estado actual.",
+                    "El código fuente debe descargarse desde repositorios públicos mediante eventos HTTP.",
+                    "Los eventos solo pueden ser procesados si el cliente mantiene la conexión abierta mediante WebSockets."
+                ],
+                correctIndex: 1,
+                feedback: "Es como el registro contable de un banco: no se borran errores (updates destructivos), se agrega una nueva transacción que anula la anterior. Permite tener auditoría total y reconstruir el estado en cualquier punto temporal."
+            },
+            {
+                question: "En arquitecturas Cloud, el término 'Escalabilidad Horizontal' se refiere a:",
+                answers: [
+                    "Añadir más memoria RAM, CPU o discos SSD a un servidor ya existente.",
+                    "Añadir más nodos, servidores físicos o instancias (pods) al balanceador de carga para distribuir el tráfico.",
+                    "Refactorizar el código para que las clases sean más cortas horizontalmente.",
+                    "Replicar la base de datos en zonas geográficas (continentes) diferentes para backups fríos."
+                ],
+                correctIndex: 1,
+                feedback: "Horizontal (Scale Out/In) es agregar o quitar máquinas (instancias) manejadas por un Load Balancer. Vertical (Scale Up/Down) es inyectarle esteroides (RAM/CPU) a una sola máquina."
+            },
+            {
+                question: "Si un microservicio externo responde pero con latencias intermitentes extremas (más de 30 segundos), y esto está agotando el pool de hilos de nuestro servicio local, el patrón de protección arquitectónica requerido es:",
+                answers: [
+                    "Retry (Reintentos infinitos).",
+                    "Circuit Breaker configurado con un umbral de Timeout.",
+                    "Orquestación de Sagas.",
+                    "Load Balancing de Capa 4."
+                ],
+                correctIndex: 1,
+                feedback: "Los timeouts lentos son los peores enemigos porque bloquean recursos (hilos, memoria). El Circuit Breaker detecta estos timeouts, se 'abre', y hace que las siguientes peticiones fallen rápido localmente liberando la CPU."
+            },
+            {
+                question: "El algoritmo de 'Token Bucket' es una de las implementaciones más comunes para resolver arquitecturas de:",
+                answers: [
+                    "Autenticación mediante JWT.",
+                    "Rate Limiting o Throttling.",
+                    "Descubrimiento de Servicios (Service Discovery).",
+                    "Balanceo de Carga por Round-Robin."
+                ],
+                correctIndex: 1,
+                feedback: "El Token Bucket recarga 'fichas' a una tasa constante. Cada petición consume una ficha. Si el balde (bucket) se vacía, se retorna HTTP 429 (Too Many Requests). Es excelente porque permite ráfagas de tráfico controladas."
+            }
+        ];
+
+        // Módulo 3 Bank: Cultura DevOps
+        const modulo3Questions = [
+            {
+                question: "¿Cuál es la principal ventaja de realizar 'git rebase' en lugar de 'git merge' al integrar cambios de una rama secundaria?",
+                answers: [
+                    "Rebase compila el código automáticamente antes de unir las ramas.",
+                    "Rebase evita conflictos de fusión en el 100% de los casos.",
+                    "Rebase mantiene un historial de commits lineal y limpio al reubicar tus commits locales sobre la punta de la rama destino, evitando commits de merge extras.",
+                    "Rebase reduce el tamaño físico de los archivos del repositorio en disco."
+                ],
+                correctIndex: 2,
+                feedback: "El rebase linealiza el árbol de Git, facilitando la auditoría y lectura de commits al evitar los ruidosos commits de fusión automáticos ('Merge branch...')."
+            },
+            {
+                question: "En Docker, ¿cuál es la diferencia clave entre usar la instrucción COPY y la instrucción ADD en un Dockerfile?",
+                answers: [
+                    "ADD solo sirve para contenedores Windows; COPY es exclusivo para entornos Linux.",
+                    "COPY copia archivos locales del host al contenedor; ADD además permite descargar archivos desde URLs remotas y desempaquetar archivos tar comprimidos automáticamente.",
+                    "ADD es significativamente más rápido que COPY porque comprime la capa intermedia en tiempo real.",
+                    "No hay diferencia; son alias exactamente idénticos en la especificación de Docker."
+                ],
+                correctIndex: 1,
+                feedback: "ADD tiene superpoderes adicionales (descomprime tarballs y descarga de URLs), pero por buenas prácticas de Docker y seguridad, siempre se recomienda usar COPY a menos que requieras esas funciones específicas."
+            },
+            {
+                question: "Se requiere optimizar al máximo el peso de una imagen de Docker para un microservicio productivo de Flux IT. ¿Cuál es la estrategia recomendada?",
+                answers: [
+                    "Ejecutar el contenedor con privilegios de root para evitar el cacheado de capas.",
+                    "Utilizar Multi-Stage Builds (construcción en etapas) y seleccionar imágenes base ultralivianas como Alpine o distroless.",
+                    "Guardar la imagen final directamente en formato comprimido zip en el host.",
+                    "Borrar la carpeta .git del host antes de compilar la imagen."
+                ],
+                correctIndex: 1,
+                feedback: "Multi-stage builds te permite tener un contenedor de compilación pesado con SDKs, y luego arrastrar solo el binario final compilado a una imagen ultraliviana de producción (como Alpine), reduciendo el peso de gigabytes a megabytes."
+            },
+            {
+                question: "En Git, el comando 'git cherry-pick' se utiliza específicamente para:",
+                answers: [
+                    "Borrar un commit erróneo directamente de la rama remota main sin dejar rastros.",
+                    "Aplicar los cambios introducidos por uno o varios commits específicos de otra rama sobre la rama actual en la que estás parado.",
+                    "Verificar el rendimiento y consumo de memoria RAM de un pipeline en Jenkins.",
+                    "Hacer un clon parcial de un repositorio descargando solo los archivos de texto."
+                ],
+                correctIndex: 1,
+                feedback: "Cherry-pick es un comando quirúrgico. Te permite ir a cualquier rama secundaria, tomar un único commit (por ejemplo, un bugfix de producción) e inyectarlo en tu rama activa."
+            },
+            {
+                question: "Dentro de un pipeline de CI/CD, ¿cuál es la diferencia conceptual entre Continuous Delivery (Entrega Continua) y Continuous Deployment (Despliegue Continuo)?",
+                answers: [
+                    "Continuous Delivery requiere bases de datos SQL; Continuous Deployment solo funciona con NoSQL.",
+                    "En Continuous Delivery, el despliegue final a producción requiere una aprobación manual humana; en Continuous Deployment, los cambios que pasan todas las pruebas automatizadas se despliegan en producción automáticamente.",
+                    "Continuous Deployment solo corre en nubes públicas como AWS; Continuous Delivery es para servidores on-premise.",
+                    "Continuous Delivery es exclusivo de perfiles de QA; Continuous Deployment es para programadores backend."
+                ],
+                correctIndex: 1,
+                feedback: "Ambos automatizan la compilación y el testing, pero el 'Deployment' va un paso más allá eliminando el botón de liberación manual: si el pipeline está en verde, el código impacta directamente en los usuarios de producción."
+            },
+            {
+                question: "En Kubernetes, ¿qué es un Pod?",
+                answers: [
+                    "Es un servidor físico on-premise asignado al clúster.",
+                    "Es la unidad de ejecución más pequeña y básica que se puede crear y gestionar, la cual representa un grupo de uno o más contenedores estrechamente acoplados que comparten red y almacenamiento.",
+                    "Es una base de datos NoSQL distribuida en memoria RAM.",
+                    "Es un script de automatización exclusivo para entornos GCP."
+                ],
+                correctIndex: 1,
+                feedback: "El Pod es el átomo de Kubernetes. Aunque suele contener un solo contenedor de Docker, representa la abstracción donde se ejecuta tu aplicación, compartiendo recursos de red local y volúmenes de almacenamiento."
+            },
+            {
+                question: "¿En qué consiste una estrategia de despliegue tipo 'Canary Deployment' (Despliegue Canario)?",
+                answers: [
+                    "En encriptar las conexiones SSL del balanceador mediante certificados DNS dinámicos.",
+                    "En liberar la nueva versión del software de manera progresiva a un pequeño porcentaje de usuarios reales, permitiendo monitorear errores antes de escalarla al 100% del tráfico.",
+                    "En duplicar la infraestructura física apagando el clúster original durante 30 minutos.",
+                    "En migrar todas las bases de datos de Postgres a MongoDB de forma automática."
+                ],
+                correctIndex: 1,
+                feedback: "Inspirado en los canarios usados en las minas de carbón para detectar gases tóxicos, este patrón despliega la versión nueva a una fracción mínima del tráfico (ej. 5%). Si hay bugs, solo afecta a ese 5% y el rollback es inmediato."
+            },
+            {
+                question: "En Docker, ¿cuál es la diferencia principal entre un Volume (Volumen de Docker) y un Bind Mount?",
+                answers: [
+                    "Los volúmenes solo corren en Mac y los bind mounts en Linux.",
+                    "Los volúmenes son gestionados internamente por Docker y están aislados del sistema de archivos del host; los bind mounts mapean directamente un directorio exacto del host al contenedor.",
+                    "Los bind mounts encriptan los datos en tránsito; los volúmenes guardan todo en texto plano.",
+                    "No hay diferencia, Docker obsoletizó los bind mounts en la versión v20."
+                ],
+                correctIndex: 1,
+                feedback: "Los volúmenes son la forma recomendada de persistir datos porque Docker los gestiona de forma segura en un área aislada. Los bind mounts dependen de la estructura física de carpetas del host, siendo útiles para desarrollo local."
+            },
+            {
+                question: "Al configurar alertas SRE, ¿cuál es la principal función de Prometheus y Grafana en un clúster de microservicios?",
+                answers: [
+                    "Prometheus es un broker de mensajería; Grafana es la base de datos distribuida.",
+                    "Prometheus recolecta métricas de series temporales de tus microservicios y clústeres; Grafana se conecta a él para renderizar tableros e infografías analíticas.",
+                    "Prometheus realiza el despliegue Blue-Green; Grafana ejecuta las pruebas unitarias.",
+                    "Prometheus escanea vulnerabilidades de código estático; Grafana enruta llamadas DNS."
+                ],
+                correctIndex: 1,
+                feedback: "Prometheus recolecta periódicamente métricas (CPU, memoria, latencias HTTP), y Grafana las lee para representarlas en dashboards interactivos y tableros en tiempo real."
+            },
+            {
+                question: "Bajo la cultura DevOps / SRE, ¿qué significa el concepto de 'Blameless Post-Mortem' tras una caída grave del sistema?",
+                answers: [
+                    "Identificar inmediatamente al culpable de haber subido el commit roto para suspenderlo temporalmente.",
+                    "Borrar los logs de auditoría para evitar multas del cliente bancario.",
+                    "Realizar una investigación técnica exhaustiva enfocada en entender POR QUÉ fallaron las defensas del sistema y de la infraestructura, sin buscar culpabilizar a las personas, para prevenir que vuelva a ocurrir.",
+                    "Restaurar la base de datos de producción ignorando los fallos del balanceador."
+                ],
+                correctIndex: 2,
+                feedback: "El Blameless Post-Mortem asume que las personas trabajan con buena intención basándose en la información que tenían. El problema es la debilidad de las alertas, pruebas o automatizaciones de la infraestructura."
+            },
+            {
+                question: "En Kubernetes, ¿qué es el componente denominado KEDA (Kubernetes Event-driven Autoscaling)?",
+                answers: [
+                    "Autoescalar los pods de tu clúster basándose en eventos externos (como el tamaño de una cola de Kafka o RabbitMQ) en lugar de medir solo el consumo de CPU o memoria RAM física.",
+                    "Cifrar los tokens JWT en los endpoints REST.",
+                    "Configurar túneles VPN dinámicos entre múltiples proveedores de nube pública.",
+                    "Compilar código Node.js de manera concurrente en contenedores secundarios."
+                ],
+                correctIndex: 0,
+                feedback: "KEDA es vital en arquitecturas dirigidas por eventos (EDA). Permite que tu servicio escale a 50 réplicas si la cola de Kafka se llena de mensajes, e incluso apagar los pods a cero si la cola está vacía, ahorrando costos cloud."
+            },
+            {
+                question: "Usted necesita automatizar la creación y el versionado de la infraestructura de red, servidores y balanceadores de carga en la nube de AWS. ¿Qué práctica técnica debe aplicar?",
+                answers: [
+                    "Crear scripts Bash locales y ejecutarlos manualmente desde la consola del administrador.",
+                    "IaC (Infrastructure as Code - Infraestructura como Código) utilizando herramientas descriptivas declarativas como Terraform o CloudFormation.",
+                    "Configurar alertas en CloudWatch para que escalen de forma vertical las instancias EC2.",
+                    "Delegar el control al equipo de seguridad mediante políticas IAM de lectura."
+                ],
+                correctIndex: 1,
+                feedback: "Infrastructure as Code (IaC) permite definir toda tu topología de red y servidores en archivos de texto planos (código declarativo). Esto permite versionar tu infraestructura en Git, automatizarla y replicar entornos idénticos sin errores manuales."
+            },
+            {
+                question: "En Git, ¿cuál es el propósito de utilizar 'git stash'?",
+                answers: [
+                    "Subir commits directamente a la rama de producción sin pasar por un pipeline.",
+                    "Almacenar temporalmente los cambios no confirmados del directorio de trabajo en una pila interna de Git, permitiéndote limpiar tu entorno para cambiar de rama sin perder tu progreso.",
+                    "Compilar de forma estática las librerías compartidas del framework central.",
+                    "Descargar la base de datos de producción codificada en binario base64."
+                ],
+                correctIndex: 1,
+                feedback: "Git stash es como un portapapeles temporal. Te permite ocultar y guardar tus cambios locales a medio hacer para limpiar tu entorno de trabajo, resolver una emergencia en otra rama, y luego recuperar tus cambios con 'git stash pop'."
+            },
+            {
+                question: "Al configurar políticas de seguridad IAM (Identity and Access Management) en nubes como AWS, Azure o GCP, el principio de 'Mínimo Privilegio' dicta que:",
+                answers: [
+                    "Todos los desarrolladores deben poseer accesos de administrador absoluto para evitar trabas en el pipeline.",
+                    "Las credenciales de los servicios deben cambiarse manualmente cada 48 horas.",
+                    "Se debe otorgar a los usuarios y microservicios únicamente los permisos mínimos indispensables requeridos para llevar a cabo sus funciones lógicas específicas, reduciendo la superficie de ataque.",
+                    "Se deben bloquear todas las conexiones entrantes SSH al clúster."
+                ],
+                correctIndex: 2,
+                feedback: "El principio de mínimo privilegio (Least Privilege) evita catástrofes: si un microservicio solo necesita leer de una base de datos, no debe tener permisos de escritura, borrado ni control de usuarios sobre el motor SQL."
+            },
+            {
+                question: "En Kubernetes, ¿qué componente es el responsable de mantener el estado deseado del clúster, monitorear la salud de los pods y recrear instancias si estas fallan?",
+                answers: [
+                    "El Docker Daemon local.",
+                    "El Kube-Controller-Manager (y sus bucles de control internos).",
+                    "La base de datos relacional PostgreSQL del nodo máster.",
+                    "El pipeline de GitHub Actions."
+                ],
+                correctIndex: 1,
+                feedback: "El plano de control de Kubernetes ejecuta bucles de control continuos (reconciliation loops). Si le indicas que quieres tener 3 pods, y uno muere, el controlador de réplicas detecta el desvío y levanta un pod nuevo al instante."
+            },
+            {
+                question: "¿Cuál de los siguientes problemas se resuelve implementando 'Multistage Builds' en Docker?",
+                answers: [
+                    "Evita conflictos de red entre múltiples contenedores locales.",
+                    "La acumulación de herramientas de desarrollo, SDKs de compilación pesados y código intermedio dentro de la imagen productiva final, optimizando su tamaño y seguridad.",
+                    "Permite correr imágenes Linux dentro de servidores físicos Windows antiguos.",
+                    "Automatiza la encriptación SSL de los endpoints internos."
+                ],
+                correctIndex: 1,
+                feedback: "Multistage build separa la etapa de compilación (build stage, que requiere JDK, compilers, etc.) de la de ejecución. Permite que la imagen que subes al registro solo contenga el ejecutable (jar, binario) y el runtime de ejecución."
+            },
+            {
+                question: "En Git Flow, ¿cuál es la diferencia de ciclo de vida entre una rama de tipo 'hotfix' y una rama de tipo 'feature'?",
+                answers: [
+                    "Feature se bifurca de main; hotfix se bifurca de develop.",
+                    "Hotfix se utiliza para corregir errores urgentes directamente detectados en producción bifurcándose de main e integrándose tanto a main como a develop; feature se usa para nuevas funcionalidades integrándose solo a develop.",
+                    "Hotfix solo puede ser creada por perfiles SRE; feature es exclusiva de diseñadores UX.",
+                    "No hay diferencias; son dos términos para la misma rama temporal."
+                ],
+                correctIndex: 1,
+                feedback: "Hotfix reacciona ante una emergencia en producción. Nace de main (que tiene el código productivo actual), se arregla el bug y se integra rápido a main (para parchear producción) y a develop (para no perder el parche en futuros desarrollos)."
+            },
+            {
+                question: "En Kubernetes, ¿qué es un Pod?",
+                answers: [
+                    "Es un servidor físico on-premise asignado al clúster.",
+                    "Es la unidad de ejecución más pequeña y básica que se puede crear y gestionar, la cual representa un grupo de uno o más contenedores estrechamente acoplados que comparten red y almacenamiento.",
+                    "Es una base de datos NoSQL distribuida en memoria RAM.",
+                    "Es un script de automatización de builds."
+                ],
+                correctIndex: 1,
+                feedback: "El Pod es el átomo de Kubernetes. Aloja uno o más contenedores estrechamente relacionados que comparten la misma IP y recursos locales, facilitando escalado cohesivo."
+            },
+            {
+                question: "Si un microservicio externo responde pero con latencias intermitentes extremas (más de 30 segundos), y esto está agotando el pool de hilos de nuestro servicio local, el patrón de protección arquitectónica requerido es:",
+                answers: [
+                    "Retry (Reintentos infinitos).",
+                    "Circuit Breaker configurado con un umbral de Timeout.",
+                    "Orquestación de Sagas.",
+                    "Load Balancing de Capa 4."
+                ],
+                correctIndex: 1,
+                feedback: "Los timeouts lentos son los peores enemigos porque bloquean recursos (hilos, memoria). El Circuit Breaker detecta estos timeouts, se 'abre', y hace que las siguientes peticiones fallen rápido localmente liberando la CPU."
+            },
+            {
+                question: "¿Qué es 'Liveness Probe' (Prueba de Supervivencia) en Kubernetes y cómo ayuda a la resiliencia?",
+                answers: [
+                    "Es un test que mide si la base de datos externa acepta conexiones remotas encriptadas.",
+                    "Es un mecanismo con el cual el clúster comprueba periódicamente la salud interna de un contenedor dentro de un Pod; si la prueba falla, Kubernetes reinicia el contenedor de manera autónoma.",
+                    "Es una alerta que gatilla un correo electrónico al equipo de DevOps si la latencia sube.",
+                    "Es la fase del pipeline donde se ejecuta el escaneo de código SonarQube."
+                ],
+                correctIndex: 1,
+                feedback: "La liveness probe detecta bloqueos infinitos de hilos (deadlocks) o caídas internas del proceso. Si tu servidor Java se congela y deja de responder llamadas, la sonda lo detecta, K8s destruye el contenedor y levanta uno nuevo."
+            }
+        ];
+
+        let activeQuizQuestions = [];
+        let activeQuizKey = "";
+        let activeQuizName = "";
+        let activeQuizIndex = 0;
+        let activeQuizScore = 0;
+        let selectedQuizAnswerIndex = null;
+
+        function setupQuiz(moduleId) {
+            if (moduleId === 'modulo1') {
+                activeQuizQuestions = modulo1Questions;
+                activeQuizKey = "modulo1";
+                activeQuizName = "Módulo 1: Ing. de Software";
+                document.getElementById('quiz-module-name-badge').className = "font-bold text-blue-400 tracking-wider";
+            } else if (moduleId === 'modulo2') {
+                activeQuizQuestions = modulo2Questions;
+                activeQuizKey = "modulo2";
+                activeQuizName = "Módulo 2: Arq. de Software";
+                document.getElementById('quiz-module-name-badge').className = "font-bold text-teal-400 tracking-wider";
+            } else {
+                activeQuizQuestions = modulo3Questions;
+                activeQuizKey = "modulo3";
+                activeQuizName = "Módulo 3: Cultura DevOps";
+                document.getElementById('quiz-module-name-badge').className = "font-bold text-amber-400 tracking-wider";
+            }
+
+            document.getElementById('quiz-module-name-badge').innerText = activeQuizName.toUpperCase();
+            
+            // Switch screen
+            document.getElementById('quiz-start-screen').classList.add('hidden');
+            document.getElementById('quiz-results-screen').classList.add('hidden');
+            document.getElementById('quiz-game-screen').classList.remove('hidden');
+            
+            activeQuizIndex = 0;
+            activeQuizScore = 0;
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            selectedQuizAnswerIndex = null;
+            const q = activeQuizQuestions[activeQuizIndex];
+            
+            document.getElementById('quiz-progress-text').innerText = 'Pregunta ' + (activeQuizIndex + 1) + ' de ' + activeQuizQuestions.length;
+            document.getElementById('quiz-score-text').innerText = 'Aciertos: ' + activeQuizScore + '/' + activeQuizIndex;
+            document.getElementById('quiz-question-text').innerText = q.question;
+            document.getElementById('quiz-feedback-panel').classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+
+            const container = document.getElementById('quiz-answers-container');
+            container.innerHTML = "";
+
+            q.answers.forEach((ans, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-xl border border-slate-800 hover:border-blue-500 bg-slate-900/50 hover:bg-slate-900 transition text-sm text-slate-300 font-medium";
+                btn.innerText = ans;
+                btn.onclick = function() { selectQuizAnswer(idx, btn); };
+                container.appendChild(btn);
+            });
+        }
+
+        function selectQuizAnswer(index, element) {
+            if (selectedQuizAnswerIndex !== null) return;
+            selectedQuizAnswerIndex = index;
+
+            const q = activeQuizQuestions[activeQuizIndex];
+            const isCorrect = index === q.correctIndex;
+
+            if (isCorrect) {
+                activeQuizScore++;
+                element.className = "w-full text-left p-4 rounded-xl border border-emerald-500 bg-emerald-950/40 text-sm text-emerald-300 font-bold";
+            } else {
+                element.className = "w-full text-left p-4 rounded-xl border border-rose-500 bg-rose-950/40 text-sm text-rose-300 font-bold";
+                const buttons = document.getElementById('quiz-answers-container').children;
+                buttons[q.correctIndex].className = "w-full text-left p-4 rounded-xl border border-emerald-500 bg-emerald-950/20 text-sm text-emerald-300 font-semibold";
+            }
+
+            const fbPanel = document.getElementById('quiz-feedback-panel');
+            fbPanel.classList.remove('hidden');
+            if (isCorrect) {
+                fbPanel.className = "p-4 rounded-xl border border-emerald-500/20 bg-emerald-950/20 text-xs text-emerald-400 mt-4";
+                fbPanel.innerHTML = '<strong>¡Excelente!</strong> ' + q.feedback;
+            } else {
+                fbPanel.className = "p-4 rounded-xl border border-rose-500/20 bg-rose-950/20 text-xs text-rose-400 mt-4";
+                fbPanel.innerHTML = '<strong>Respuesta incorrecta:</strong> ' + q.feedback;
+            }
+
+            document.getElementById('quiz-score-text').innerText = 'Aciertos: ' + activeQuizScore + '/' + (activeQuizIndex + 1);
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            activeQuizIndex++;
+            if (activeQuizIndex < activeQuizQuestions.length) {
+                renderQuizQuestion();
+            } else {
+                showQuizResults();
+            }
+        }
+
+        function showQuizResults() {
+            document.getElementById('quiz-game-screen').classList.add('hidden');
+            document.getElementById('quiz-results-screen').classList.remove('hidden');
+            
+            const pct = Math.round((activeQuizScore / activeQuizQuestions.length) * 100);
+            const summary = document.getElementById('quiz-results-summary');
+            const icon = document.getElementById('quiz-results-icon');
+
+            if (pct >= 80) {
+                icon.innerText = "🏆";
+                summary.innerHTML = '<span class="text-emerald-400 font-bold text-lg block mb-2 font-sans">¡Puntaje excepcional! (' + pct + '%)</span>Estás listísimo para afrontar la presión del cronómetro de TestGorilla. Tus bases teóricas de arquitectura e ingeniería están al nivel de un desarrollador senior.';
+            } else if (pct >= 50) {
+                icon.innerText = "👍";
+                summary.innerHTML = '<span class="text-amber-400 font-bold text-lg block mb-2 font-sans">Buen desempeño (' + pct + '%)</span>Tienes los conceptos generales incorporados, pero te sugiero darle otra pasada rápida a las flashcards de patrones y a la teoría de resiliencia antes de rendir el examen oficial.';
+            } else {
+                icon.innerText = "📚";
+                summary.innerHTML = '<span class="text-rose-400 font-bold text-lg block mb-2 font-sans">Requiere revisión (' + pct + '%)</span>El test real de TestGorilla te exigirá responder muy rápido. Te recomiendo leer en detalle la guía teórica y simular un par de veces más este bloque para ganar velocidad de lectura.';
+            }
+
+            // Registrar intento dinámicamente en el estado global y UI
+            addQuizAttempt(activeQuizKey, activeQuizScore, activeQuizQuestions.length);
+        }
+
+        function restartQuiz() {
+            document.getElementById('quiz-results-screen').classList.add('hidden');
+            document.getElementById('quiz-start-screen').classList.remove('hidden');
+        }
+    </script>
+
+</body>
+</html>
