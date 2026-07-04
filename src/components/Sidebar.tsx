@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Pattern } from '../data/types';
 import { CategoryAccordion } from './CategoryAccordion';
-import { Layers, Activity, Settings, Code, ChevronDown, ChevronRight, Hammer, BookOpen, Terminal, HelpCircle, Award, Shield, Cpu } from 'lucide-react';
+import { Layers, Activity, Settings, Code, ChevronDown, ChevronRight, BookOpen, Terminal, HelpCircle, Award, Shield, Cpu } from 'lucide-react';
 
 interface SidebarProps {
   patterns: Pattern[];
@@ -39,7 +39,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   useEffect(() => {
     if (activeView === 'pattern' || activeView === 'category') {
       setShowPatternsSubmenu(true);
-    } else if (activeView === 'solid-clean' || activeView === 'grasp') {
+    } else if (activeView === 'solid-clean' || activeView === 'grasp' || activeView === 'refactor') {
       setShowPrinciplesSubmenu(true);
     } else if (activeView === 'testing' || activeView === 'resilience-eda' || activeView === 'sre-devops') {
       setShowArchitectureSubmenu(true);
@@ -125,15 +125,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         )}
 
-        {/* SECCIÓN: PRINCIPIOS DE DISEÑO (SOLID/GRASP) */}
+        {/* SECCIÓN: PRINCIPIOS DE DISEÑO (SOLID/GRASP/REFACTOR) */}
         <button
           onClick={() => {
             setShowPrinciplesSubmenu(!showPrinciplesSubmenu);
-            if (activeView !== 'solid-clean' && activeView !== 'grasp') {
+            if (activeView !== 'solid-clean' && activeView !== 'grasp' && activeView !== 'refactor') {
               onSelectTopic('solid-clean');
             }
           }}
-          className={`pattern-item ${(activeView === 'solid-clean' || activeView === 'grasp') ? 'active' : ''}`}
+          className={`pattern-item ${(activeView === 'solid-clean' || activeView === 'grasp' || activeView === 'refactor') ? 'active' : ''}`}
           style={{ 
             fontWeight: '600', 
             border: '1px solid var(--border-color)',
@@ -168,6 +168,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
               style={{ fontSize: '13px', padding: '6px 10px' }}
             >
               Principios GRASP
+            </button>
+            <button
+              onClick={onSelectRefactor}
+              className={`pattern-item ${activeView === 'refactor' ? 'active' : ''}`}
+              style={{ fontSize: '13px', padding: '6px 10px' }}
+            >
+              Refactorización & Smells
             </button>
           </div>
         )}
@@ -226,21 +233,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         )}
 
-        {/* BOTÓN GLOBAL: REFACTORIZACIÓN */}
-        <button
-          onClick={onSelectRefactor}
-          className={`pattern-item ${activeView === 'refactor' ? 'active' : ''}`}
-          style={{ 
-            fontWeight: '600', 
-            border: '1px solid var(--border-color)',
-            boxShadow: 'var(--shadow-sm)',
-            marginTop: '8px'
-          }}
-        >
-          <Hammer size={16} />
-          <span>Refactorización (Smells)</span>
-        </button>
-
         {/* BOTÓN GLOBAL: FUENTES DE ESTUDIO */}
         <button
           onClick={onSelectSources}
@@ -248,7 +240,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           style={{ 
             fontWeight: '600', 
             border: '1px solid var(--border-color)',
-            boxShadow: 'var(--shadow-sm)'
+            boxShadow: 'var(--shadow-sm)',
+            marginTop: '8px'
           }}
         >
           <BookOpen size={16} />
