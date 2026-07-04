@@ -21,6 +21,9 @@ FROM nginx:stable-alpine
 # Copiar la carpeta compilada de la etapa anterior al directorio por defecto de Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
+# Copiar la configuración personalizada de Nginx con cabeceras de seguridad
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Exponer el puerto 80 del contenedor
 EXPOSE 80
 
