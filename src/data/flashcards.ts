@@ -1,3 +1,5 @@
+import { technicalDefinitions } from './definitions';
+
 export interface Flashcard {
   id: number;
   front: string;
@@ -9,56 +11,56 @@ export const flashcards: Flashcard[] = [
   {
     id: 1,
     front: "¿Cuál es la regla fundamental del Principio de Responsabilidad Única (SRP)?",
-    back: "Una clase debe tener una sola razón para sufrir modificaciones, lo que significa que debe resolver una única tarea enfocada a un solo actor o rol del negocio.",
-    hint: "Piensa en 'un solo actor' o 'una sola razón de cambio'."
+    back: technicalDefinitions.srp.description,
+    hint: technicalDefinitions.srp.hint || ""
   },
   {
     id: 2,
     front: "¿Qué define el principio Abierto/Cerrado (OCP)?",
-    back: "Las entidades de software (clases, módulos) deben estar abiertas para su extensión (a través de herencia o polimorfismo) pero estrictamente cerradas para su modificación directa.",
-    hint: "Extensible sin editar el código fuente original."
+    back: technicalDefinitions.ocp.description,
+    hint: technicalDefinitions.ocp.hint || ""
   },
   {
     id: 3,
     front: "¿Qué exige el principio de Sustitución de Liskov (LSP)?",
-    back: "Las subclases o tipos derivados deben poder sustituir a sus clases base sin alterar el comportamiento esperado ni la corrección del programa, sin lanzar excepciones imprevistas.",
-    hint: "Si parece un pato pero necesita pilas, tienes el tipo de objeto incorrecto."
+    back: technicalDefinitions.lsp.description,
+    hint: technicalDefinitions.lsp.hint || ""
   },
   {
     id: 4,
     front: "¿Cuál es el núcleo del principio de Segregación de Interfaces (ISP)?",
-    back: "Es preferible diseñar muchas interfaces específicas y delgadas a tener una sola interfaz gigantesca y monolítica, evitando obligar a los clientes a implementar métodos vacíos.",
-    hint: "Evita contratos gigantescos con firmas de métodos no utilizadas."
+    back: technicalDefinitions.isp.description,
+    hint: technicalDefinitions.isp.hint || ""
   },
   {
     id: 5,
     front: "¿En qué se diferencia el principio de Inversión de Dependencias (DIP) de la Inyección de Dependencias (DI)?",
-    back: "DIP es el principio arquitectónico abstracto (alto nivel no depende de bajo nivel, ambos dependen de abstracciones). DI es la técnica que implementa DIP inyectando las dependencias por constructor.",
-    hint: "Abstracciones sobre implementaciones concretas."
+    back: technicalDefinitions.dip.description,
+    hint: technicalDefinitions.dip.hint || ""
   },
   {
     id: 6,
     front: "¿Qué establece el principio GRASP de Experto en Información?",
-    back: "Se debe asignar la responsabilidad de una acción a la clase que posee la información necesaria para realizarla, reduciendo el acoplamiento y centralizando el conocimiento del dominio.",
-    hint: "¿Quién calcula el total del carrito? El carrito, no el procesador de pagos."
+    back: technicalDefinitions.informationExpert.description,
+    hint: technicalDefinitions.informationExpert.hint || ""
   },
   {
     id: 7,
     front: "¿Cuándo se utiliza una Fabricación Pura (Pure Fabrication) en GRASP?",
-    back: "Cuando queremos asignar responsabilidades de alta cohesión y bajo acoplamiento a una clase artificial que no representa un concepto del dominio real (ej. Logger, Database Connection, Exporter).",
-    hint: "Concepto de software creado artificialmente para mantener el dominio limpio."
+    back: technicalDefinitions.pureFabrication.description,
+    hint: technicalDefinitions.pureFabrication.hint || ""
   },
   {
     id: 8,
     front: "¿Cuál es el rol del patrón GRASP Controlador?",
-    back: "Es el primer objeto del sistema, más allá de la capa gráfica, que recibe las peticiones externas y coordina su ejecución delegando el flujo a los servicios o entidades del dominio.",
-    hint: "Mediador inicial entre el cliente o capa de presentación y el dominio."
+    back: technicalDefinitions.controller.description,
+    hint: technicalDefinitions.controller.hint || ""
   },
   {
     id: 9,
     front: "¿Qué es el principio GRASP de Variaciones Protegidas?",
-    back: "Identificar puntos de inestabilidad o cambio potencial y envolverlos en una interfaz estable y polimórfica para proteger al resto del sistema de variaciones futuras.",
-    hint: "Concepto similar al OCP pero enfocado en aislar la inestabilidad."
+    back: technicalDefinitions.protectedVariations.description,
+    hint: technicalDefinitions.protectedVariations.hint || ""
   },
   {
     id: 10,
@@ -117,32 +119,32 @@ export const flashcards: Flashcard[] = [
   {
     id: 19,
     front: "¿Cómo gestiona el patrón Saga las transacciones en una arquitectura de microservicios?",
-    back: "Divide una transacción distribuida en una secuencia de transacciones locales en cada microservicio, ejecutando transacciones compensatorias (reversa) si ocurre un fallo intermedio.",
-    hint: "Consistencia eventual mediante orquestación o coreografía ante fallos distribuidos."
+    back: technicalDefinitions.sagaPattern.description,
+    hint: technicalDefinitions.sagaPattern.hint || ""
   },
   {
     id: 20,
     front: "¿Qué es el Circuit Breaker y cuáles son sus tres estados?",
-    back: "Patrón de resiliencia que evita llamadas a servicios externos caídos. Estados: Cerrado (tráfico normal), Abierto (falla rápido localmente) y Semi-abierto (prueba de recuperación).",
-    hint: "Cortocircuita llamadas lentas o fallidas para liberar recursos."
+    back: technicalDefinitions.circuitBreaker.description,
+    hint: technicalDefinitions.circuitBreaker.hint || ""
   },
   {
     id: 21,
     front: "¿Qué problema resuelve el patrón Transactional Outbox?",
-    back: "Garantiza la atomicidad al guardar datos en la base de datos local y publicar eventos en un broker (Kafka/RabbitMQ) insertando el mensaje en una tabla temporal dentro de la misma transacción.",
-    hint: "Evita inconsistencias de red escribiendo en base de datos e inyectando cola en un solo paso ACID."
+    back: technicalDefinitions.transactionalOutbox.description,
+    hint: technicalDefinitions.transactionalOutbox.hint || ""
   },
   {
     id: 22,
     front: "¿Qué decisión impone el Teorema CAP ante una partición de red (P)?",
-    back: "Obliga a elegir entre Consistencia (C - denegar peticiones para evitar datos desactualizados) o Disponibilidad (A - aceptar peticiones respondiendo con datos potencialmente obsoletos).",
-    hint: "No puedes tener C y A simultáneamente si hay fallos de comunicación en red."
+    back: technicalDefinitions.capTheorem.description,
+    hint: technicalDefinitions.capTheorem.hint || ""
   },
   {
     id: 23,
     front: "¿Cuál es la diferencia técnica entre un Stub y un Mock?",
-    back: "Un Stub es un doble pasivo que devuelve respuestas preconfiguradas fijas. Un Mock es un doble activo enfocado en verificar e inspeccionar cómo y cuántas veces se invocó la dependencia.",
-    hint: "Stub alimenta el flujo del test; Mock audita las llamadas."
+    back: technicalDefinitions.stubVsMock.description,
+    hint: technicalDefinitions.stubVsMock.hint || ""
   },
   {
     id: 24,

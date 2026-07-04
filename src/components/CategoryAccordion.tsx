@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Pattern } from '../data/types';
 import { ChevronDown, ChevronRight } from 'lucide-react';
+import { categoryOverviews } from '../data/categories';
 
 interface CategoryAccordionProps {
   category: 'creational' | 'structural' | 'behavioral';
@@ -35,18 +36,6 @@ export const CategoryAccordion: React.FC<CategoryAccordionProps> = ({
       setIsOpen(true);
     }
   }, [selectedPattern, selectedCategory, activeView, category]);
-
-  // Explicaciones rápidas por tipo de patrón
-  const getCategoryDescription = () => {
-    switch (category) {
-      case 'creational':
-        return 'Relativos al proceso de creación de objetos. Desacoplan al sistema de cómo sus objetos se crean, componen y representan.';
-      case 'structural':
-        return 'Composición de clases y objetos. Definen cómo ensamblar objetos y clases grandes en estructuras más complejas de forma flexible y eficiente.';
-      case 'behavioral':
-        return 'Interacción y distribución de responsabilidades. Se centran en la comunicación entre objetos y en cómo coordinar flujos complejos de control.';
-    }
-  };
 
   // Color de borde de la explicación
   const getBorderColor = () => {
@@ -125,7 +114,7 @@ export const CategoryAccordion: React.FC<CategoryAccordionProps> = ({
             borderRadius: '6px',
             borderLeft: `2px solid ${getBorderColor()}`
           }}>
-            {getCategoryDescription()}
+            {categoryOverviews[category].shortDescription}
           </p>
           
           {patterns.map(p => (

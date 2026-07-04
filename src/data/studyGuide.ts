@@ -1,3 +1,5 @@
+import { technicalDefinitions } from './definitions';
+
 export interface Subsection {
   title: string;
   description: string;
@@ -36,7 +38,7 @@ export const studyGuide: StudySection[] = [
         title: "Inyección de Dependencias (DI) vs Inversión de Dependencias (DIP)",
         description: "Es común confundir el principio abstracto con el patrón técnico que lo implementa.",
         details: [
-          "DIP (Dependency Inversion Principle): Es el principio abstracto de diseño de SOLID. Establece que las clases de alto nivel (lógica de negocio) no deben depender de módulos de bajo nivel (bases de datos, red, controladores), sino que ambos deben depender de abstracciones (interfaces).",
+          `DIP (Dependency Inversion Principle): ${technicalDefinitions.dip.description}`,
           "DI (Dependency Injection): Es el patrón de diseño técnico que materializa DIP. Consiste en proveer (inyectar) las dependencias requeridas a un objeto desde el exterior, usualmente a través de su constructor, en lugar de que el propio objeto las instancie con 'new'."
         ]
       },
@@ -44,11 +46,11 @@ export const studyGuide: StudySection[] = [
         title: "SOLID (Resumen Rápido)",
         description: "Las cinco directrices indispensables para crear software mantenible y extensible:",
         details: [
-          "SRP (Single Responsibility Principle): Una clase debe tener solo una razón para cambiar, resolviendo una única responsabilidad para un solo actor del negocio.",
-          "OCP (Open/Closed Principle): El código debe estar abierto a la extensión pero cerrado a la modificación. Se implementa programando contra interfaces y abstrayendo el comportamiento.",
-          "LSP (Liskov Substitution Principle): Las clases derivadas deben poder reemplazar a sus clases base sin alterar el comportamiento correcto del sistema. No se deben heredar clases para capar funcionalidades o lanzar excepciones imprevistas.",
-          "ISP (Interface Segregation Principle): Es mejor diseñar interfaces pequeñas y enfocadas que una sola interfaz gigantesca que obligue a los clientes a implementar métodos inútiles.",
-          "DIP (Dependency Inversion Principle): Depender exclusivamente de abstracciones (interfaces) y nunca de implementaciones concretas."
+          `SRP (Single Responsibility Principle): ${technicalDefinitions.srp.description}`,
+          `OCP (Open/Closed Principle): ${technicalDefinitions.ocp.description}`,
+          `LSP (Liskov Substitution Principle): ${technicalDefinitions.lsp.description}`,
+          `ISP (Interface Segregation Principle): ${technicalDefinitions.isp.description}`,
+          `DIP (Dependency Inversion Principle): ${technicalDefinitions.dip.description}`
         ]
       }
     ]
@@ -60,41 +62,29 @@ export const studyGuide: StudySection[] = [
     introduction: "General Responsibility Assignment Software Patterns. Directrices esenciales enfocadas en la asignación básica de responsabilidades de las clases durante el modelado de dominio.",
     subsections: [
       {
-        title: "Experto en Información (Information Expert)",
-        description: "Asigna la responsabilidad de realizar un cálculo o ejecutar una acción a aquella clase que posee la información necesaria para llevarla a cabo.",
-        details: [
-          "Ayuda a mantener la encapsulación y reduce el acoplamiento.",
-          "Ejemplo: El objeto Carrito debe tener la responsabilidad de calcular el total de la compra porque contiene la lista de items, y no un servicio de pago externo."
-        ]
+        title: technicalDefinitions.informationExpert.title,
+        description: technicalDefinitions.informationExpert.description,
+        details: technicalDefinitions.informationExpert.details
       },
       {
-        title: "Creador (Creator)",
-        description: "¿Quién debe ser el responsable de instanciar un nuevo objeto B? La clase A debe crear a B si A contiene o agrega a B, A registra o usa estrechamente a B, o A tiene los datos para inicializar a B.",
-        details: [
-          "Promueve el bajo acoplamiento al delegar la creación en contenedores lógicos naturales."
-        ]
+        title: technicalDefinitions.creator.title,
+        description: technicalDefinitions.creator.description,
+        details: technicalDefinitions.creator.details
       },
       {
-        title: "Fabricación Pura (Pure Fabrication)",
-        description: "Crear una clase altamente cohesiva que no represente un concepto real del dominio de negocio, sino que se diseñe exclusivamente para mantener el acoplamiento bajo y la cohesión alta.",
-        details: [
-          "Se aplica para evitar sobrecargar objetos del dominio con tareas de infraestructura.",
-          "Ejemplos típicos: Exporters (PDFExporter), Loggers, manejadores de conexión a bases de datos."
-        ]
+        title: technicalDefinitions.pureFabrication.title,
+        description: technicalDefinitions.pureFabrication.description,
+        details: technicalDefinitions.pureFabrication.details
       },
       {
-        title: "Controlador (Controller)",
-        description: "Es el primer objeto no gráfico que intercepta y coordina un mensaje del sistema externo hacia el dominio, actuando como manejador del flujo del caso de uso.",
-        details: [
-          "Separa la capa de presentación de la lógica interna."
-        ]
+        title: technicalDefinitions.controller.title,
+        description: technicalDefinitions.controller.description,
+        details: technicalDefinitions.controller.details
       },
       {
-        title: "Variaciones Protegidas (Protected Variations)",
-        description: "Identificar los puntos de inestabilidad o variación futura en el sistema y envolverlos con una interfaz estable.",
-        details: [
-          "Protege a los clientes del impacto de cambios en elementos inestables o de terceros."
-        ]
+        title: technicalDefinitions.protectedVariations.title,
+        description: technicalDefinitions.protectedVariations.description,
+        details: technicalDefinitions.protectedVariations.details
       }
     ]
   },
@@ -144,12 +134,9 @@ export const studyGuide: StudySection[] = [
     introduction: "Conceptos esenciales para garantizar que la suite de pruebas automatizadas sea confiable, veloz y robusta.",
     subsections: [
       {
-        title: "Doble de Prueba: Stub vs Mock",
-        description: "Distinguir la forma y propósito de los dobles de prueba es crucial para evitar pruebas frágiles o mal diseñadas.",
-        details: [
-          "Stub (Doble Pasivo): Se utiliza para proveer respuestas fijas preconfiguradas que alimentan el flujo del componente bajo prueba. No verifica llamadas ni comportamiento.",
-          "Mock (Doble Activo): Se enfoca en auditar y asertar la interacción. Valida si un método de la dependencia fue llamado, cuántas veces y con qué argumentos específicos."
-        ]
+        title: technicalDefinitions.stubVsMock.title,
+        description: technicalDefinitions.stubVsMock.description,
+        details: technicalDefinitions.stubVsMock.details
       },
       {
         title: "El Ciclo TDD (Test-Driven Development)",
@@ -169,30 +156,19 @@ export const studyGuide: StudySection[] = [
     introduction: "Patrones arquitectónicos avanzados diseñados para asegurar la alta disponibilidad, tolerancia a fallos y escalabilidad horizontal de sistemas distribuidos.",
     subsections: [
       {
-        title: "Circuit Breaker (Patrón Cortocircuito)",
-        description: "Protege al sistema local de la saturación al realizar llamadas a servicios externos inestables o lentos.",
-        details: [
-          "Estado Cerrado: Las peticiones fluyen normalmente hacia el servicio externo.",
-          "Estado Abierto: Ante reiterados fallos o timeouts, el circuito se abre. Todas las peticiones fallan rápido localmente (fail-fast), liberando hilos de ejecución de inmediato.",
-          "Estado Semi-abierto: Transcurrido un tiempo de enfriamiento, permite pasar unas pocas solicitudes de prueba para validar si el servicio externo se ha recuperado."
-        ]
+        title: technicalDefinitions.circuitBreaker.title,
+        description: technicalDefinitions.circuitBreaker.description,
+        details: technicalDefinitions.circuitBreaker.details
       },
       {
-        title: "Saga Pattern (Saga Transaccional)",
-        description: "Gestiona la consistencia eventual de transacciones de negocio distribuidas entre múltiples microservicios mediante secuencias locales y compensaciones.",
-        details: [
-          "Coreografía: Los servicios reaccionan asíncronamente a eventos de forma descentralizada.",
-          "Orquestación: Un servicio central (Orquestador) mantiene el estado de la saga y comanda explícitamente a los demás qué hacer.",
-          "Transacción Compensatoria: Acción inversa (rollback lógico) ejecutada secuencialmente para anular los efectos de pasos completados si un paso posterior de la saga falla."
-        ]
+        title: technicalDefinitions.sagaPattern.title,
+        description: technicalDefinitions.sagaPattern.description,
+        details: technicalDefinitions.sagaPattern.details
       },
       {
-        title: "Transactional Outbox Pattern",
-        description: "Resuelve el problema de la atomicidad al guardar datos en una base de datos local y publicar un evento de forma confiable a un broker (Kafka/RabbitMQ).",
-        details: [
-          "Paso 1: Dentro de la misma transacción ACID local, la aplicación escribe la entidad de negocio y el evento a transmitir en una tabla temporal auxiliar llamada OUTBOX.",
-          "Paso 2: Un proceso independiente (Message Relay, CDC como Debezium o un polling worker) lee secuencialmente la tabla OUTBOX, publica los eventos en el Broker de mensajería, y tras recibir el ACK, elimina o marca el registro como procesado."
-        ],
+        title: technicalDefinitions.transactionalOutbox.title,
+        description: technicalDefinitions.transactionalOutbox.description,
+        details: technicalDefinitions.transactionalOutbox.details,
         code: "[Aplicación] ──(Transacción ACID)──> [Base de Datos]\n" +
               "                                    ├──> Tabla: PEDIDO (Entidad de negocio)\n" +
               "                                    └──> Tabla: OUTBOX (Evento a enviar)\n" +
@@ -226,12 +202,9 @@ export const studyGuide: StudySection[] = [
     introduction: "Pautas de observabilidad, cultura de análisis de fallos y prácticas recomendadas de contenedores en la nube.",
     subsections: [
       {
-        title: "Teorema CAP (Teorema de Brewer)",
-        description: "En un sistema distribuido que sufre una partición de red inevitable (P), se debe elegir de forma obligatoria entre Consistencia (C) o Disponibilidad (A).",
-        details: [
-          "Sistemas CP (Consistencia + Tolerancia a Particiones): Ante fallos de red, los nodos aislados rechazan peticiones de los usuarios para evitar entregar datos desactualizados o inconsistentes (ej. Sistemas bancarios tradicionales).",
-          "Sistemas AP (Disponibilidad + Tolerancia a Particiones): Los nodos aislados siguen respondiendo peticiones con la versión local de sus datos, asumiendo consistencia eventual (ej. Feeds de redes sociales)."
-        ]
+        title: technicalDefinitions.capTheorem.title,
+        description: technicalDefinitions.capTheorem.description,
+        details: technicalDefinitions.capTheorem.details
       },
       {
         title: "4 Señales de Oro de SRE (Golden Signals)",

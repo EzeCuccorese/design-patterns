@@ -2,6 +2,7 @@ export interface CategoryOverview {
   id: 'creational' | 'structural' | 'behavioral';
   name: string;
   definition: string;
+  shortDescription: string;
   what: string;  // ¿Qué es?
   how: string;   // ¿Cómo se usan?
   when: string;  // ¿Cuándo usarlos?
@@ -13,6 +14,7 @@ export const categoryOverviews: Record<'creational' | 'structural' | 'behavioral
     id: 'creational',
     name: 'Patrones Creacionales',
     definition: 'Diseños que manejan los mecanismos de creación de objetos, intentando crear objetos de una manera adecuada a la situación.',
+    shortDescription: 'Relativos al proceso de creación de objetos. Desacoplan al sistema de cómo sus objetos se crean, componen y representan.',
     what: 'Son patrones que abstraen el proceso de instanciación. Evitan que el cliente cree instancias directamente con el operador "new", delegando la lógica de creación a fábricas o constructores especializados.',
     how: 'Se usan encapsulando la lógica de inicialización y controlando el ciclo de vida de las instancias. Permiten definir si necesitamos una única instancia en memoria (Singleton), clonar un objeto existente (Prototype) o construirlo por partes (Builder).',
     when: 'Úsalos cuando tu sistema debe ser independiente de cómo se crean, componen y representan sus productos; cuando las clases a instanciar se especifican en tiempo de ejecución; o para evitar duplicación de memoria RAM.',
@@ -22,6 +24,7 @@ export const categoryOverviews: Record<'creational' | 'structural' | 'behavioral
     id: 'structural',
     name: 'Patrones Estructurales',
     definition: 'Diseños que explican cómo ensamblar objetos y clases dentro de estructuras más grandes, manteniendo estas estructuras flexibles y eficientes.',
+    shortDescription: 'Composición de clases y objetos. Definen cómo ensamblar objetos y clases grandes en estructuras más complejas de forma flexible y eficiente.',
     what: 'Se enfocan en cómo las clases y objetos se componen para formar estructuras más grandes. Utilizan la herencia o, preferiblemente, la composición de interfaces para unificar accesos y ocultar complejidades.',
     how: 'Se implementan creando envoltorios (Wrappers) o adaptadores que interceptan llamadas para cambiar interfaces (Adapter), añadir funcionalidades dinámicas (Decorator) o proporcionar un punto de acceso alternativo (Proxy).',
     when: 'Úsalos cuando quieras conectar clases desarrolladas por separado que tienen interfaces incompatibles, cuando necesites una jerarquía uniforme de objetos hoja y compuestos (árboles), o para agregar responsabilidades dinámicamente sin heredar.',
@@ -31,9 +34,11 @@ export const categoryOverviews: Record<'creational' | 'structural' | 'behavioral
     id: 'behavioral',
     name: 'Patrones de Comportamiento',
     definition: 'Diseños que se encargan de la comunicación e interacción entre objetos, definiendo cómo cooperan y distribuyen las responsabilidades.',
+    shortDescription: 'Se centran en la comunicación entre objetos y en cómo coordinar flujos complejos de control, distribuyendo responsabilidades.',
     what: 'Se centran en la comunicación entre objetos. Definen cómo interactúan las clases y cómo se reparte el flujo de control, facilitando el desacoplamiento entre emisores y receptores de mensajes.',
     how: 'Se aplican encapsulando algoritmos en objetos (Strategy), guardando estados previos (Memento), encadenando peticiones (Chain of Responsibility), o permitiendo suscripciones a cambios (Observer).',
     when: 'Úsalos cuando tengas flujos de control complejos con múltiples condicionales dependientes de estados, cuando el cambio de estado de un objeto deba actualizar a otros sin acoplarlos, o cuando un algoritmo deba variar dinámicamente.',
     nativeInsight: 'La mayoría de patrones de comportamiento tienen alternativas de primera clase hoy:\n\n• Strategy: En Python, TypeScript y Go, las funciones son ciudadanos de primera clase. En lugar de crear una interfaz y clases Strategy separadas, puedes pasar una función o lambda directamente como argumento.\n• Iterator: Prácticamente todos los lenguajes modernos traen implementado el protocolo de iterador en sus bucles (for...of, for each, select/range, yield). Rara vez necesitas implementar un iterador manualmente.\n• Observer: Se resuelve nativamente con el soporte de eventos incorporado (EventTarget en JS, interfaces funcionales/Streams en Java, o canales en Go).'
   }
 };
+export default categoryOverviews;
