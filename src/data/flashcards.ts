@@ -247,5 +247,17 @@ export const flashcards: Flashcard[] = [
     front: "¿Cuál es la diferencia clave entre Inyección de Dependencias (DI) e Inversión de Dependencias (DIP)?",
     back: "DIP es el principio abstracto de diseño (los módulos de alto nivel dependen de abstracciones, no de detalles). DI es el patrón técnico concreto mediante el cual pasamos esas abstracciones al constructor.",
     hint: "DIP es la regla conceptual de diseño; DI es el mecanismo de inyección física."
+  },
+  {
+    id: 41,
+    front: "¿Qué tipo de datos se guardan en la memoria Stack (Pila) y cuál es su comportamiento de liberación?",
+    back: "Se guardan variables locales de tipos primitivos (como int, boolean) y punteros de referencia a objetos. Su liberación es automática e instantánea al finalizar la ejecución del contexto de la función (LIFO).",
+    hint: "Estructura secuencial rápida y local gestionada por la CPU."
+  },
+  {
+    id: 42,
+    front: "¿Qué tipo de datos se guardan en la memoria Heap (Montón) y qué error crítico ocurre si se llena?",
+    back: "Se guardan todos los objetos instanciados físicamente (con new) y sus campos. Si se llena debido a excesos de objetos o fugas de memoria (memory leaks), el sistema operativo o runtime lanza un OutOfMemoryError (OOM).",
+    hint: "Gran espacio de memoria de asignación dinámica gestionado por el Garbage Collector."
   }
 ];

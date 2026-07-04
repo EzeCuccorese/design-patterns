@@ -275,6 +275,32 @@ export const modulo1Questions: Question[] = [
     ],
     correctIndex: 2,
     feedback: "El Code Review humano de alto valor evalúa las decisiones de diseño del software, la mantenibilidad y la semántica, mientras que la automatización se encarga del formato estático."
+  },
+  {
+    id: 21,
+    topic: "Memory Management - Stack Overflow",
+    question: "¿Qué error crítico se produce de forma típica en la ejecución de un programa si la memoria Stack (Pila) se llena por completo, por ejemplo, mediante una llamada recursiva infinita?",
+    answers: [
+      "OutOfMemoryError (OOM).",
+      "StackOverflowError.",
+      "NullPointerException.",
+      "MemoryLeakException."
+    ],
+    correctIndex: 1,
+    feedback: "La Pila es pequeña y tiene un tamaño fijo definido por hilo. Si una función se llama a sí misma infinitamente, acumula frames en la pila hasta llenarla, disparando un StackOverflowError."
+  },
+  {
+    id: 22,
+    topic: "Memory Management - Stack vs Heap",
+    question: "Al ejecutar la línea 'Cliente cliente = new Cliente();' en un lenguaje como Java, ¿cómo se distribuye la asignación de memoria RAM entre Stack y Heap?",
+    answers: [
+      "Tanto la variable 'cliente' como el objeto físico 'new Cliente()' se guardan en el Stack.",
+      "El objeto físico 'new Cliente()' y sus atributos se crean en el Heap (Montón), mientras que la variable local 'cliente' (puntero/referencia) se guarda en el Stack (Pila).",
+      "El objeto físico se almacena en el Stack y su puntero temporal se inyecta en el Heap.",
+      "La memoria se asigna únicamente en el Stack ya que 'cliente' es una variable local."
+    ],
+    correctIndex: 1,
+    feedback: "La instanciación con 'new' asigna memoria dinámica para el objeto en el Heap. La variable local del método que contiene la dirección de memoria de dicho objeto es una simple referencia guardada en el Stack."
   }
 ];
 

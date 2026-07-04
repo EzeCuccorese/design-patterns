@@ -70,6 +70,25 @@ export const studyGuide: StudySection[] = [
           "Revisiones constructivas: Enfocarse en el diseño del código, la modularidad y la semántica, delegando el control de espacios y formato a linters automáticos.",
           "Propagación del conocimiento: El code review sirve no solo para buscar bugs, sino para que todo el equipo entienda las decisiones de diseño del sistema."
         ]
+      },
+      {
+        title: "Memoria Stack vs Heap: La Pila y El Montón",
+        description: "Comprender la diferencia entre ambas estructuras y qué se guarda en cada lugar es fundamental para responder preguntas de bajo nivel y optimizar sistemas.",
+        details: [
+          "1. La Pila (Stack): Memoria secuencial LIFO (Last In First Out) rápida y limitada, auto-gestionada por la CPU. Guarda variables locales primitivas, contextos de ejecución y punteros de referencia a objetos. El exceso de recursividad genera StackOverflowError.",
+          "2. El Montón (Heap): Zona de memoria de gran tamaño y dinámica para guardar objetos instanciados físicamente con 'new' y sus atributos. Su liberación se realiza vía Garbage Collector.",
+          "3. OutOfMemoryError (OOM): Error crítico cuando el montón se llena debido a fugas de memoria (memory leaks) por objetos que retienen referencias inútiles."
+        ],
+        code: "public void procesar() {\n" +
+              "    int edad = 30;                         // (1) Guardado directamente en la Pila\n" +
+              "    Cliente cliente = new Cliente(\"Eze\");  // (2) Objeto físico en el Heap; puntero en la Pila\n" +
+              "}\n\n" +
+              "PILA (Stack)                   MONTÓN (Heap)\n" +
+              "┌──────────────┐               ┌─────────────────────────────────┐\n" +
+              "│ edad = 30    │               │                                 │\n" +
+              "├──────────────┤               │   Cliente (\"Eze\") <─────────────┤ (Objeto real)\n" +
+              "│ cliente ─────┼──────────────>│   { nombre: \"Eze\", ... }        │\n" +
+              "└──────────────┘               └─────────────────────────────────┘"
       }
     ]
   },

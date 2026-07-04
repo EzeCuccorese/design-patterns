@@ -277,5 +277,15 @@ export const technicalDefinitions: Record<string, TechnicalDefinition> = {
       "Velocidad de Entrega: Acelera la entrega de valor y es clave para habilitar pipelines de despliegue continuo de alto rendimiento."
     ],
     hint: "Integraciones cortas directas a la rama principal apoyadas por feature flags."
+  },
+  stackVsHeap: {
+    title: "Memoria Stack vs Heap (La Pila y El Montón)",
+    description: "Dos áreas de memoria RAM asignadas a un proceso por el sistema operativo, diferenciándose en velocidad, tamaño, estructuración y control del ciclo de vida de los datos.",
+    details: [
+      "La Pila (Stack): Estructura LIFO (Last In First Out) ultra rápida gestionada por la CPU para guardar variables locales de tipo primitivo y punteros de referencia a objetos.",
+      "El Montón (Heap): Zona de memoria dinámica y de gran tamaño utilizada para almacenar objetos complejos. Su ciclo de vida es dinámico y requiere liberación (Garbage Collector en lenguajes modernos).",
+      "Ciclo de vida: Al finalizar la función, el frame de la Pila se destruye al instante. Los objetos del Heap permanecen hasta que el Garbage Collector los recolecta."
+    ],
+    hint: "Pila es LIFO y rápida para variables locales; Montón es dinámico y grande para objetos instanciados."
   }
 };
