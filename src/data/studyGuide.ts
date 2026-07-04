@@ -89,45 +89,6 @@ export const studyGuide: StudySection[] = [
     ]
   },
   {
-    id: "code-smells",
-    title: "Code Smells y Refactorización",
-    icon: "Code",
-    introduction: "Aprender a detectar síntomas de diseño defectuoso en el software legacy y cómo sanarlo mediante pasos estructurados.",
-    subsections: [
-      {
-        title: "Primitive Obsession (Obsesión Primitiva)",
-        description: "Uso de tipos primitivos (como String, int o Double) para modelar conceptos complejos del negocio que requieren sus propias reglas y validaciones.",
-        details: [
-          "Síntoma: Guardar un Email, Dirección o CBU como un String genérico, dispersando las validaciones por todo el código.",
-          "Refactorización: Replace Data Value with Object. Crear un Value Object dedicado (ej. Email) que encapsule su propia validación y formato."
-        ]
-      },
-      {
-        title: "Feature Envy (Envidia de Funciones)",
-        description: "Un método de una clase que accede y manipula los datos y getters de otra clase vecina más de lo que utiliza los datos de su propia clase.",
-        details: [
-          "Síntoma: El método calcula algo usando intensamente las propiedades del otro objeto.",
-          "Refactorización: Move Method. Mover el método a la clase que posee los datos para respetar el principio de Experto en Información."
-        ]
-      },
-      {
-        title: "Switch Statements (Condicionales Múltiples)",
-        description: "Estructuras condicionales o switch extensas que toman decisiones basadas en el tipo de un objeto.",
-        details: [
-          "Síntoma: Cada vez que se agrega un nuevo tipo de objeto, hay que modificar todas las estructuras switch distribuidas en el código.",
-          "Refactorización: Replace Conditional with Polymorphism. Crear clases polimórficas bajo una interfaz o usar patrones como Strategy o State."
-        ]
-      },
-      {
-        title: "Long Method (Método Largo)",
-        description: "Métodos que exceden las 15-20 líneas, volviéndose difíciles de leer, mantener y testear.",
-        details: [
-          "Refactorización: Extract Method. Delegar flujos lógicos intermedios en métodos privados cohesivos con nombres expresivos que expliquen su propósito."
-        ]
-      }
-    ]
-  },
-  {
     id: "testing",
     title: "Estrategias de Testing",
     icon: "CheckCircle",
