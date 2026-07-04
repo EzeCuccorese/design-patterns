@@ -157,5 +157,95 @@ export const flashcards: Flashcard[] = [
     front: "¿En qué consiste un despliegue de tipo Canario (Canary Deployment)?",
     back: "Consiste en liberar la nueva versión del software a un porcentaje pequeño de usuarios reales (ej. 5%) para monitorear errores en producción antes de escalarla al 100% del tráfico.",
     hint: "Minimiza el impacto de bugs enviando tráfico progresivamente."
+  },
+  {
+    id: 26,
+    front: "¿Qué es la Arquitectura Hexagonal y cuál es su principal objetivo?",
+    back: technicalDefinitions.cleanArchitecture.description,
+    hint: technicalDefinitions.cleanArchitecture.hint || ""
+  },
+  {
+    id: 27,
+    front: "¿Qué significan las siglas CQRS y qué propone?",
+    back: technicalDefinitions.cqrs.description,
+    hint: technicalDefinitions.cqrs.hint || ""
+  },
+  {
+    id: 28,
+    front: "¿Cuál es la función del patrón BFF (Backend-for-Frontend)?",
+    back: technicalDefinitions.bff.description,
+    hint: technicalDefinitions.bff.hint || ""
+  },
+  {
+    id: 29,
+    front: "¿Qué promueve el enfoque Domain-Driven Design (DDD)?",
+    back: technicalDefinitions.ddd.description,
+    hint: technicalDefinitions.ddd.hint || ""
+  },
+  {
+    id: 30,
+    front: "¿Qué es Trunk-Based Development y qué ventajas ofrece?",
+    back: technicalDefinitions.trunkBased.description,
+    hint: technicalDefinitions.trunkBased.hint || ""
+  },
+  {
+    id: 31,
+    front: "¿Por qué se prefiere usar Biome u Oxlint sobre ESLint y Prettier en proyectos modernos?",
+    back: technicalDefinitions.lintersRust.description,
+    hint: technicalDefinitions.lintersRust.hint || ""
+  },
+  {
+    id: 32,
+    front: "¿Qué rol cumplen Husky y Lint-Staged en el flujo local de Git?",
+    back: technicalDefinitions.gitHooks.description,
+    hint: technicalDefinitions.gitHooks.hint || ""
+  },
+  {
+    id: 33,
+    front: "¿Cómo ayuda la herramienta 'Act' a la depuración de pipelines de integración continua?",
+    back: technicalDefinitions.localCicd.description,
+    hint: technicalDefinitions.localCicd.hint || ""
+  },
+  {
+    id: 34,
+    front: "¿Qué es GitOps y qué rol cumple ArgoCD o FluxCD?",
+    back: technicalDefinitions.gitOps.description,
+    hint: technicalDefinitions.gitOps.hint || ""
+  },
+  {
+    id: 35,
+    front: "¿Qué es OpenTelemetry y cuáles son sus tres pilares de observabilidad?",
+    back: technicalDefinitions.openTelemetry.description,
+    hint: technicalDefinitions.openTelemetry.hint || ""
+  },
+  {
+    id: 36,
+    front: "¿Cómo se orquesta un Canary Deployment usando una malla de servicios (Service Mesh) como Istio?",
+    back: "Istio utiliza proxies Envoy (sidecars) para interceptar el tráfico de red de forma transparente y dividirlo de manera dinámica y precisa (ej. 95% a V1 y 5% a V2) en base a reglas de ruteo configuradas.",
+    hint: "Ruteo dinámico de red mediante proxies sidecar Envoy."
+  },
+  {
+    id: 37,
+    front: "¿Qué ventajas de seguridad aportan las imágenes de contenedor de tipo Distroless?",
+    back: technicalDefinitions.distroless.description,
+    hint: technicalDefinitions.distroless.hint || ""
+  },
+  {
+    id: 38,
+    front: "¿Qué establece la Boy Scout Rule aplicada a la ingeniería de software?",
+    back: "Establece que debes dejar el archivo o módulo que estás editando en un estado ligeramente más limpio y ordenado de como lo encontraste, reduciendo de manera continua la deuda técnica.",
+    hint: "Deja el campamento más limpio de como lo encontraste."
+  },
+  {
+    id: 39,
+    front: "En DDD, ¿qué es un Bounded Context (Contexto Delimitado)?",
+    back: "Es un límite explícito y conceptual dentro del cual un modelo de dominio y sus términos lógicos (ubiquitous language) tienen un significado único y consistente, evitando la ambigüedad semántica.",
+    hint: "Frontera semántica donde las palabras significan exactamente una sola cosa."
+  },
+  {
+    id: 40,
+    front: "¿Cuál es la diferencia clave entre Inyección de Dependencias (DI) e Inversión de Dependencias (DIP)?",
+    back: "DIP es el principio abstracto de diseño (los módulos de alto nivel dependen de abstracciones, no de detalles). DI es el patrón técnico concreto mediante el cual pasamos esas abstracciones al constructor.",
+    hint: "DIP es la regla conceptual de diseño; DI es el mecanismo de inyección física."
   }
 ];

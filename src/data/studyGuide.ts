@@ -52,6 +52,24 @@ export const studyGuide: StudySection[] = [
           `ISP (Interface Segregation Principle): ${technicalDefinitions.isp.description}`,
           `DIP (Dependency Inversion Principle): ${technicalDefinitions.dip.description}`
         ]
+      },
+      {
+        title: "Branching Patterns: Trunk-Based vs Git Flow",
+        description: "La velocidad de despliegue en la industria moderna está directamente ligada al patrón de control de versiones elegido.",
+        details: [
+          `Trunk-Based Development: ${technicalDefinitions.trunkBased.description}`,
+          "Git Flow: Enfoque clásico con múltiples ramas de larga duración (develop, master, release, hotfix). Tiende a generar integraciones complejas o cuellos de botella en equipos ágiles.",
+          "Cuándo usar: Trunk-Based es ideal para equipos con alta cobertura de tests y despliegue continuo; Git Flow se prefiere en software de lanzamientos programados o regulados."
+        ]
+      },
+      {
+        title: "Prácticas de Code Review & Boy Scout Rule",
+        description: "La revisión de código y la mentalidad de limpieza continua son las mejores herramientas de prevención de bugs y propagación del conocimiento.",
+        details: [
+          "Boy Scout Rule: 'Deja siempre el campamento más limpio de como lo encontraste'. Fomenta dejar el archivo que modificas ligeramente mejor estructurado o limpio.",
+          "Revisiones constructivas: Enfocarse en el diseño del código, la modularidad y la semántica, delegando el control de espacios y formato a linters automáticos.",
+          "Propagación del conocimiento: El code review sirve no solo para buscar bugs, sino para que todo el equipo entienda las decisiones de diseño del sistema."
+        ]
       }
     ]
   },
@@ -143,6 +161,43 @@ export const studyGuide: StudySection[] = [
         title: technicalDefinitions.capTheorem.title,
         description: technicalDefinitions.capTheorem.description,
         details: technicalDefinitions.capTheorem.details
+      },
+      {
+        title: technicalDefinitions.cleanArchitecture.title,
+        description: technicalDefinitions.cleanArchitecture.description,
+        details: technicalDefinitions.cleanArchitecture.details,
+        code: "          [Adaptador de Entrada: UI/Web]\n" +
+              "                        │\n" +
+              "                        ▼ (Llamadas)\n" +
+              "           [Puerto de Entrada: Interfaz Interactor]\n" +
+              "                        │\n" +
+              "                        ▼\n" +
+              "            [Núcleo Lógico de Dominio]\n" +
+              "                        ▲\n" +
+              "                        │\n" +
+              "           [Puerto de Salida: Interfaz Repositorio]\n" +
+              "                        ▲\n" +
+              "                        │ (Implementa)\n" +
+              "        [Adaptador de Salida: DB / Infraestructura]"
+      },
+      {
+        title: technicalDefinitions.cqrs.title,
+        description: technicalDefinitions.cqrs.description,
+        details: technicalDefinitions.cqrs.details,
+        code: "[Cliente UI] ──── Comando (Escribir) ───> [Command Controller] ──> [Write DB]\n" +
+              "                                                                      │\n" +
+              "                                                                 (Sincroniza)\n" +
+              "                                                                      ▼\n" +
+              "[Cliente UI] <─── Consulta (Leer) ─────── [Query Controller] ◄─── [Read DB]"
+      },
+      {
+        title: "BFF (Backend-for-Frontend) & Domain-Driven Design (DDD)",
+        description: "Estructuración moderna de microservicios basada en el negocio y optimización de clientes móviles y web.",
+        details: [
+          `BFF: ${technicalDefinitions.bff.description}`,
+          `DDD: ${technicalDefinitions.ddd.description}`,
+          "Integración industrial: En sistemas complejos, cada Bounded Context (DDD) expone microservicios independientes, y las aplicaciones cliente acceden a ellos a través de un BFF dedicado que agrega y simplifica los datos."
+        ]
       }
     ]
   },
@@ -193,6 +248,94 @@ export const studyGuide: StudySection[] = [
           "Asume que los desarrolladores actúan con buena intención basándose en la información que poseían en ese instante.",
           "El análisis se enfoca en entender POR QUÉ fallaron los tests, las alertas o las defensas de la infraestructura, evitando apuntar a errores humanos concretos.",
           "Su meta es la mejora continua de los procesos preventivos."
+        ]
+      },
+      {
+        title: "GitOps & ArgoCD",
+        description: "Automatización de despliegues y mantenimiento declarativo utilizando repositorios de Git como la única fuente de verdad.",
+        details: [
+          `GitOps: ${technicalDefinitions.gitOps.description}`,
+          "Reconciliación: Herramientas como ArgoCD o Flux detectan activamente desviaciones entre el repositorio Git y el clúster de Kubernetes, auto-reparando los recursos locales en minutos.",
+          "Seguridad: Evita otorgar credenciales de administración del clúster a los desarrolladores o herramientas externas de CI/CD; el agente dentro de K8s tira del repositorio Git de forma interna y segura."
+        ]
+      },
+      {
+        title: "Observabilidad Moderna: OpenTelemetry, Prometheus & Grafana",
+        description: "La trinidad de la observabilidad y los estándares unificados en la nube para sistemas distribuidos.",
+        details: [
+          `OpenTelemetry: ${technicalDefinitions.openTelemetry.description}`,
+          "Trazabilidad Distribuida: Permite seguir el flujo y la latencia exacta de un request de usuario cruzando múltiples microservicios a través de IDs de traza (traceId).",
+          "Métricas y Logs: Prometheus recolecta las métricas agregadas de los endpoints y Grafana provee la visualización centralizada para la toma de decisiones y alertas preventivas."
+        ],
+        code: "[Request] ──> [BFF (traceId=abc)] ──> [Microservicio Ventas (traceId=abc)]\n" +
+              "                                         │\n" +
+              "                     (Envía métricas/trazas mediante gRPC/HTTP)\n" +
+              "                                         ▼\n" +
+              "                         [Colector OpenTelemetry]\n" +
+              "                            ├──> Métricas ──> [Prometheus] ──> [Grafana]\n" +
+              "                            └──> Trazas ────> [Jaeger / APM]"
+      },
+      {
+        title: "Estrategias de Despliegue Canary con Service Mesh (Istio)",
+        description: "Cómo implementar ruteo dinámico de red para lanzamientos seguros de software.",
+        details: [
+          `Canary Deployments: ${technicalDefinitions.canaryIstio.description}`,
+          "Proxy Envoy: Un sidecar intercepta el tráfico de red de los contenedores de forma transparente.",
+          "Automatización: Si el análisis de métricas en Prometheus detecta un aumento de errores 5xx o latencia en el contenedor Canary, el despliegue se cancela (rollback automático) sin afectar al 95% restante del tráfico."
+        ]
+      },
+      {
+        title: "Contenedores Distroless: Ciberseguridad en Producción",
+        description: "Maximización de la seguridad en despliegues minimizando el tamaño y dependencias de los contenedores.",
+        details: [
+          `Distroless: ${technicalDefinitions.distroless.description}`,
+          "Diferencia con Alpine: Alpine Linux incluye BusyBox y apk (gestor de paquetes), lo que aún deja superficie para ataques. Distroless no tiene gestores de paquetes ni shell.",
+          "Implementación: Se usa compilación multi-stage de Docker. Compilas con un SDK completo y copias el binario resultante a la imagen distroless base."
+        ]
+      }
+    ]
+  },
+  {
+    id: "tooling-dev",
+    title: "Tooling de Desarrollo Moderno",
+    icon: "Terminal",
+    introduction: "Las herramientas y flujos de automatización que hoy maximizan la velocidad y calidad del desarrollo local en la industria.",
+    subsections: [
+      {
+        title: "Linters & Formateadores en Rust (Biome & Oxlint)",
+        description: "El cambio de paradigma en el análisis de código estático por herramientas nativas de alto rendimiento.",
+        details: [
+          `Biome & Oxlint: ${technicalDefinitions.lintersRust.description}`,
+          "Velocidad: Analizan miles de archivos en milisegundos. Libera la CPU local y acorta drásticamente el feedback loop del programador en su IDE.",
+          "Configuración Simplificada: Reduce la complejidad del ecosistema de JavaScript consolidando formateador y linter en una sola herramienta libre de conflictos."
+        ]
+      },
+      {
+        title: "Husky, Commitlint & Lint-Staged",
+        description: "Validación automatizada local en pre-commit para proteger el repositorio de código erróneo.",
+        details: [
+          `Husky: ${technicalDefinitions.gitHooks.description}`,
+          "Commitlint: Valida que los mensajes de commit sigan especificaciones estándar (ej. Conventional Commits) para automatizar notas de lanzamiento.",
+          "Lint-staged: Ahorra recursos ejecutando el formateo y linter únicamente sobre el conjunto de archivos modificados activos."
+        ],
+        code: "git commit -m \"feat: add bff component\"\n" +
+              "  │\n" +
+              "  ├──> [Husky pre-commit] ──> [Lint-staged] ──> Oxlint / Biome (Solo archivos staged)\n" +
+              "  │                                               └──> Exitoso?\n" +
+              "  │                                                      │ (Sí)\n" +
+              "  ▼                                                      ▼\n" +
+              "  ├──> [Husky commit-msg] ──> [Commitlint] ──> ¿Conventional Commit?\n" +
+              "  │                                                      │ (Sí)\n" +
+              "  ▼                                                      ▼\n" +
+              "[Commit Guardado Exitosamente]"
+      },
+      {
+        title: "Local CI/CD con Act (GitHub Actions Local)",
+        description: "Ejecución y depuración local de tus pipelines sin necesidad de pushear a la nube.",
+        details: [
+          `Act: ${technicalDefinitions.localCicd.description}`,
+          "Funcionamiento: Lee el archivo YAML del workflow y levanta contenedores de Docker idénticos a los del clúster de GitHub para correr cada paso.",
+          "Uso: Ideal para depurar variables de entorno, dependencias de compilación y scripts complejos de bash en minutos."
         ]
       }
     ]

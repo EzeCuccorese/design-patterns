@@ -109,3 +109,32 @@ El catálogo incluye explicaciones y código comparativo en **Java 21, Python 3,
 *   **Iterator:** Recorrido secuencial de colecciones. (Ejemplo: Guía de turismo que recorre colecciones sin exponer el mapa interno).
 *   **Visitor:** Operaciones externas sobre estructuras. (Ejemplo: Exportador de datos XML/JSON que actúa externamente sobre formas geométricas).
 *   **Interpreter:** Evaluación gramatical del lenguaje. (Ejemplo: Motor que interpreta expresiones matemáticas básicas).
+
+---
+
+## 🚀 El Ecosistema Moderno de Desarrollo (Prácticas de la Industria)
+
+Además de los patrones de diseño clásicos de GoF, este proyecto sirve como una suite interactiva de estudio sobre los pilares y herramientas que definen el desarrollo de software y la infraestructura a escala en la industria moderna:
+
+### 1. Ingeniería de Software & Código Limpio
+*   **Trunk-Based Development:** Práctica que reemplaza el Git Flow tradicional. Consiste en integrar ramas de vida corta directamente en la rama principal (`main`) varias veces al día. Permite evitar conflictos masivos de integración y acelerar la entrega de valor, apoyándose en **Feature Flags** para ocultar funcionalidades en progreso.
+*   **Boy Scout Rule (Regla del Boy Scout):** *"Deja el código más limpio de como lo encontraste"*. Consiste en refactorizar pequeños fragmentos del archivo que estás editando (mejorar nomenclatura, eliminar líneas muertas, simplificar una condición) sin alterar el comportamiento general, previniendo la acumulación de deuda técnica.
+*   **Constructive Code Reviews:** Proceso de revisión humana centrado en evaluar decisiones de arquitectura, semántica del código, mantenibilidad y testing, delegando las discusiones de estilo, sintaxis y espaciado a los formateadores automatizados.
+
+### 2. Arquitectura de Software
+*   **Arquitectura Hexagonal (Puertos y Adaptadores):** Patrón que aísla el núcleo de dominio (reglas de negocio puras) de la tecnología externa (bases de datos, frameworks, protocolos de transporte). El dominio define interfaces estables (**Puertos**) y la infraestructura implementa adaptadores (**Adaptadores de entrada/salida**), logrando una alta modularidad y facilidad para realizar tests unitarios veloces.
+*   **CQRS (Command Query Responsibility Segregation):** Segregación de responsabilidades de lectura y escritura. Al utilizar modelos de datos diferentes para mutar estado (**Comandos**) y recuperar información (**Consultas**), se optimiza el rendimiento y se permite escalar los almacenes de datos según el tipo de tráfico del sistema.
+*   **BFF (Backend-for-Frontend):** Microservicio intermedio diseñado a la medida de un cliente específico (ej. App móvil iOS o Dashboard Web). Su rol es consolidar peticiones a múltiples servicios del backend, filtrar payloads redundantes y optimizar el consumo de ancho de banda y latencia del dispositivo cliente.
+*   **Domain-Driven Design (DDD):** Enfoque estratégico y táctico centrado en alinear el modelado del dominio de software con las necesidades reales del negocio. Define límites semánticos claros (**Bounded Contexts**), un lenguaje común (**Ubiquitous Language**) y fronteras de consistencia transaccional (**Aggregate Roots**).
+
+### 3. Tooling Dev (Herramientas de Desarrollo)
+*   **Linters Rápidos en Rust (Biome & Oxlint):** El reemplazo de ESLint y Prettier. Programas compilados a código de máquina nativo mediante Rust que permiten analizar, corregir y formatear millones de líneas de código en milisegundos, acelerando significativamente el feedback loop local en el IDE.
+*   **Git Hooks (Husky & Lint-Staged):** Automatización local que intercepta los comandos de Git (como `git commit` o `git push`). Corre linters y pruebas unitarias únicamente sobre el conjunto de archivos modificados activos en la preparación (**staged**), bloqueando commits defectuosos antes de que lleguen al repositorio remoto.
+*   **Local CI/CD con Act:** Herramienta de línea de comandos que lee los archivos YAML de GitHub Actions y los ejecuta localmente dentro de contenedores de Docker, facilitando la depuración y pruebas de pipelines en el entorno local.
+
+### 4. DevOps, SRE & Infraestructura Cloud
+*   **GitOps (ArgoCD / FluxCD):** Patrón de entrega continua (CD) que define la infraestructura de forma declarativa (generalmente en Kubernetes) utilizando repositorios de Git como la única fuente de verdad. El agente ArgoCD monitorea Git y el clúster vivo, sincronizando y auto-curando los recursos si detecta cualquier desviación.
+*   **Observabilidad de 3 Pilares (OpenTelemetry):** Estándar de la CNCF para la recopilación de datos de telemetría de manera agnóstica a proveedores (vendor-neutral). Se basa en la recolección coordinada de **Métricas** (uso cuantitativo de recursos), **Logs** (registros textuales) y **Trazabilidad Distribuida** (seguimiento de requests con `traceId` a través de microservicios).
+*   **Estrategias de Despliegue Canary con Service Mesh (Istio):** Enrutamiento inteligente a nivel de red para minimizar fallos en producción. Istio utiliza proxies sidecar (Envoy) para dividir y redirigir una fracción mínima de tráfico real (ej. 2%) hacia la nueva versión (Canary), monitorear su comportamiento y hacer rollback automático ante anomalías detectadas en Prometheus.
+*   **Contenedores Distroless:** Imágenes base de Docker extremadamente mínimas que contienen únicamente la aplicación y su runtime de ejecución (sin gestores de paquetes como apt/apk, utilidades de red o shells como bash/sh), reduciendo la superficie de ataque y bloqueando vectores de intrusión de seguridad informática.
+

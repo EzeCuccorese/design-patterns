@@ -157,5 +157,125 @@ export const technicalDefinitions: Record<string, TechnicalDefinition> = {
       "Mock (Doble Activo): Se enfoca en auditar y asertar la interacción. Valida si un método de la dependencia fue llamado, cuántas veces y con qué argumentos específicos."
     ],
     hint: "Stub alimenta el flujo del test; Mock audita las llamadas."
+  },
+  cleanArchitecture: {
+    title: "Arquitectura Hexagonal (Puertos y Adaptadores)",
+    description: "Patrón arquitectónico que desacopla el núcleo lógico de negocio (dominio) de los agentes externos e infraestructura (bases de datos, UI, transporte) a través de contratos específicos.",
+    details: [
+      "Núcleo / Dominio: Contiene las entidades y reglas de negocio puras, sin dependencias de frameworks ni librerías externas.",
+      "Puertos (Interfaces): Contratos de entrada y salida definidos por el dominio para comunicarse con el exterior.",
+      "Adaptadores: Implementaciones concretas de la infraestructura (ej. un repositorio SQL implementando un puerto de base de datos) que interactúan con el puerto."
+    ],
+    hint: "Desacopla la lógica de negocio pura de la tecnología y bases de datos a través de interfaces."
+  },
+  cqrs: {
+    title: "CQRS (Command Query Responsibility Segregation)",
+    description: "Separa de forma lógica u orgánica las operaciones que escriben o modifican datos (Comandos) de las operaciones que solo leen datos (Consultas).",
+    details: [
+      "Comandos (Commands): Representan intenciones de cambio de estado (crear, actualizar, eliminar). No retornan datos de negocio, solo éxito o error.",
+      "Consultas (Queries): Recuperan información del sistema sin realizar ninguna mutación o efecto secundario.",
+      "Optimización: Permite escalar la lectura independientemente de la escritura, incluso utilizando bases de datos diferentes optimizadas para cada rol (ej. PostgreSQL para comandos y Elasticsearch para consultas)."
+    ],
+    hint: "Rutas diferentes y modelos optimizados para escribir (Comandos) y leer (Consultas)."
+  },
+  bff: {
+    title: "BFF (Backend-for-Frontend)",
+    description: "Variante de API Gateway donde se crea un servicio intermedio específico para cada tipo de cliente (Web, Mobile, IoT) encargado de formatear, simplificar y consolidar los payloads de los microservicios.",
+    details: [
+      "Desacoplamiento: Evita que el cliente móvil tenga que hacer múltiples llamadas a distintos microservicios para armar una pantalla.",
+      "Optimización de Red: Reduce la transferencia de datos enviando únicamente los campos específicos que el cliente en particular va a renderizar.",
+      "Mantenimiento independiente: Los cambios en la interfaz móvil solo requieren alterar su BFF específico, reduciendo el acoplamiento con los microservicios core."
+    ],
+    hint: "Un microservicio API Gateway adaptado exclusivamente para las necesidades de un cliente específico."
+  },
+  ddd: {
+    title: "Domain-Driven Design (DDD)",
+    description: "Enfoque de desarrollo de software complejo centrado en el modelado del dominio de negocio, estrechamente alineado con expertos en la materia.",
+    details: [
+      "Lenguaje Ubicuo: Lenguaje común y formal utilizado de igual forma por desarrolladores y expertos del negocio en código y especificaciones.",
+      "Bounded Context (Contexto Delimitado): Frontera conceptual donde un modelo de datos y sus términos tienen un significado único y consistente.",
+      "Aggregate Root: Entidad padre que actúa como puerta de acceso para modificar cualquier elemento dentro de su frontera transaccional de negocio."
+    ],
+    hint: "Diseño centrado en el dominio de negocio usando un lenguaje unificado y límites contextuales claros."
+  },
+  lintersRust: {
+    title: "Linters Modernos en Rust (Biome & Oxlint)",
+    description: "Nueva generación de herramientas de desarrollo estático programadas en Rust que reemplazan a ESLint y Prettier, ejecutándose a velocidades hasta 100 veces mayores.",
+    details: [
+      "Rendimiento Extremo: Capaces de analizar y formatear millones de líneas de código en milisegundos, optimizando los tiempos del bucle de desarrollo local y de CI/CD.",
+      "Configuración Unificada: Biome consolida formateo, linting y organización de importaciones en un único archivo de configuración simplificado.",
+      "Sin dependencias Node: Al estar compilados a código nativo, no sufren del bloat ni sobrecarga de ejecución de Node.js."
+    ],
+    hint: "Herramientas de análisis de código ultra rápidas programadas en Rust que unifican linting y formateo."
+  },
+  gitHooks: {
+    title: "Husky & Lint-Staged",
+    description: "Automatización de disparadores Git (Git Hooks) en el entorno de desarrollo para validar que el código cumpla con los estándares antes de permitir un commit o push.",
+    details: [
+      "Husky: Facilita la configuración y compartición de hooks de Git de forma nativa e integrada en el package.json de Node.",
+      "Lint-Staged: Ejecuta linters y pruebas únicamente sobre los archivos que están en el área de preparación (staged) en lugar de todo el proyecto, ahorrando tiempo.",
+      "Garantía de Calidad: Evita que código con errores de compilación, fallos de formato o commits que rompan las convenciones lleguen al repositorio remoto."
+    ],
+    hint: "Bloquea localmente commits y pushes que no pasen el formato o los tests mínimos."
+  },
+  localCicd: {
+    title: "Local CI/CD con Act",
+    description: "Herramienta que permite ejecutar pipelines de GitHub Actions de forma local dentro de contenedores de Docker, acelerando la depuración del flujo de integración continua.",
+    details: [
+      "Ciclo de Feedback Rápido: Permite probar cambios en los workflows de CI/CD instantáneamente en la terminal sin tener que hacer push al repositorio remoto.",
+      "Simulación Fiel: Usa imágenes Docker idénticas a las que utiliza GitHub Actions en la nube para asegurar el comportamiento correcto de variables y dependencias.",
+      "Ahorro de Cómputo: Evita consumir minutos de cómputo del plan de la plataforma en la nube durante etapas de desarrollo y pruebas del pipeline."
+    ],
+    hint: "Prueba y corre tus workflows de GitHub Actions de forma local en Docker antes de subirlos."
+  },
+  gitOps: {
+    title: "GitOps (ArgoCD / FluxCD)",
+    description: "Práctica de DevOps para CD (Despliegue Continuo) donde Git actúa como la única fuente de verdad para el estado deseado de la infraestructura declarativa.",
+    details: [
+      "Estado Deseado Declarativo: La infraestructura y configuraciones de Kubernetes se definen en repositorios Git como código yaml.",
+      "Reconciliación Activa: Un agente (ej. ArgoCD) dentro del clúster compara constantemente el estado en Git con el estado vivo del clúster.",
+      "Autocuración (Self-healing): Si se altera un recurso manualmente en el clúster (desviación de configuración), el controlador GitOps sobrescribe los cambios para restaurar lo definido en Git."
+    ],
+    hint: "Git es la fuente de verdad: el clúster se auto-sincroniza con los archivos del repositorio."
+  },
+  openTelemetry: {
+    title: "Observabilidad de 3 Pilares (OpenTelemetry)",
+    description: "Estándar de la Cloud Native Computing Foundation (CNCF) para recolectar, procesar y exportar telemetría de sistemas distribuidos sin acoplarse a vendors de APM específicos.",
+    details: [
+      "Métricas: Datos cuantitativos agregados (ej. uso de CPU, tasa de errores HTTP) para entender el comportamiento general del sistema en el tiempo.",
+      "Trazas (Traces): Permiten seguir el flujo de una petición a través de múltiples microservicios distribuidos mediante identificadores de correlación.",
+      "Logs: Registros textuales estructurados con contexto temporal e identificadores asociados a la traza actual para depurar fallos específicos."
+    ],
+    hint: "Instrumentación unificada de Métricas, Trazas y Logs para diagnosticar sistemas distribuidos."
+  },
+  canaryIstio: {
+    title: "Despliegues Canary con Service Mesh (Istio)",
+    description: "Estrategia avanzada de despliegue de software que consiste en rutear progresivamente una fracción mínima de tráfico real de red hacia la nueva versión del servicio.",
+    details: [
+      "Service Mesh (Malla de Servicios): Istio intercepta y administra el tráfico de red entre microservicios utilizando proxies sidecar (Envoy).",
+      "Control de Tráfico Fino: Permite dividir el tráfico de forma precisa (ej. enviar 98% a V1 y 2% a V2) mediante Custom Resources como VirtualServices.",
+      "Monitoreo Canary: Si la V2 presenta errores o latencias elevadas en el 2% de tráfico, se revierte el ruteo a V1 automáticamente sin afectar a la masa crítica de usuarios."
+    ],
+    hint: "Enrutamiento inteligente de tráfico progresivo (ej. 5%, 20%, 100%) hacia la nueva versión de un servicio."
+  },
+  distroless: {
+    title: "Contenedores Seguros Distroless",
+    description: "Imágenes de contenedor mínimas de producción que contienen exclusivamente la aplicación y su runtime de ejecución (ej. node o jre), eliminando sistemas de archivos completos, gestores de paquetes y shells.",
+    details: [
+      "Reducción de Superficie de Ataque: Al no contar con terminales (bash, sh) ni utilidades de red (curl, wget), se neutralizan la mayoría de los vectores de explotación de vulnerabilidades.",
+      "Imágenes Livianas: Reducen el tamaño del contenedor a lo indispensable, acelerando los tiempos de descarga y despliegue en la nube.",
+      "Cumplimiento y Auditoría: Facilitan la aprobación de escaneos de seguridad estáticos en pipelines (Trivy, Grype) al carecer de dependencias de sistema operativo obsoletas."
+    ],
+    hint: "Imágenes de Docker mínimas sin shell, sin gestores de paquetes, reduciendo vulnerabilidades."
+  },
+  trunkBased: {
+    title: "Trunk-Based Development",
+    description: "Patrón de branching en Git que prioriza la integración frecuente de cambios pequeños directamente en una rama única principal ('trunk' o main), evitando ramas de características de larga duración.",
+    details: [
+      "Integración Continua Real: Los desarrolladores integran sus cambios varias veces al día. Reduce drásticamente los conflictos de merge masivos ('merge hell').",
+      "Feature Flags: Permite integrar código incompleto a producción desactivando la funcionalidad en tiempo de ejecución hasta que esté lista para su lanzamiento.",
+      "Velocidad de Entrega: Acelera la entrega de valor y es clave para habilitar pipelines de despliegue continuo de alto rendimiento."
+    ],
+    hint: "Integraciones cortas directas a la rama principal apoyadas por feature flags."
   }
 };

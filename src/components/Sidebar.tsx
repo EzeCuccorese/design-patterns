@@ -41,7 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       setShowPatternsSubmenu(true);
     } else if (activeView === 'solid-clean' || activeView === 'grasp' || activeView === 'refactor' || activeView === 'testing') {
       setShowPrinciplesSubmenu(true);
-    } else if (activeView === 'resilience-eda' || activeView === 'sre-devops') {
+    } else if (activeView === 'resilience-eda' || activeView === 'sre-devops' || activeView === 'tooling-dev') {
       setShowArchitectureSubmenu(true);
     }
   }, [activeView]);
@@ -190,11 +190,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <button
           onClick={() => {
             setShowArchitectureSubmenu(!showArchitectureSubmenu);
-            if (activeView !== 'resilience-eda' && activeView !== 'sre-devops') {
+            if (activeView !== 'resilience-eda' && activeView !== 'sre-devops' && activeView !== 'tooling-dev') {
               onSelectTopic('resilience-eda');
             }
           }}
-          className={`pattern-item ${(activeView === 'resilience-eda' || activeView === 'sre-devops') ? 'active' : ''}`}
+          className={`pattern-item ${(activeView === 'resilience-eda' || activeView === 'sre-devops' || activeView === 'tooling-dev') ? 'active' : ''}`}
           style={{ 
             fontWeight: '600', 
             border: '1px solid var(--border-color)',
@@ -229,6 +229,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
               style={{ fontSize: '13px', padding: '6px 10px' }}
             >
               SRE & Infraestructura
+            </button>
+            <button
+              onClick={() => onSelectTopic('tooling-dev')}
+              className={`pattern-item ${activeView === 'tooling-dev' ? 'active' : ''}`}
+              style={{ fontSize: '13px', padding: '6px 10px' }}
+            >
+              Tooling de Desarrollo
             </button>
           </div>
         )}

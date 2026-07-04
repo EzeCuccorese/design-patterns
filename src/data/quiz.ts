@@ -210,6 +210,71 @@ export const modulo1Questions: Question[] = [
     ],
     correctIndex: 1,
     feedback: "En entornos concurrentes, Double-Checked Locking garantiza la inicialización segura (Thread-Safe) del Singleton controlando que solo el primer hilo instancie la variable bloqueando el recurso."
+  },
+  {
+    id: 16,
+    topic: "Branching - Trunk-Based Development",
+    question: "¿Cuál es la principal ventaja de aplicar el flujo de ramificación 'Trunk-Based Development' frente a 'Git Flow' en un equipo ágil de alto rendimiento?",
+    answers: [
+      "Facilita la segregación de accesos de infraestructura limitando el acceso de los desarrolladores a producción.",
+      "Promueve la integración continua real al fusionar cambios pequeños varias veces al día directamente en 'main', eliminando los largos periodos de integración y 'merge hells'.",
+      "Permite prescindir completamente del uso de pruebas unitarias locales.",
+      "Garantiza que no sea necesario contar con entornos de staging o prueba antes de lanzar."
+    ],
+    correctIndex: 1,
+    feedback: "Trunk-Based Development acelera la entrega de valor al integrar cambios pequeños en una sola rama común, reduciendo la fricción de merges gigantes típicos de ramas de características de larga duración."
+  },
+  {
+    id: 17,
+    topic: "Clean Code - Boy Scout Rule",
+    question: "¿Qué indica la conocida 'Boy Scout Rule' aplicada en el código de producción?",
+    answers: [
+      "Que no debes tocar el código de tus compañeros bajo ninguna circunstancia.",
+      "Que los programadores más jóvenes deben dedicarse a documentar código en vez de programar lógica.",
+      "Que debes dejar el archivo que estás modificando en un estado ligeramente más limpio y ordenado de como lo encontraste, reduciendo de forma continua la deuda técnica.",
+      "Que cada archivo de código de negocio debe contener al menos 1000 líneas para ser considerado profesional."
+    ],
+    correctIndex: 2,
+    feedback: "La regla de los Boy Scouts ('deja el campamento más limpio de como lo encontraste') ayuda a prevenir la acumulación de código spaguetti o deuda técnica a través de pequeñas mejoras incrementales."
+  },
+  {
+    id: 18,
+    topic: "Dependency Injection Best Practices",
+    question: "En entornos profesionales como Spring Boot (Java), ¿por qué se desaconseja el uso de la inyección directa sobre campos (ej. colocar `@Autowired` sobre el atributo) y se promueve la inyección por constructor?",
+    answers: [
+      "Porque la inyección directa sobre campos está deprecada y no compila a partir de Java 17.",
+      "Porque la inyección por constructor facilita el testeo unitario permitiendo pasar stubs/mocks manualmente, asegura la inmutabilidad mediante el uso de 'final' y previene referencias nulas en el arranque.",
+      "Porque la inyección por constructor reduce el uso de memoria RAM en el clúster productivo.",
+      "Porque el constructor hace que el bytecode sea compatible con frameworks de NodeJS."
+    ],
+    correctIndex: 1,
+    feedback: "La inyección por constructor obliga a declarar las dependencias de forma explícita, facilitando la instanciación directa del componente en tests unitarios sin levantar un contexto pesado de framework."
+  },
+  {
+    id: 19,
+    topic: "Software Engineering - Conventional Commits",
+    question: "¿Cuál es el propósito principal de seguir el estándar de Conventional Commits (ej. 'feat(auth): add login validation')?",
+    answers: [
+      "Bloquear la ejecución de tests automatizados si no se incluye el ticket de Jira.",
+      "Que las herramientas automatizadas y pipelines puedan parsear el historial de git para generar automáticamente notas de lanzamiento (changelogs) e incrementos de versión semántica de forma confiable.",
+      "Verificar que el autor del commit posea la firma digital PGP autorizada.",
+      "Evitar que Git guarde el historial completo reduciendo el espacio en disco del repositorio."
+    ],
+    correctIndex: 1,
+    feedback: "Conventional Commits provee una estructura predecible que permite a los pipelines de CI/CD determinar automáticamente la severidad del cambio y automatizar los releases semánticos."
+  },
+  {
+    id: 20,
+    topic: "Software Engineering - Code Reviews",
+    question: "En un equipo de ingeniería maduro, ¿cuál debe ser el enfoque primordial de las revisiones de código (Code Reviews)?",
+    answers: [
+      "Encontrar errores de formato tipográficos y de espaciados, que deben ser la máxima prioridad del revisor humano.",
+      "Fomentar la competencia sana determinando qué desarrollador comete menos fallos en el mes.",
+      "Centrarse en aspectos arquitectónicos, legibilidad, modularidad y compartir conocimientos técnicos colectivos, dejando el control de formato y sintaxis a linters automatizados en el pipeline.",
+      "Validar que el programador haya ejecutado el código al menos 100 veces de forma manual."
+    ],
+    correctIndex: 2,
+    feedback: "El Code Review humano de alto valor evalúa las decisiones de diseño del software, la mantenibilidad y la semántica, mientras que la automatización se encarga del formato estático."
   }
 ];
 
@@ -369,6 +434,71 @@ export const modulo2Questions: Question[] = [
     ],
     correctIndex: 1,
     feedback: "El Token Bucket recarga 'fichas' a una tasa constante. Cada petición consume una ficha. Si el balde (bucket) se vacía, se retorna HTTP 429 (Too Many Requests). Es excelente porque permite ráfagas de tráfico controladas."
+  },
+  {
+    id: 13,
+    topic: "Architecture - Hexagonal Architecture",
+    question: "En la Arquitectura Hexagonal (Puertos y Adaptadores), ¿cuál es la responsabilidad de un 'Adaptador de Salida' (Output Adapter)?",
+    answers: [
+      "Definir el caso de uso y las reglas de negocio principales.",
+      "Implementar un contrato/interfaz (puerto de salida) provisto por el dominio para interactuar con un servicio o tecnología externa, como una base de datos SQL o cliente de API.",
+      "Recibir la petición HTTP del usuario final y validar los esquemas JSON.",
+      "Modelar las entidades y Value Objects del núcleo del negocio."
+    ],
+    correctIndex: 1,
+    feedback: "Los puertos son las interfaces definidas por el dominio para aislarse tecnológicamente. Los adaptadores de salida implementan esas interfaces usando tecnologías físicas de infraestructura externas."
+  },
+  {
+    id: 14,
+    topic: "Architecture - CQRS",
+    question: "Al implementar el patrón CQRS (Command Query Responsibility Segregation), ¿qué beneficio fundamental se busca al separar Comandos de Consultas?",
+    answers: [
+      "Evitar escribir tests de integración para las capas de persistencia.",
+      "Optimizar y escalar las operaciones de lectura (Consultas) independientemente de las de escritura (Comandos), permitiendo usar bases de datos especializadas para cada función.",
+      "Garantizar que todas las operaciones se realicen dentro de una única transacción ACID síncrona global.",
+      "Eliminar el uso de APIs REST utilizando únicamente colas de mensajería asíncronas."
+    ],
+    correctIndex: 1,
+    feedback: "CQRS reconoce que en la mayoría de los sistemas la lectura de datos es mucho más frecuente que la escritura, permitiendo crear modelos y almacenes optimizados exclusivamente para consultar datos de forma masiva."
+  },
+  {
+    id: 15,
+    topic: "Architecture - BFF (Backend-for-Frontend)",
+    question: "¿En qué escenario es altamente recomendado implementar el patrón Backend-for-Frontend (BFF)?",
+    answers: [
+      "Cuando tenemos una única base de datos relacional compartida por múltiples servidores locales.",
+      "Cuando nuestra aplicación interactúa con múltiples clientes específicos (ej. una App móvil, una web de escritorio) con requisitos de datos y pantallas drásticamente diferentes, evitando llamadas redundantes.",
+      "Cuando queremos eliminar la capa de backend conectando la interfaz móvil directamente a la base de datos.",
+      "Cuando el equipo de DevOps requiere configurar balanceadores de carga a nivel de capa de red física."
+    ],
+    correctIndex: 1,
+    feedback: "Un BFF actúa como un intermediario a medida de la pantalla o cliente. Consolida múltiples peticiones a microservicios core en un solo payload optimizado para la red móvil o web."
+  },
+  {
+    id: 16,
+    topic: "Architecture - Domain-Driven Design (DDD)",
+    question: "En Domain-Driven Design (DDD), ¿cuál es el propósito de definir un 'Bounded Context' (Contexto Delimitado)?",
+    answers: [
+      "Limitar la cantidad de memoria RAM que puede consumir un microservicio en el clúster.",
+      "Establecer una frontera conceptual explícita donde un modelo lógico y sus términos de negocio (Lenguaje Ubicuo) tienen un único significado claro y consistente.",
+      "Configurar redes privadas virtuales (VPCs) para restringir el tráfico HTTP.",
+      "Implementar mecanismos de cifrado para las comunicaciones internas."
+    ],
+    correctIndex: 1,
+    feedback: "DDD evita la confusión de conceptos. Por ejemplo, en una e-commerce, el término 'Usuario' significa algo distinto para el contexto de 'Seguridad' (credenciales), 'Facturación' (dirección de facturas) y 'Soporte' (tickets)."
+  },
+  {
+    id: 17,
+    topic: "Architecture - Event Sourcing",
+    question: "En una arquitectura basada en eventos, ¿en qué consiste la técnica de 'Event Sourcing'?",
+    answers: [
+      "En guardar el estado actual de la entidad en una base de datos relacional y generar eventos temporales para alertas.",
+      "En persistir de forma inmutable la secuencia completa de eventos de cambio de estado en lugar de guardar solo el estado final actual, permitiendo reconstruir la entidad en cualquier punto del tiempo.",
+      "En interceptar todos los logs del sistema y enviarlos a Elastic Search de forma continua.",
+      "En configurar colas redundantes en brokers locales ante eventuales fallos de red."
+    ],
+    correctIndex: 1,
+    feedback: "Event Sourcing almacena la historia completa. El estado actual de un objeto es el resultado de aplicar secuencialmente todos los eventos pasados sobre dicho objeto, lo cual provee una auditoría perfecta."
   }
 ];
 
@@ -632,6 +762,71 @@ export const modulo3Questions: Question[] = [
     ],
     correctIndex: 1,
     feedback: "Los runners autohospedados te dan control absoluto del hardware y de la seguridad de red. Son obligatorios si el pipeline necesita desplegar código dentro de servidores locales privados protegidos por un firewall corporativo estricto."
+  },
+  {
+    id: 21,
+    topic: "DevOps - GitOps",
+    question: "En una arquitectura GitOps implementada con ArgoCD, ¿cómo se garantiza que el estado vivo del clúster coincida con el estado deseado?",
+    answers: [
+      "Un desarrollador ejecuta comandos manuales 'kubectl apply' cada vez que se hace merge a main.",
+      "El servidor de ArgoCD corre un reconciliation loop continuo para comparar las definiciones yaml en Git con los recursos vivos de K8s, sobrescribiendo cualquier cambio manual (self-healing).",
+      "Se deshabilita la edición de archivos yaml y se configura la base de datos de Kubernetes en modo de solo lectura.",
+      "ArgoCD envía alertas de slack para que el administrador actualice los recursos a mano."
+    ],
+    correctIndex: 1,
+    feedback: "GitOps se basa en la automatización del ruteo del estado deseado. El agente dentro de Kubernetes monitorea el repositorio Git (fuente de verdad) y aplica de forma activa cualquier cambio al clúster de forma autónoma."
+  },
+  {
+    id: 22,
+    topic: "DevOps - OpenTelemetry",
+    question: "Al instrumentar un ecosistema distribuido con OpenTelemetry, ¿a qué nos referimos con la 'Trazabilidad Distribuida' (Distributed Tracing)?",
+    answers: [
+      "A mapear los servidores físicos en un plano cartográfico de red.",
+      "A la capacidad de seguir y correlacionar el flujo exacto de una única petición a través de múltiples microservicios independientes mediante identificadores comunes (traceId).",
+      "A guardar logs en archivos de texto encriptados de forma secuencial.",
+      "A medir el uso de disco rígido y CPU en todos los nodos del clúster."
+    ],
+    correctIndex: 1,
+    feedback: "Las trazas distribuidas permiten diagnosticar cuellos de botella en sistemas de microservicios: al asociar un traceId único a la petición original, se puede ver exactamente cuánto demoró cada servicio en procesarla."
+  },
+  {
+    id: 23,
+    topic: "DevOps - Canary & Istio",
+    question: "Cuando orquestamos un despliegue Canary automatizado con una malla de servicios (Service Mesh) como Istio, ¿qué componente es el responsable de dividir el tráfico de red?",
+    answers: [
+      "El DNS público de la red externa.",
+      "Los proxies sidecar (Envoy) inyectados en los pods, que interceptan y redirigen el tráfico HTTP/gRPC basándose en las reglas configuradas.",
+      "El pipeline de integración continua GitHub Actions.",
+      "El balanceador de carga física de hardware del data center."
+    ],
+    correctIndex: 1,
+    feedback: "Istio inyecta proxies Envoy junto a cada contenedor. Estos sidecars interceptan la comunicación y dividen el tráfico (ej. 98% a V1 y 2% a V2) sin necesidad de modificar el código de la aplicación."
+  },
+  {
+    id: 24,
+    topic: "DevOps - Container Security (Distroless)",
+    question: "¿Por qué el uso de imágenes base 'Distroless' de Google se considera una práctica recomendada de ciberseguridad en contenedores Docker?",
+    answers: [
+      "Porque comprimen la aplicación utilizando algoritmos avanzados reduciendo el uso de red.",
+      "Porque no contienen shells (como bash o sh), administradores de paquetes ni utilidades del sistema operativo, reduciendo la superficie de ataque y los vectores de explotación.",
+      "Porque encriptan automáticamente toda la base de datos local en tiempo de ejecución.",
+      "Porque impiden el acceso HTTP no autorizado de forma nativa en el kernel."
+    ],
+    correctIndex: 1,
+    feedback: "Al eliminar elementos del sistema operativo (bash, sh, apt/apk, curl, etc.) que no son necesarios para correr la aplicación, se neutraliza la capacidad de un atacante para ejecutar comandos o descargar herramientas maliciosas si el contenedor es vulnerado."
+  },
+  {
+    id: 25,
+    topic: "Tooling - Husky & Lint-Staged",
+    question: "¿Qué beneficio principal aporta configurar Husky y Lint-Staged conjuntamente en un entorno de desarrollo de software?",
+    answers: [
+      "Habilitar la edición de código colaborativo en tiempo real dentro del IDE.",
+      "Garantizar la calidad ejecutando el formateo y linter de forma automática local únicamente sobre los archivos que están en el área de preparación (staged) antes de permitir un commit.",
+      "Ejecutar los pipelines de CI/CD completos en servidores en la nube de forma asíncrona.",
+      "Migrar de forma segura la base de datos local de desarrollo."
+    ],
+    correctIndex: 1,
+    feedback: "Husky automatiza los Git Hooks y Lint-Staged asegura que no perdamos tiempo analizando todo el proyecto: solo valida y formatea los archivos que modificaste y estás a punto de commitear."
   }
 ];
 
