@@ -8,9 +8,12 @@ import { RefactorDetail } from './components/RefactorDetail';
 import { SourcesDetail } from './components/SourcesDetail';
 import { ThemeToggle } from './components/ThemeToggle';
 import { Pattern } from './data/types';
+import { QuizSimulator } from './components/QuizSimulator';
+import { Flashcards } from './components/Flashcards';
+import { StudyGuide } from './components/StudyGuide';
 
 export const App: React.FC = () => {
-  const [activeView, setActiveView] = useState<'pattern' | 'category' | 'refactor' | 'sources'>('pattern');
+  const [activeView, setActiveView] = useState<'pattern' | 'category' | 'refactor' | 'sources' | 'quiz' | 'flashcards' | 'guide'>('pattern');
   const [selectedPattern, setSelectedPattern] = useState<Pattern | null>(patterns[0]);
   const [selectedCategory, setSelectedCategory] = useState<'creational' | 'structural' | 'behavioral' | null>(null);
 
@@ -38,6 +41,24 @@ export const App: React.FC = () => {
     setActiveView('sources');
   };
 
+  const handleSelectQuiz = () => {
+    setSelectedCategory(null);
+    setSelectedPattern(null);
+    setActiveView('quiz');
+  };
+
+  const handleSelectFlashcards = () => {
+    setSelectedCategory(null);
+    setSelectedPattern(null);
+    setActiveView('flashcards');
+  };
+
+  const handleSelectGuide = () => {
+    setSelectedCategory(null);
+    setSelectedPattern(null);
+    setActiveView('guide');
+  };
+
   // Determinar título de cabecera
   const getHeaderTitle = () => {
     switch (activeView) {
@@ -45,6 +66,12 @@ export const App: React.FC = () => {
         return "Introducción a la Refactorización";
       case 'sources':
         return "Fuentes de Estudio Consolidadas";
+      case 'guide':
+        return "Guía de Estudio Técnica y SRE";
+      case 'flashcards':
+        return "Mazo de Flashcards de Ingeniería";
+      case 'quiz':
+        return "Simulador de Evaluaciones Técnicas";
       case 'category':
         return selectedCategory ? categoryOverviews[selectedCategory].name : "Resumen de Categoría";
       case 'pattern':
@@ -65,6 +92,9 @@ export const App: React.FC = () => {
         onSelectCategory={handleSelectCategory}
         onSelectRefactor={handleSelectRefactor}
         onSelectSources={handleSelectSources}
+        onSelectQuiz={handleSelectQuiz}
+        onSelectFlashcards={handleSelectFlashcards}
+        onSelectGuide={handleSelectGuide}
       />
 
       {/* Panel de Contenido Principal */}
@@ -93,6 +123,18 @@ export const App: React.FC = () => {
 
           {activeView === 'sources' && (
             <SourcesDetail />
+          )}
+
+          {activeView === 'guide' && (
+            <StudyGuide />
+          )}
+
+          {activeView === 'flashcards' && (
+            <Flashcards />
+          )}
+
+          {activeView === 'quiz' && (
+            <QuizSimulator />
           )}
         </div>
       </main>
