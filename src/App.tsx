@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { env } from './config/env';
 import { patterns } from './data/index';
 import { categoryOverviews } from './data/categories';
 import { Sidebar } from './components/Sidebar';
@@ -16,6 +17,10 @@ export const App: React.FC = () => {
   const [activeView, setActiveView] = useState<'pattern' | 'category' | 'refactor' | 'sources' | 'quiz' | 'flashcards' | 'guide'>('pattern');
   const [selectedPattern, setSelectedPattern] = useState<Pattern | null>(patterns[0]);
   const [selectedCategory, setSelectedCategory] = useState<'creational' | 'structural' | 'behavioral' | null>(null);
+
+  useEffect(() => {
+    document.title = env.VITE_APP_TITLE;
+  }, []);
 
   const handleSelectPattern = (pattern: Pattern) => {
     setSelectedPattern(pattern);
