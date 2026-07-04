@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Pattern } from '../data/types';
 import { CategoryAccordion } from './CategoryAccordion';
-import { Layers, Activity, Settings, Code, ChevronDown, ChevronRight, Hammer, BookOpen, Terminal } from 'lucide-react';
+import { Layers, Activity, Settings, Code, ChevronDown, ChevronRight, Hammer, BookOpen, Terminal, HelpCircle, Award } from 'lucide-react';
 
 interface SidebarProps {
   patterns: Pattern[];
   selectedPattern: Pattern | null;
   selectedCategory: 'creational' | 'structural' | 'behavioral' | null;
-  activeView: 'pattern' | 'category' | 'refactor' | 'sources';
+  activeView: 'pattern' | 'category' | 'refactor' | 'sources' | 'quiz' | 'flashcards' | 'guide';
   onSelectPattern: (pattern: Pattern) => void;
   onSelectCategory: (category: 'creational' | 'structural' | 'behavioral') => void;
   onSelectRefactor: () => void;
   onSelectSources: () => void;
+  onSelectQuiz: () => void;
+  onSelectFlashcards: () => void;
+  onSelectGuide: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -23,6 +26,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectCategory,
   onSelectRefactor,
   onSelectSources,
+  onSelectQuiz,
+  onSelectFlashcards,
+  onSelectGuide,
 }) => {
   // Estados de acordeón global para submenú de patrones
   const [showPatternsSubmenu, setShowPatternsSubmenu] = useState(true);
@@ -143,6 +149,60 @@ export const Sidebar: React.FC<SidebarProps> = ({
         >
           <BookOpen size={16} />
           <span>Fuentes de Estudio</span>
+        </button>
+
+        {/* SECCIÓN DE AUTOEVALUACIÓN */}
+        <div style={{ 
+          fontSize: '11px', 
+          fontWeight: '700', 
+          textTransform: 'uppercase', 
+          letterSpacing: '1px', 
+          color: 'var(--text-muted)',
+          margin: '16px 0 6px 8px'
+        }}>
+          Autoevaluación
+        </div>
+
+        {/* BOTÓN GLOBAL: GUÍA DE ESTUDIO */}
+        <button
+          onClick={onSelectGuide}
+          className={`pattern-item ${activeView === 'guide' ? 'active' : ''}`}
+          style={{ 
+            fontWeight: '600', 
+            border: '1px solid var(--border-color)',
+            boxShadow: 'var(--shadow-sm)'
+          }}
+        >
+          <BookOpen size={16} />
+          <span>Guía de Estudio</span>
+        </button>
+
+        {/* BOTÓN GLOBAL: FLASHCARDS */}
+        <button
+          onClick={onSelectFlashcards}
+          className={`pattern-item ${activeView === 'flashcards' ? 'active' : ''}`}
+          style={{ 
+            fontWeight: '600', 
+            border: '1px solid var(--border-color)',
+            boxShadow: 'var(--shadow-sm)'
+          }}
+        >
+          <HelpCircle size={16} />
+          <span>Flashcards (25)</span>
+        </button>
+
+        {/* BOTÓN GLOBAL: SIMULADOR DE EXAMEN */}
+        <button
+          onClick={onSelectQuiz}
+          className={`pattern-item ${activeView === 'quiz' ? 'active' : ''}`}
+          style={{ 
+            fontWeight: '600', 
+            border: '1px solid var(--border-color)',
+            boxShadow: 'var(--shadow-sm)'
+          }}
+        >
+          <Award size={16} />
+          <span>Simulador de Examen</span>
         </button>
       </div>
     </aside>

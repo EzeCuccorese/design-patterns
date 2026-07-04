@@ -9,7 +9,7 @@ interface CategoryAccordionProps {
   patterns: Pattern[];
   selectedPattern: Pattern | null;
   selectedCategory: 'creational' | 'structural' | 'behavioral' | null;
-  activeView: 'pattern' | 'category' | 'refactor' | 'sources';
+  activeView: string;
   onSelectPattern: (pattern: Pattern) => void;
   onSelectCategory: (category: 'creational' | 'structural' | 'behavioral') => void;
 }
