@@ -856,6 +856,139 @@ export const modulo3Questions: Question[] = [
   }
 ];
 
+export const modulo4Questions: Question[] = [
+  {
+    id: 1,
+    topic: "Ciencias de la Computación - Matrices Dispersas",
+    question: "¿Cuál es la ventaja primordial del formato CSR (Compressed Sparse Row) en el contexto de matrices dispersas?",
+    answers: [
+      "Permite agregar elementos dinámicamente de forma muy veloz en tiempo constante.",
+      "Es altamente eficiente para operaciones matemáticas de multiplicación de matrices por vectores y reduce drásticamente el espacio de almacenamiento al evitar guardar ceros redundantes.",
+      "Encripta los valores en RAM para evitar que sean leídos en memoria por procesos intrusos.",
+      "Convierte la matriz en una estructura tridimensional optimizada para sistemas paralelos."
+    ],
+    correctIndex: 1,
+    feedback: "CSR comprime filas mediante punteros acumulativos (row offsets). Es el estándar industrial de optimización para álgebra computacional de alto rendimiento."
+  },
+  {
+    id: 2,
+    topic: "Ciencias de la Computación - COO",
+    question: "Si estás construyendo dinámicamente una matriz dispersa agregando elementos uno a uno de forma desordenada, ¿qué formato es el más adecuado antes de la conversión final para cómputo?",
+    answers: [
+      "CSR (Compressed Sparse Row).",
+      "CSC (Compressed Sparse Column).",
+      "COO (Coordinate List).",
+      "Yale Formato Comprimido."
+    ],
+    correctIndex: 2,
+    feedback: "El formato COO almacena tuplas simples (fila, columna, valor). Esto lo hace extremadamente veloz e idóneo para la inserción dinámica o incremental de elementos antes de convertirlos a un formato optimizado de cálculo como CSR."
+  },
+  {
+    id: 3,
+    topic: "Ciencias de la Computación - Árboles DFS",
+    question: "Quieres implementar una funcionalidad para clonar o duplicar un árbol binario. ¿Qué recorrido DFS es el más natural y adecuado?",
+    answers: [
+      "Inorder (Izquierda -> Raíz -> Derecha).",
+      "Postorder (Izquierda -> Derecha -> Raíz).",
+      "Preorder (Raíz -> Izquierda -> Derecha).",
+      "BFS (Level-Order)."
+    ],
+    correctIndex: 2,
+    feedback: "Preorder visita primero la raíz antes que sus subárboles. Esto permite instanciar el nodo padre primero y luego asignar/colgar recursivamente sus nodos hijos izquierdo y derecho."
+  },
+  {
+    id: 4,
+    topic: "Ciencias de la Computación - BST Inorder",
+    question: "Al realizar un recorrido Inorder sobre un Árbol Binario de Búsqueda (BST), ¿en qué orden se visitarán los elementos?",
+    answers: [
+      "En orden aleatorio debido al balanceo interno del árbol.",
+      "En orden perfectamente ordenado de menor a mayor.",
+      "En orden descendente (de mayor a menor) únicamente.",
+      "Primero los nodos hojas inferiores y al final la raíz principal."
+    ],
+    correctIndex: 1,
+    feedback: "Dado que en un BST todos los nodos a la izquierda son menores y todos los de la derecha son mayores que el nodo actual, el recorrido Inorder (Izquierda -> Raíz -> Derecha) procesa y entrega los elementos en orden ascendente perfecto."
+  },
+  {
+    id: 5,
+    topic: "Ciencias de la Computación - Ordenamiento",
+    question: "¿Cuál es la complejidad temporal en el caso promedio de algoritmos de ordenamiento eficientes como Merge Sort o Heap Sort?",
+    answers: [
+      "O(N)",
+      "O(N log N)",
+      "O(N^2)",
+      "O(log N)"
+    ],
+    correctIndex: 1,
+    feedback: "O(N log N) es el límite inferior óptimo para ordenar colecciones basándose en comparaciones, utilizado por Merge Sort, Heap Sort y Quick Sort (en su caso promedio)."
+  },
+  {
+    id: 6,
+    topic: "Ciencias de la Computación - Búsqueda",
+    question: "Si disponemos de un array que ya se encuentra ordenado en memoria, ¿cuál es la complejidad temporal de realizar una Búsqueda Binaria?",
+    answers: [
+      "O(N)",
+      "O(1)",
+      "O(log N)",
+      "O(N log N)"
+    ],
+    correctIndex: 2,
+    feedback: "La búsqueda binaria divide a la mitad el rango de búsqueda en cada paso comparando el elemento medio, lo cual resulta en una complejidad logarítmica O(log N)."
+  },
+  {
+    id: 7,
+    topic: "Ciencias de la Computación - Regex Lazy",
+    question: "Si aplicas la expresión regular `/^<.*>$/` sobre el texto `<div>hola</div>`, ¿qué capturará el motor y por qué?",
+    answers: [
+      "Capturará únicamente `<div>` debido a que es perezoso.",
+      "Capturará el string completo `<div>hola</div>` porque el cuantificador `*` es codicioso (greedy) por defecto.",
+      "Fallará en encontrar coincidencias porque el texto tiene caracteres de escape.",
+      "Capturará solo el contenido interno `hola`."
+    ],
+    correctIndex: 1,
+    feedback: "Los cuantificadores en Regex son codiciosos por defecto (* o +), lo que significa que se extienden buscando la última coincidencia del delimitador `>`. Para hacerlo perezoso (lazy) se debe escribir como `*?`."
+  },
+  {
+    id: 8,
+    topic: "Ciencias de la Computación - Lookbehind",
+    question: "¿Qué aserto de búsqueda (Lookaround) utilizarías para encontrar números que estén precedidos por un signo de dólar (por ejemplo, extraer '150' de '$150'), sin incluir el signo de dólar en la coincidencia final?",
+    answers: [
+      "Positive Lookahead (?=\\$)",
+      "Negative Lookahead (?!\\$)",
+      "Positive Lookbehind (?<=\\$)",
+      "Negative Lookbehind (?<!\\$)"
+    ],
+    correctIndex: 2,
+    feedback: "El Positive Lookbehind (?<=...) comprueba si el patrón a la izquierda coincide antes del cursor, permitiendo capturar el número subsiguiente sin registrar el signo '$' en el match final."
+  },
+  {
+    id: 9,
+    topic: "DevOps - Puertos en Linux",
+    question: "Tu aplicación local falla en arrancar con un error de puerto ocupado (EADDRINUSE). ¿Qué comando de Linux utilizarías para identificar exactamente el PID del proceso causante?",
+    answers: [
+      "lsof -i :8080 (o bien ss -tulpn)",
+      "ps aux --sort=-%mem",
+      "chmod 755 :8080",
+      "sed -i 's/:8080//g'"
+    ],
+    correctIndex: 0,
+    feedback: "lsof -i :8080 lista los archivos y sockets abiertos en el puerto 8080 mostrando el PID del proceso dueño. ss -tulpn también entrega el PID del proceso escuchando."
+  },
+  {
+    id: 10,
+    topic: "DevOps - Manipulación de Texto en Linux",
+    question: "Necesitas leer un archivo de logs estructurado en columnas, extraer la primera columna (IP) y la novena columna (código de respuesta HTTP), y finalmente filtrar aquellas peticiones que devolvieron un error de servidor 500. ¿Qué combinación de utilitarios de consola es la ideal?",
+    answers: [
+      "chmod combinado con grep.",
+      "sed únicamente, editando las columnas en disco.",
+      "awk para extraer las columnas por variables ($1 y $9) y redirigir el flujo mediante un pipe a grep '500'.",
+      "chown recursivo combinando con ss."
+    ],
+    correctIndex: 2,
+    feedback: "awk es un procesador de texto orientado a registros y columnas. Permite extraer campos de forma sencilla y pasárselos a grep para filtrar líneas específicas."
+  }
+];
+
 export const quizModules: QuizModule[] = [
   {
     id: "modulo1",
@@ -877,5 +1010,12 @@ export const quizModules: QuizModule[] = [
     description: "Docker, Kubernetes, flujos de Git, CI/CD autohospedados e infraestructura Cloud.",
     timeLimitMinutes: 10,
     questions: modulo3Questions
+  },
+  {
+    id: "modulo4",
+    title: "Ciencias de la Computación & Linux",
+    description: "Preguntas conceptuales de matrices dispersas, árboles, Big O, Regex avanzados y comandos Bash de Linux.",
+    timeLimitMinutes: 10,
+    questions: modulo4Questions
   }
 ];

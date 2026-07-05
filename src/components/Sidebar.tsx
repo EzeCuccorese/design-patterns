@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Pattern } from '../data/types';
 import { CategoryAccordion } from './CategoryAccordion';
-import { Layers, Activity, Settings, Code, ChevronDown, ChevronRight, BookOpen, Terminal, HelpCircle, Award, Shield, Cpu } from 'lucide-react';
+import { Layers, Activity, Settings, Code, ChevronDown, ChevronRight, BookOpen, Terminal, HelpCircle, Award, Shield, Cpu, Binary } from 'lucide-react';
+import { flashcards } from '../data/flashcards';
 
 interface SidebarProps {
   patterns: Pattern[];
@@ -240,6 +241,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         )}
 
+        {/* BOTÓN GLOBAL: CIENCIAS DE LA COMPUTACIÓN */}
+        <button
+          onClick={() => onSelectTopic('computer-science')}
+          className={`pattern-item ${activeView === 'computer-science' ? 'active' : ''}`}
+          style={{ 
+            fontWeight: '600', 
+            border: '1px solid var(--border-color)',
+            boxShadow: 'var(--shadow-sm)',
+            marginTop: '4px'
+          }}
+        >
+          <Binary size={16} />
+          <span>Ciencias de la Computación</span>
+        </button>
+
         {/* BOTÓN GLOBAL: FUENTES DE ESTUDIO */}
         <button
           onClick={onSelectSources}
@@ -278,7 +294,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           }}
         >
           <HelpCircle size={16} />
-          <span>Flashcards (25)</span>
+          <span>Flashcards ({flashcards.length})</span>
         </button>
 
         {/* BOTÓN GLOBAL: SIMULADOR DE EXAMEN */}

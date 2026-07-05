@@ -1295,3 +1295,53 @@ pre[class*="language-"] {
 .alert-warning { background-color: rgba(239, 68, 68, 0.08); border-left: 4px solid #ef4444; color: var(--text-primary); }
 .alert-caution { background-color: rgba(239, 68, 68, 0.1); border-left: 4px solid #b91c1c; color: var(--text-primary); }
 
+/* 5. Estilos para Tablas Comparativas en Guías de Estudio */
+.comparison-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-card);
+  margin: 8px 0;
+}
+
+.comparison-table th {
+  background-color: rgba(99, 102, 241, 0.05);
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 12px 16px;
+  font-size: 13px;
+  text-align: left;
+}
+
+.comparison-table th:last-child {
+  border-right: none;
+}
+
+.comparison-table td {
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 12px 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  transition: background-color 0.2s ease;
+}
+
+.comparison-table td:last-child {
+  border-right: none;
+}
+
+.comparison-table tr:last-child td {
+  border-bottom: none;
+}
+
+.comparison-table tr:hover td {
+  background-color: rgba(99, 102, 241, 0.02);
+  color: var(--text-primary);
+}
+

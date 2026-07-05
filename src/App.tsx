@@ -83,6 +83,8 @@ export const App: React.FC = () => {
         return "SRE, DevOps e Infraestructura";
       case 'tooling-dev':
         return "Tooling de Desarrollo Moderno";
+      case 'computer-science':
+        return "Ciencias de la Computación & Linux";
       case 'flashcards':
         return "Mazo de Flashcards de Ingeniería";
       case 'quiz':
@@ -140,7 +142,7 @@ export const App: React.FC = () => {
             <SourcesDetail />
           )}
 
-          {['solid-clean', 'grasp', 'testing', 'resilience-eda', 'sre-devops', 'tooling-dev'].includes(activeView) && (
+          {['solid-clean', 'grasp', 'testing', 'resilience-eda', 'sre-devops', 'tooling-dev', 'computer-science'].includes(activeView) && (
             <TopicDetail topicId={activeView} />
           )}
 

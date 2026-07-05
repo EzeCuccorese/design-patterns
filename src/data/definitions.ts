@@ -280,12 +280,63 @@ export const technicalDefinitions: Record<string, TechnicalDefinition> = {
   },
   stackVsHeap: {
     title: "Memoria Stack vs Heap (La Pila y El Montón)",
-    description: "Dos áreas de memoria RAM asignadas a un proceso por el sistema operativo, diferenciándose en velocidad, tamaño, estructuración y control del ciclo de vida de los datos.",
+    description: "Dos áreas de memoria RAM principales que el sistema operativo asigna a un programa para gestionar la ejecución de funciones y el almacenamiento dinámico de datos.",
     details: [
-      "La Pila (Stack): Estructura LIFO (Last In First Out) ultra rápida gestionada por la CPU para guardar variables locales de tipo primitivo y punteros de referencia a objetos.",
-      "El Montón (Heap): Zona de memoria dinámica y de gran tamaño utilizada para almacenar objetos complejos. Su ciclo de vida es dinámico y requiere liberación (Garbage Collector en lenguajes modernos).",
-      "Ciclo de vida: Al finalizar la función, el frame de la Pila se destruye al instante. Los objetos del Heap permanecen hasta que el Garbage Collector los recolecta."
+      "La Pila (Stack): Estructura muy rápida y ordenada bajo el principio LIFO (Last In, First Out) gestionada automáticamente por la CPU. Guarda variables locales primitivas (int, boolean), punteros/referencias a objetos y contextos de ejecución. Su tamaño limitado puede provocar un StackOverflowError si se agota (ej. por recursividad infinita).",
+      "El Montón (Heap): Zona de memoria de gran tamaño, desordenada y dinámica. Guarda todos los objetos instanciados físicamente (con new o dinámicos) y sus atributos. Su ciclo de vida es dinámico y los objetos persisten tras finalizar la función que los creó.",
+      "Liberación y Límites: El frame en la Pila se destruye instantáneamente al retornar de la función. En el Heap, el Garbage Collector (o liberación manual) rastrea y elimina periódicamente los objetos huérfanos que ya no tienen punteros activos en la Pila, evitando OutOfMemoryError (OOM) causados por fugas de memoria."
     ],
-    hint: "Pila es LIFO y rápida para variables locales; Montón es dinámico y grande para objetos instanciados."
+    hint: "Pila: LIFO, rápida, variables locales, referencias y StackOverflowError. Montón: dinámica, grande, objetos con new, Garbage Collector y OutOfMemoryError (OOM)."
+  },
+  sparseMatrix: {
+    title: "Matrices Dispersas (Sparse Matrices)",
+    description: "Una matriz en la que la mayoría de los elementos son cero. Para evitar desperdicio de memoria RAM y procesamiento, se almacena comprimida mediante esquemas como COO, CSR o CSC.",
+    details: [
+      "COO (Coordinate List): Almacena tuplas (fila, columna, valor) solo para elementos no nulos. Es ideal para construcción incremental.",
+      "CSR (Compressed Sparse Row): Comprime filas usando values, col_indices y row_offsets (de tamaño N + 1). Rápido para accesos de filas y multiplicaciones de matrices.",
+      "CSC (Compressed Sparse Column): Comprime columnas usando values, row_indices y col_offsets (de tamaño M + 1). Ideal para accesos rápidos por columna."
+    ],
+    hint: "Optimiza memoria y cómputo de ceros usando COO (coordenadas), CSR (filas) y CSC (columnas)."
+  },
+  binaryTree: {
+    title: "Árboles Binarios (Binary Trees)",
+    description: "Estructuras de datos jerárquicas formadas por nodos, donde cada nodo tiene a lo sumo dos hijos. Los recorridos principales son en profundidad (DFS) y amplitud (BFS).",
+    details: [
+      "Preorder (Raíz -> Izquierda -> Derecha): Ideal para clonar o duplicar un árbol (se crea el padre antes que sus hijos).",
+      "Inorder (Izquierda -> Raíz -> Derecha): En un BST, devuelve los elementos ordenados ascendentemente de menor a mayor.",
+      "Postorder (Izquierda -> Derecha -> Raíz): Ideal para eliminar o liberar memoria (se borran los hijos antes que el padre).",
+      "BFS (Level-Order): Visita los nodos nivel por nivel, de izquierda a derecha, requiriendo una Cola (FIFO) para su implementación."
+    ],
+    hint: "Estructura jerárquica con recorridos DFS (pila/recursión) y BFS (cola)."
+  },
+  bigO: {
+    title: "Notación Big O (Complejidad Algorítmica)",
+    description: "Medida matemática de la eficiencia temporal y espacial de un algoritmo a medida que el tamaño de los datos de entrada (N) crece hacia el infinito.",
+    details: [
+      "Complejidad Constante O(1) y Logarítmica O(log N): Búsqueda binaria, acceso a índices directos.",
+      "Complejidad Lineal O(N) y Linearítmica O(N log N): Bucles simples, ordenamientos eficientes (Merge/Quick Sort).",
+      "Complejidad Cuadrática O(N^2), Exponencial O(2^N) y Factorial O(N!): Bucles anidados, recursión ineficiente, fuerza bruta (TSP)."
+    ],
+    hint: "Clasificación de eficiencia temporal y espacial: O(1) < O(log N) < O(N) < O(N log N) < O(N^2) < O(2^N) < O(N!)."
+  },
+  regex: {
+    title: "Expresiones Regulares (Regex) Avanzadas",
+    description: "Motores de búsqueda de patrones con directrices de precedencia, Lookarounds y cuantificación Greedy vs Lazy.",
+    details: [
+      "Greedy (Codicioso) vs Lazy (Perezoso): El motor codicioso (*, +) busca la coincidencia más larga posible; el perezoso (*?, +?) se detiene ante la primera.",
+      "Lookahead (?=...) y (?!...): Positive/Negative. Valida que el texto actual esté seguido o no por un patrón, sin incluirlo en el resultado.",
+      "Lookbehind (?<=...) y (?<!...): Positive/Negative. Valida si el texto actual está precedido o no por un patrón, sin consumirlo."
+    ],
+    hint: "Greedy/Lazy para límites; Lookarounds para asertos sin capturar caracteres."
+  },
+  linuxCommands: {
+    title: "Comandos de Linux & Diagnóstico de Infraestructura",
+    description: "Herramientas de terminal en entornos Bash para procesar texto estructurado en columnas, diagnosticar redes, administrar procesos y gestionar permisos.",
+    details: [
+      "Procesamiento de Texto: grep para filtrado, sed para sustituciones in-place y awk para manipulación avanzada de columnas/campos de logs.",
+      "Procesamiento de Red/Procesos: lsof -i para puertos, ss -tulpn para sockets en escucha y ps aux para ordenar procesos por memoria.",
+      "Permisos y Propiedades: chmod para modificar permisos (lectura/escritura/ejecución) y chown para cambiar de forma recursiva dueños/grupos."
+    ],
+    hint: "Utilitarios de DevOps: grep/sed/awk (texto), lsof/ss/ps (red/procesos), chmod/chown (seguridad)."
   }
 };

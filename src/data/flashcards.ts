@@ -259,5 +259,41 @@ export const flashcards: Flashcard[] = [
     front: "¿Qué tipo de datos se guardan en la memoria Heap (Montón) y qué error crítico ocurre si se llena?",
     back: "Se guardan todos los objetos instanciados físicamente (con new) y sus campos. Si se llena debido a excesos de objetos o fugas de memoria (memory leaks), el sistema operativo o runtime lanza un OutOfMemoryError (OOM).",
     hint: "Gran espacio de memoria de asignación dinámica gestionado por el Garbage Collector."
+  },
+  {
+    id: 43,
+    front: "¿En qué consiste el formato CSR (Compressed Sparse Row) para matrices dispersas?",
+    back: "Comprime las filas de una matriz dispersa usando tres arrays planos: values (valores no nulos), col_indices (sus columnas) y row_offsets (punteros acumulativos de tamaño N + 1 que indican dónde inicia cada fila).",
+    hint: "Comprime filas de ceros mediante punteros acumulativos para acelerar la multiplicación matriz-vector."
+  },
+  {
+    id: 44,
+    front: "¿Qué estructura de datos es indispensable para realizar un recorrido en amplitud (BFS - Level Order) en un árbol?",
+    back: "Requiere obligatoriamente una Cola (Queue), la cual funciona bajo la política FIFO (First In, First Out) para recordar qué nodos vecinos debe visitar en el siguiente nivel jerárquico.",
+    hint: "Estructura FIFO auxiliar en lugar de la pila recursiva de DFS."
+  },
+  {
+    id: 45,
+    front: "¿Cuál es la jerarquía general de eficiencia algorítmica de mejor a peor según la notación Big O?",
+    back: "O(1) [Constante] < O(log N) [Logarítmica] < O(N) [Lineal] < O(N log N) [Linearítmica] < O(N^2) [Cuadrática] < O(2^N) [Exponencial] < O(N!) [Factorial].",
+    hint: "Clasificación de eficiencia temporal y espacial estándar de la industria."
+  },
+  {
+    id: 46,
+    front: "¿Cómo se convierte un cuantificador codicioso (greedy) en uno perezoso (lazy) en Regex?",
+    back: "Agregando un signo de pregunta (?) inmediatamente después del cuantificador principal (ej. transformar * en *?, o + en +?). Esto hace que se detenga en la primera coincidencia del patrón.",
+    hint: "Detiene la codicia por defecto agregando un signo de interrogación."
+  },
+  {
+    id: 47,
+    front: "¿Qué comando de Linux permite identificar qué proceso (PID) tiene bloqueado el puerto 8080?",
+    back: "lsof -i :8080 (List Open Files) o también ss -tulpn (Socket Statistics) filtrando por el puerto.",
+    hint: "Resuelve el error local EADDRINUSE antes de matar el proceso."
+  },
+  {
+    id: 48,
+    front: "¿Qué es un Positive Lookbehind en una expresión regular y cuál es su sintaxis?",
+    back: "Es un aserto de búsqueda que permite verificar si un patrón específico está justo antes de la coincidencia actual, sin incluir dichos caracteres en la captura final. Sintaxis: (?<=patrón).",
+    hint: "Valida el texto anterior sin consumirlo."
   }
 ];

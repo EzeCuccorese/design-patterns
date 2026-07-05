@@ -1,6 +1,6 @@
 import React from 'react';
 import { studyGuide } from '../data/studyGuide';
-import { Shield, Layout, CheckCircle, Activity, Terminal, Info, BookOpen } from 'lucide-react';
+import { Shield, Layout, CheckCircle, Activity, Terminal, Info, BookOpen, Binary } from 'lucide-react';
 
 interface TopicDetailProps {
   topicId: string;
@@ -11,7 +11,8 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   Layout,
   CheckCircle,
   Activity,
-  Terminal
+  Terminal,
+  Binary
 };
 
 export const TopicDetail: React.FC<TopicDetailProps> = ({ topicId }) => {
@@ -82,6 +83,29 @@ export const TopicDetail: React.FC<TopicDetailProps> = ({ topicId }) => {
                   </ul>
                 )}
               </div>
+
+              {sub.table && (
+                <div className="table-container" style={{ overflowX: 'auto', margin: '12px 0 16px 0' }}>
+                  <table className="comparison-table">
+                    <thead>
+                      <tr>
+                        {sub.table.headers.map((header, hIdx) => (
+                          <th key={hIdx} style={{ padding: '10px 12px', textAlign: 'left', fontWeight: '600', fontSize: '13px' }}>{header}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sub.table.rows.map((row, rIdx) => (
+                        <tr key={rIdx}>
+                          {row.map((cell, cIdx) => (
+                            <td key={cIdx} style={{ padding: '10px 12px', fontSize: '12.5px', lineHeight: '1.4' }}>{cell}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
 
               {sub.code && (
                 <div className="code-container" style={{ margin: '8px 0 12px 0', padding: '10px' }}>
