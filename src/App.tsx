@@ -1,68 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { env } from './config/env';
 import { patterns } from './data/index';
 import { categoryOverviews } from './data/categories';
 import { Sidebar } from './components/Sidebar';
 import { BentoGrid } from './components/BentoGrid';
 import { CategoryDetail } from './components/CategoryDetail';
-import { RefactorDetail } from './components/RefactorDetail';
-import { SourcesDetail } from './components/SourcesDetail';
 import { ThemeToggle } from './components/ThemeToggle';
-import { Pattern } from './data/types';
-import { QuizSimulator } from './components/QuizSimulator';
-import { Flashcards } from './components/Flashcards';
-import { TopicDetail } from './components/TopicDetail';
+import { GlobalSearch } from './components/GlobalSearch';
+import { useHashRoute } from './hooks/useHashRoute';
+import { useStudyProgress } from './hooks/useStudyProgress';
+
+// Lazy loading de vistas secundarias y componentes pesados
+const RefactorDetail = React.lazy(() =>
+  import('./components/RefactorDetail').then((m) => ({ default: m.RefactorDetail }))
+);
+const SourcesDetail = React.lazy(() =>
+  import('./components/SourcesDetail').then((m) => ({ default: m.SourcesDetail }))
+);
+const QuizSimulator = React.lazy(() =>
+  import('./components/QuizSimulator').then((m) => ({ default: m.QuizSimulator }))
+);
+const Flashcards = React.lazy(() =>
+  import('./components/Flashcards').then((m) => ({ default: m.Flashcards }))
+);
+const TopicDetail = React.lazy(() =>
+  import('./components/TopicDetail').then((m) => ({ default: m.TopicDetail }))
+);
+
+const LoadingFallback: React.FC = () => (
+  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '300px', color: 'var(--text-muted, #888)' }}>
+    <div style={{ textAlign: 'center' }}>
+      <div className="animate-spin" style={{ width: '32px', height: '32px', border: '3px solid rgba(255,255,255,0.1)', borderTopColor: 'var(--accent-color, #6366f1)', borderRadius: '50%', margin: '0 auto 12px auto' }} />
+      <p style={{ fontSize: '14px' }}>Cargando módulo...</p>
+    </div>
+  </div>
+);
 
 export const App: React.FC = () => {
-  const [activeView, setActiveView] = useState<string>('pattern');
-  const [selectedPattern, setSelectedPattern] = useState<Pattern | null>(patterns[0]);
-  const [selectedCategory, setSelectedCategory] = useState<'creational' | 'structural' | 'behavioral' | null>(null);
+  const { routeState, navigatePattern, navigateCategory, navigateView } = useHashRoute();
+  const { activeView, selectedPattern, selectedCategory } = routeState;
+  const { progressPercentage } = useStudyProgress();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     document.title = env.VITE_APP_TITLE;
   }, []);
-
-  const handleSelectPattern = (pattern: Pattern) => {
-    setSelectedPattern(pattern);
-    setSelectedCategory(null);
-    setActiveView('pattern');
-  };
-
-  const handleSelectCategory = (category: 'creational' | 'structural' | 'behavioral') => {
-    setSelectedCategory(category);
-    setSelectedPattern(null);
-    setActiveView('category');
-  };
-
-  const handleSelectRefactor = () => {
-    setSelectedCategory(null);
-    setSelectedPattern(null);
-    setActiveView('refactor');
-  };
-
-  const handleSelectSources = () => {
-    setSelectedCategory(null);
-    setSelectedPattern(null);
-    setActiveView('sources');
-  };
-
-  const handleSelectQuiz = () => {
-    setSelectedCategory(null);
-    setSelectedPattern(null);
-    setActiveView('quiz');
-  };
-
-  const handleSelectFlashcards = () => {
-    setSelectedCategory(null);
-    setSelectedPattern(null);
-    setActiveView('flashcards');
-  };
-
-  const handleSelectTopic = (topicId: string) => {
-    setSelectedCategory(null);
-    setSelectedPattern(null);
-    setActiveView(topicId);
-  };
 
   // Determinar título de cabecera
   const getHeaderTitle = () => {
@@ -93,25 +75,36 @@ export const App: React.FC = () => {
         return selectedCategory ? categoryOverviews[selectedCategory].name : "Resumen de Categoría";
       case 'pattern':
       default:
-        return "Panel de Estudio de Patrones";
+        return selectedPattern ? `Patrón: ${selectedPattern.name}` : "Panel de Estudio de Patrones";
     }
   };
 
   return (
     <div className="app-container">
+      {/* Modal de Búsqueda Global */}
+      <GlobalSearch
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        onSelectPattern={(p) => navigatePattern(p)}
+        onSelectTopic={(tId) => navigateView(tId)}
+        onNavigateView={(v) => navigateView(v)}
+      />
+
       {/* Barra de Navegación Lateral */}
       <Sidebar
         patterns={patterns}
         selectedPattern={selectedPattern}
         selectedCategory={selectedCategory}
         activeView={activeView}
-        onSelectPattern={handleSelectPattern}
-        onSelectCategory={handleSelectCategory}
-        onSelectRefactor={handleSelectRefactor}
-        onSelectSources={handleSelectSources}
-        onSelectQuiz={handleSelectQuiz}
-        onSelectFlashcards={handleSelectFlashcards}
-        onSelectTopic={handleSelectTopic}
+        onSelectPattern={(p) => navigatePattern(p)}
+        onSelectCategory={(c) => navigateCategory(c)}
+        onSelectRefactor={() => navigateView('refactor')}
+        onSelectSources={() => navigateView('sources')}
+        onSelectQuiz={() => navigateView('quiz')}
+        onSelectFlashcards={() => navigateView('flashcards')}
+        onSelectTopic={(topicId) => navigateView(topicId)}
+        onOpenSearch={() => setIsSearchOpen(true)}
+        progressPercentage={progressPercentage}
       />
 
       {/* Panel de Contenido Principal */}
@@ -126,33 +119,35 @@ export const App: React.FC = () => {
         </header>
 
         <div className="dashboard-content">
-          {activeView === 'category' && selectedCategory && (
-            <CategoryDetail category={categoryOverviews[selectedCategory]} />
-          )}
-          
-          {activeView === 'pattern' && selectedPattern && (
-            <BentoGrid pattern={selectedPattern} />
-          )}
+          <Suspense fallback={<LoadingFallback />}>
+            {activeView === 'category' && selectedCategory && (
+              <CategoryDetail category={categoryOverviews[selectedCategory]} />
+            )}
 
-          {activeView === 'refactor' && (
-            <RefactorDetail />
-          )}
+            {activeView === 'pattern' && selectedPattern && (
+              <BentoGrid pattern={selectedPattern} />
+            )}
 
-          {activeView === 'sources' && (
-            <SourcesDetail />
-          )}
+            {activeView === 'refactor' && (
+              <RefactorDetail />
+            )}
 
-          {['solid-clean', 'grasp', 'testing', 'resilience-eda', 'sre-devops', 'tooling-dev', 'computer-science'].includes(activeView) && (
-            <TopicDetail topicId={activeView} />
-          )}
+            {activeView === 'sources' && (
+              <SourcesDetail />
+            )}
 
-          {activeView === 'flashcards' && (
-            <Flashcards />
-          )}
+            {['solid-clean', 'grasp', 'testing', 'resilience-eda', 'sre-devops', 'tooling-dev', 'computer-science'].includes(activeView) && (
+              <TopicDetail topicId={activeView} />
+            )}
 
-          {activeView === 'quiz' && (
-            <QuizSimulator />
-          )}
+            {activeView === 'flashcards' && (
+              <Flashcards />
+            )}
+
+            {activeView === 'quiz' && (
+              <QuizSimulator />
+            )}
+          </Suspense>
         </div>
       </main>
     </div>

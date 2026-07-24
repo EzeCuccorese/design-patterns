@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Pattern } from '../data/types';
 import { CategoryAccordion } from './CategoryAccordion';
-import { Layers, Activity, Settings, Code, ChevronDown, ChevronRight, BookOpen, Terminal, HelpCircle, Award, Shield, Cpu, Binary } from 'lucide-react';
+import { Layers, Activity, Settings, Code, ChevronDown, ChevronRight, BookOpen, Terminal, HelpCircle, Award, Shield, Cpu, Binary, Search } from 'lucide-react';
 import { flashcards } from '../data/flashcards';
 
 interface SidebarProps {
@@ -16,6 +16,8 @@ interface SidebarProps {
   onSelectQuiz: () => void;
   onSelectFlashcards: () => void;
   onSelectTopic: (topicId: string) => void;
+  onOpenSearch?: () => void;
+  progressPercentage?: number;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -30,6 +32,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectQuiz,
   onSelectFlashcards,
   onSelectTopic,
+  onOpenSearch,
+  progressPercentage,
 }) => {
   // Estados de acordeón colapsables
   const [showPatternsSubmenu, setShowPatternsSubmenu] = useState(true);
@@ -48,7 +52,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   }, [activeView]);
 
   return (
-    <aside className="sidebar">
+    <aside className="sidebar" role="navigation" aria-label="Menú principal">
       {/* Nombre general de la plataforma */}
       <div className="sidebar-header">
         <div className="logo">
@@ -56,7 +60,52 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <span style={{ fontSize: '15px', fontWeight: 'bold', letterSpacing: '0.5px' }}>Arquitectura & Código</span>
         </div>
       </div>
-      
+
+      {/* Botón de Búsqueda Global */}
+      <div style={{ padding: '0 8px' }}>
+        <button
+          id="global-search-trigger"
+          onClick={onOpenSearch}
+          className="sidebar-search-button"
+          aria-label="Buscar en la plataforma (Cmd + K)"
+          style={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '8px 12px',
+            margin: '0 0 8px 0',
+            backgroundColor: 'var(--bg-secondary, rgba(255, 255, 255, 0.05))',
+            border: '1px solid var(--border-color, #333)',
+            borderRadius: '8px',
+            color: 'var(--text-secondary, #aaa)',
+            cursor: 'pointer',
+            fontSize: '13px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Search size={14} />
+            <span>Buscar...</span>
+          </div>
+          <kbd style={{ background: 'var(--bg-primary, #111)', padding: '2px 5px', borderRadius: '4px', fontSize: '11px', border: '1px solid #444' }}>
+            ⌘K
+          </kbd>
+        </button>
+
+        {/* Indicador de Progreso */}
+        {progressPercentage !== undefined && (
+          <div className="sidebar-progress-box" style={{ padding: '8px 12px', margin: '4px 0 12px 0', backgroundColor: 'var(--bg-secondary, rgba(255,255,255,0.03))', borderRadius: '8px', border: '1px solid var(--border-color, #333)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '4px', fontWeight: '500' }}>
+              <span>Progreso de Estudio</span>
+              <span>{progressPercentage}%</span>
+            </div>
+            <div style={{ height: '5px', width: '100%', backgroundColor: 'var(--border-color, #333)', borderRadius: '3px', overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${progressPercentage}%`, backgroundColor: 'var(--accent-color, #6366f1)', transition: 'width 0.3s ease' }} />
+            </div>
+          </div>
+        )}
+      </div>
+
       <div className="sidebar-content" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         
         {/* SECCIÓN: PATRONES DE DISEÑO */}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { quizModules, QuizModule } from '../data/quiz';
 import { Timer, CheckCircle2, XCircle, ChevronRight, RefreshCw, Trophy, Calendar } from 'lucide-react';
 
@@ -25,14 +25,48 @@ export const QuizSimulator: React.FC = () => {
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  const saveAttempt = useCallback((finalScore: number) => {
+    if (!selectedModule) return;
+    const pct = Math.round((finalScore / selectedModule.questions.length) * 100);
+    const newAttempt: Attempt = {
+      moduleId: selectedModule.id,
+      moduleTitle: selectedModule.title,
+      score: finalScore,
+      total: selectedModule.questions.length,
+      percentage: pct,
+      date: new Date().toLocaleString('es-AR', {
+        day: '2-digit',
+        month: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      }) + ' hs'
+    };
+
+    setAttempts((prevAttempts) => {
+      const updatedAttempts = [newAttempt, ...prevAttempts].slice(0, 10);
+      localStorage.setItem('quiz_attempts', JSON.stringify(updatedAttempts));
+      return updatedAttempts;
+    });
+  }, [selectedModule]);
+
+  const handleTimeOut = useCallback(() => {
+    setGameState('results');
+    saveAttempt(score);
+  }, [score, saveAttempt]);
+
+  const handleTimeOutRef = useRef(handleTimeOut);
+  useEffect(() => {
+    handleTimeOutRef.current = handleTimeOut;
+  }, [handleTimeOut]);
+
   // Iniciar temporizador
   useEffect(() => {
-    if (gameState === 'playing' && timeLeft > 0) {
+    if (gameState === 'playing') {
       timerRef.current = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
-            clearInterval(timerRef.current!);
-            handleTimeOut();
+            if (timerRef.current) clearInterval(timerRef.current);
+            handleTimeOutRef.current();
             return 0;
           }
           return prev - 1;
@@ -43,12 +77,7 @@ export const QuizSimulator: React.FC = () => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [gameState, timeLeft]);
-
-  const handleTimeOut = () => {
-    setGameState('results');
-    saveAttempt(score);
-  };
+  }, [gameState]);
 
   const handleStartQuiz = (module: QuizModule) => {
     setSelectedModule(module);
@@ -78,27 +107,6 @@ export const QuizSimulator: React.FC = () => {
     }
   };
 
-  const saveAttempt = (finalScore: number) => {
-    if (!selectedModule) return;
-    const pct = Math.round((finalScore / selectedModule.questions.length) * 100);
-    const newAttempt: Attempt = {
-      moduleId: selectedModule.id,
-      moduleTitle: selectedModule.title,
-      score: finalScore,
-      total: selectedModule.questions.length,
-      percentage: pct,
-      date: new Date().toLocaleString('es-AR', {
-        day: '2-digit',
-        month: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-      }) + ' hs'
-    };
-
-    const updatedAttempts = [newAttempt, ...attempts].slice(0, 10); // Guardar los últimos 10 intentos
-    setAttempts(updatedAttempts);
-    localStorage.setItem('quiz_attempts', JSON.stringify(updatedAttempts));
-  };
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
