@@ -47,7 +47,7 @@ export const parseHash = (): RouteState => {
     };
   }
 
-  if (['refactor', 'sources', 'quiz', 'flashcards'].includes(prefix)) {
+  if (['refactor', 'sources', 'quiz', 'flashcards', 'algorithms', 'senior-staff'].includes(prefix)) {
     return {
       activeView: prefix,
       selectedPattern: null,

@@ -26,6 +26,12 @@ const Flashcards = React.lazy(() =>
 const TopicDetail = React.lazy(() =>
   import('./components/TopicDetail').then((m) => ({ default: m.TopicDetail }))
 );
+const AlgorithmCatalog = React.lazy(() =>
+  import('./components/AlgorithmCatalog').then((m) => ({ default: m.AlgorithmCatalog }))
+);
+const SeniorStaffExam = React.lazy(() =>
+  import('./components/SeniorStaffExam').then((m) => ({ default: m.SeniorStaffExam }))
+);
 
 const LoadingFallback: React.FC = () => (
   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '300px', color: 'var(--text-muted, #888)' }}>
@@ -67,10 +73,14 @@ export const App: React.FC = () => {
         return "Tooling de Desarrollo Moderno";
       case 'computer-science':
         return "Ciencias de la Computación & Linux";
+      case 'algorithms':
+        return "Catálogo de Algoritmos & Estructuras de Datos";
       case 'flashcards':
         return "Mazo de Flashcards de Ingeniería";
       case 'quiz':
         return "Simulador de Evaluaciones Técnicas";
+      case 'senior-staff':
+        return "Examen & Evaluación Nivel Senior / Staff";
       case 'category':
         return selectedCategory ? categoryOverviews[selectedCategory].name : "Resumen de Categoría";
       case 'pattern':
@@ -146,6 +156,21 @@ export const App: React.FC = () => {
 
             {activeView === 'quiz' && (
               <QuizSimulator />
+            )}
+
+            {activeView === 'algorithms' && (
+              <AlgorithmCatalog />
+            )}
+
+            {activeView === 'senior-staff' && (
+              <SeniorStaffExam
+                onNavigatePattern={(patternId) => {
+                  const p = patterns.find((item) => item.id === patternId);
+                  if (p) navigatePattern(p);
+                }}
+                onNavigateTopic={(tId) => navigateView(tId)}
+                onNavigateView={(v) => navigateView(v)}
+              />
             )}
           </Suspense>
         </div>

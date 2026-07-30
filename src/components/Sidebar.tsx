@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Pattern } from '../data/types';
 import { CategoryAccordion } from './CategoryAccordion';
-import { Layers, Activity, Settings, Code, ChevronDown, ChevronRight, BookOpen, Terminal, HelpCircle, Award, Shield, Cpu, Binary, Search } from 'lucide-react';
+import { Layers, Activity, Settings, Code, ChevronDown, ChevronRight, BookOpen, Terminal, HelpCircle, Award, Shield, Cpu, Binary, Search, FolderTree } from 'lucide-react';
 import { flashcards } from '../data/flashcards';
 
 interface SidebarProps {
@@ -305,6 +305,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <span>Ciencias de la Computación</span>
         </button>
 
+        {/* BOTÓN GLOBAL: ALGORITMOS & ESTRUCTURAS */}
+        <button
+          onClick={() => onSelectTopic('algorithms')}
+          className={`pattern-item ${activeView === 'algorithms' ? 'active' : ''}`}
+          style={{ 
+            fontWeight: '600', 
+            border: '1px solid var(--border-color)',
+            boxShadow: 'var(--shadow-sm)',
+            marginTop: '4px'
+          }}
+        >
+          <FolderTree size={16} />
+          <span>Algoritmos & Estructuras</span>
+        </button>
+
         {/* BOTÓN GLOBAL: FUENTES DE ESTUDIO */}
         <button
           onClick={onSelectSources}
@@ -358,6 +373,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
         >
           <Award size={16} />
           <span>Simulador de Examen</span>
+        </button>
+
+        {/* BOTÓN GLOBAL: EXAMEN SR / STAFF */}
+        <button
+          onClick={() => onSelectTopic('senior-staff')}
+          className={`pattern-item ${activeView === 'senior-staff' ? 'active' : ''}`}
+          style={{ 
+            fontWeight: '600', 
+            border: '1px solid var(--accent-color, #6366f1)',
+            boxShadow: 'var(--shadow-sm)',
+            background: activeView === 'senior-staff' ? 'rgba(99, 102, 241, 0.15)' : 'transparent'
+          }}
+        >
+          <Shield size={16} className="text-indigo-400" />
+          <span>Examen Sr / Staff</span>
         </button>
       </div>
     </aside>
