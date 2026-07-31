@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { quizModules, QuizModule } from '../data/quiz';
-import { Timer, CheckCircle2, XCircle, ChevronRight, RefreshCw, Trophy, Calendar } from 'lucide-react';
+import { Timer, CheckCircle2, XCircle, ChevronRight, RefreshCw, Trophy, Calendar, Eye, EyeOff } from 'lucide-react';
 
 interface Attempt {
   moduleId: string;
@@ -17,6 +17,8 @@ export const QuizSimulator: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState<number | null>(null);
+  const [userAnswers, setUserAnswers] = useState<(number | null)[]>([]);
+  const [showReview, setShowReview] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
   const [attempts, setAttempts] = useState<Attempt[]>(() => {
     const saved = localStorage.getItem('quiz_attempts');
@@ -84,6 +86,8 @@ export const QuizSimulator: React.FC = () => {
     setCurrentQuestionIndex(0);
     setScore(0);
     setSelectedAnswerIndex(null);
+    setUserAnswers([]);
+    setShowReview(false);
     setTimeLeft(module.timeLimitMinutes * 60);
     setGameState('playing');
   };
@@ -91,6 +95,7 @@ export const QuizSimulator: React.FC = () => {
   const handleSelectAnswer = (index: number) => {
     if (selectedAnswerIndex !== null) return; // Evitar doble clic
     setSelectedAnswerIndex(index);
+    setUserAnswers((prev) => [...prev, index]);
     if (index === selectedModule!.questions[currentQuestionIndex].correctIndex) {
       setScore((prev) => prev + 1);
     }
@@ -226,10 +231,51 @@ export const QuizSimulator: React.FC = () => {
             <span className="game-progress-text">
               Pregunta {currentQuestionIndex + 1} de {selectedModule.questions.length}
             </span>
-            <span className={`game-timer ${timeLeft < 60 ? 'timer-warning animate-pulse' : ''}`}>
-              <Timer size={16} />
-              {formatTime(timeLeft)}
-            </span>
+            {(() => {
+              const totalTime = selectedModule.timeLimitMinutes * 60;
+              const progress = totalTime > 0 ? Math.max(0, Math.min(1, timeLeft / totalTime)) : 0;
+              const radius = 16;
+              const circumference = 2 * Math.PI * radius;
+              const strokeDashoffset = circumference * (1 - progress);
+              const isWarning = timeLeft < 60;
+              const strokeColor = timeLeft < 30 ? '#f43f5e' : isWarning ? '#f59e0b' : 'var(--accent)';
+
+              return (
+                <div className={`game-timer ${isWarning ? 'timer-warning' : ''}`} style={{ gap: '10px' }}>
+                  <div style={{ position: 'relative', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg width="36" height="36" viewBox="0 0 40 40" style={{ transform: 'rotate(-90deg)', overflow: 'visible' }}>
+                      <circle
+                        cx="20"
+                        cy="20"
+                        r={radius}
+                        fill="transparent"
+                        stroke="var(--border-color)"
+                        strokeWidth="3.5"
+                        style={{ opacity: 0.4 }}
+                      />
+                      <circle
+                        cx="20"
+                        cy="20"
+                        r={radius}
+                        fill="transparent"
+                        stroke={strokeColor}
+                        strokeWidth="3.5"
+                        strokeLinecap="round"
+                        strokeDasharray={circumference}
+                        strokeDashoffset={strokeDashoffset}
+                        style={{
+                          transition: 'stroke-dashoffset 1s linear, stroke 0.5s ease',
+                        }}
+                      />
+                    </svg>
+                    <Timer size={13} style={{ position: 'absolute', color: strokeColor }} />
+                  </div>
+                  <span className="font-mono" style={{ fontSize: '14px', fontWeight: 700, color: strokeColor, minWidth: '40px' }}>
+                    {formatTime(timeLeft)}
+                  </span>
+                </div>
+              );
+            })()}
           </div>
 
           {/* Pregunta */}
@@ -303,25 +349,148 @@ export const QuizSimulator: React.FC = () => {
           {(() => {
             const result = getResultsFeedback(Math.round((score / selectedModule.questions.length) * 100));
             return (
-              <div className="results-card">
-                <span className="results-icon" role="img" aria-label="resultado">{result.icon}</span>
-                <h2 className="results-title">{result.title}</h2>
-                <div className="results-score-display">
-                  <span className="score-num font-mono">{score}</span>
-                  <span className="score-slash">/</span>
-                  <span className="score-total font-mono">{selectedModule.questions.length}</span>
+              <>
+                <div className="results-card">
+                  <span className="results-icon" role="img" aria-label="resultado">{result.icon}</span>
+                  <h2 className="results-title">{result.title}</h2>
+                  <div className="results-score-display">
+                    <span className="score-num font-mono">{score}</span>
+                    <span className="score-slash">/</span>
+                    <span className="score-total font-mono">{selectedModule.questions.length}</span>
+                  </div>
+                  <span className={`results-percentage ${result.colorClass}`}>
+                    {Math.round((score / selectedModule.questions.length) * 100)}% de efectividad
+                  </span>
+                  <p className="results-desc">{result.desc}</p>
+                  <div className="results-actions">
+                    <button className="control-btn btn-primary" onClick={() => setGameState('select')}>
+                      <RefreshCw size={16} />
+                      <span>Volver al Inicio</span>
+                    </button>
+                  </div>
                 </div>
-                <span className={`results-percentage ${result.colorClass}`}>
-                  {Math.round((score / selectedModule.questions.length) * 100)}% de efectividad
-                </span>
-                <p className="results-desc">{result.desc}</p>
-                <div className="results-actions">
-                  <button className="control-btn btn-primary" onClick={() => setGameState('select')}>
-                    <RefreshCw size={16} />
-                    <span>Volver al Inicio</span>
+                {/* Revisión Pregunta por Pregunta */}
+                <div style={{ marginTop: '24px', maxWidth: '800px', width: '100%', margin: '24px auto 0 auto' }}>
+                  <button
+                    onClick={() => setShowReview(!showReview)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '12px 20px',
+                      borderRadius: '10px',
+                      border: '1px solid var(--border-color)',
+                      background: 'var(--bg-card)',
+                      color: 'var(--text-primary)',
+                      cursor: 'pointer',
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      width: '100%',
+                      justifyContent: 'center',
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    {showReview ? <EyeOff size={16} /> : <Eye size={16} />}
+                    {showReview ? 'Ocultar Revisión Detallada' : 'Ver Revisión Pregunta por Pregunta'}
                   </button>
+
+                  {showReview && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
+                      {selectedModule.questions.map((q, qIdx) => {
+                        const userAnswer = userAnswers[qIdx];
+                        const isCorrect = userAnswer === q.correctIndex;
+                        const wasAnswered = userAnswer !== undefined && userAnswer !== null;
+
+                        return (
+                          <div
+                            key={qIdx}
+                            style={{
+                              padding: '20px',
+                              borderRadius: '12px',
+                              border: `1px solid ${isCorrect ? 'rgba(16, 185, 129, 0.3)' : wasAnswered ? 'rgba(239, 68, 68, 0.3)' : 'var(--border-color)'}`,
+                              backgroundColor: 'var(--bg-card)',
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '12px' }}>
+                              <span style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '28px',
+                                height: '28px',
+                                borderRadius: '50%',
+                                fontSize: '13px',
+                                fontWeight: 700,
+                                flexShrink: 0,
+                                backgroundColor: isCorrect ? 'rgba(16, 185, 129, 0.15)' : wasAnswered ? 'rgba(239, 68, 68, 0.15)' : 'var(--border-color)',
+                                color: isCorrect ? '#10b981' : wasAnswered ? '#ef4444' : 'var(--text-muted)',
+                              }}>
+                                {qIdx + 1}
+                              </span>
+                              <p style={{ fontSize: '14px', fontWeight: 600, lineHeight: '1.5', margin: 0, color: 'var(--text-primary)' }}>
+                                {q.question}
+                              </p>
+                            </div>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '12px', paddingLeft: '38px' }}>
+                              {q.answers.map((ans, aIdx) => {
+                                const isUserChoice = userAnswer === aIdx;
+                                const isCorrectAnswer = q.correctIndex === aIdx;
+                                let answerStyle: React.CSSProperties = {
+                                  padding: '8px 12px',
+                                  borderRadius: '8px',
+                                  fontSize: '13px',
+                                  lineHeight: '1.4',
+                                  border: '1px solid transparent',
+                                  color: 'var(--text-secondary)',
+                                };
+
+                                if (isCorrectAnswer) {
+                                  answerStyle = {
+                                    ...answerStyle,
+                                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                    border: '1px solid rgba(16, 185, 129, 0.3)',
+                                    color: '#10b981',
+                                    fontWeight: 600,
+                                  };
+                                } else if (isUserChoice && !isCorrectAnswer) {
+                                  answerStyle = {
+                                    ...answerStyle,
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    border: '1px solid rgba(239, 68, 68, 0.3)',
+                                    color: '#ef4444',
+                                    textDecoration: 'line-through',
+                                  };
+                                }
+
+                                return (
+                                  <div key={aIdx} style={answerStyle}>
+                                    {isCorrectAnswer && <CheckCircle2 size={14} style={{ display: 'inline', marginRight: '6px', verticalAlign: 'middle' }} />}
+                                    {isUserChoice && !isCorrectAnswer && <XCircle size={14} style={{ display: 'inline', marginRight: '6px', verticalAlign: 'middle' }} />}
+                                    {ans}
+                                  </div>
+                                );
+                              })}
+                            </div>
+
+                            {q.feedback && (
+                              <div style={{
+                                paddingLeft: '38px',
+                                fontSize: '13px',
+                                color: 'var(--text-muted)',
+                                lineHeight: '1.5',
+                                fontStyle: 'italic',
+                              }}>
+                                💡 {q.feedback}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
-              </div>
+              </>
             );
           })()}
         </div>

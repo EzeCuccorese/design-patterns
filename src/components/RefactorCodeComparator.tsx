@@ -1,12 +1,78 @@
-import React from 'react';
+import React, { useMemo, useRef, useCallback } from 'react';
 import { refactoringExamples, RefactoringExample } from '../data/refactoring';
 import { Code, AlertTriangle, CheckCircle } from 'lucide-react';
+import Prism from '../utils/prismLoader';
 
 interface RefactorCodeComparatorProps {
   selectedExample: RefactoringExample;
   onSelectExample: (example: RefactoringExample) => void;
   selectedLang: 'java' | 'python' | 'typescript' | 'go';
   onSelectLang: (lang: 'java' | 'python' | 'typescript' | 'go') => void;
+}
+
+interface LineDiff {
+  text: string;
+  type: 'normal' | 'removed' | 'added';
+  lineNumber: number;
+}
+
+function computeDiff(beforeCode: string, afterCode: string) {
+  const beforeLines = beforeCode.split('\n');
+  const afterLines = afterCode.split('\n');
+
+  const m = beforeLines.length;
+  const n = afterLines.length;
+  const dp: number[][] = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (beforeLines[i - 1].trim() === afterLines[j - 1].trim()) {
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
+    }
+  }
+
+  const matchedBefore = new Set<number>();
+  const matchedAfter = new Set<number>();
+
+  let i = m;
+  let j = n;
+  while (i > 0 && j > 0) {
+    if (beforeLines[i - 1].trim() === afterLines[j - 1].trim()) {
+      matchedBefore.add(i - 1);
+      matchedAfter.add(j - 1);
+      i--;
+      j--;
+    } else if (dp[i - 1][j] >= dp[i][j - 1]) {
+      i--;
+    } else {
+      j--;
+    }
+  }
+
+  const resultBefore: LineDiff[] = beforeLines.map((line, idx) => ({
+    text: line,
+    type: matchedBefore.has(idx) ? 'normal' : 'removed',
+    lineNumber: idx + 1,
+  }));
+
+  const resultAfter: LineDiff[] = afterLines.map((line, idx) => ({
+    text: line,
+    type: matchedAfter.has(idx) ? 'normal' : 'added',
+    lineNumber: idx + 1,
+  }));
+
+  const removedCount = beforeLines.length - matchedBefore.size;
+  const addedCount = afterLines.length - matchedAfter.size;
+
+  return {
+    beforeLines: resultBefore,
+    afterLines: resultAfter,
+    removedCount,
+    addedCount,
+  };
 }
 
 export const RefactorCodeComparator: React.FC<RefactorCodeComparatorProps> = ({
@@ -25,14 +91,37 @@ export const RefactorCodeComparator: React.FC<RefactorCodeComparatorProps> = ({
     }
   };
 
-  // Obtener clase de clase Prism para el formateo
-  const getPrismLangClass = (lang: typeof selectedLang) => {
-    switch (lang) {
-      case 'java': return 'language-java';
-      case 'python': return 'language-python';
-      case 'typescript': return 'language-typescript';
-      case 'go': return 'language-go';
+  const beforeCode = selectedExample.code[selectedLang].before;
+  const afterCode = selectedExample.code[selectedLang].after;
+
+  const diffData = useMemo(() => {
+    return computeDiff(beforeCode, afterCode);
+  }, [beforeCode, afterCode]);
+
+  const beforeRef = useRef<HTMLDivElement>(null);
+  const afterRef = useRef<HTMLDivElement>(null);
+  const isSyncing = useRef(false);
+
+  const handleSyncScroll = useCallback((source: 'before' | 'after') => {
+    if (isSyncing.current) return;
+    isSyncing.current = true;
+    const sourceEl = source === 'before' ? beforeRef.current : afterRef.current;
+    const targetEl = source === 'before' ? afterRef.current : beforeRef.current;
+    if (sourceEl && targetEl) {
+      targetEl.scrollTop = sourceEl.scrollTop;
+      targetEl.scrollLeft = sourceEl.scrollLeft;
     }
+    requestAnimationFrame(() => {
+      isSyncing.current = false;
+    });
+  }, []);
+
+  const highlightLine = (text: string, lang: typeof selectedLang) => {
+    const grammar = Prism.languages[lang];
+    if (grammar) {
+      return Prism.highlight(text || ' ', grammar, lang);
+    }
+    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   };
 
   return (
@@ -109,36 +198,76 @@ export const RefactorCodeComparator: React.FC<RefactorCodeComparatorProps> = ({
           ))}
         </div>
 
-        {/* Comparativa de código de antes y después */}
+        {/* Comparativa de código de antes y después con diffs visuales animadas */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '20px' }}>
           
           {/* ANTES: SMELL */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', color: '#ef4444', fontSize: '12.5px', fontWeight: 'bold' }}>
-              <AlertTriangle size={15} />
-              <span>CÓDIGO SUCIO (Antes / Smell)</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#ef4444', fontSize: '12.5px', fontWeight: 'bold' }}>
+                <AlertTriangle size={15} />
+                <span>CÓDIGO SUCIO (Antes / Smell)</span>
+              </div>
+              <span className="diff-badge diff-badge-removed">
+                -{diffData.removedCount} líneas removidas
+              </span>
             </div>
-            <div className="code-container" style={{ margin: 0 }}>
-              <pre className={getPrismLangClass(selectedLang)} style={{ maxHeight: '380px', overflowY: 'auto' }}>
-                <code className={getPrismLangClass(selectedLang)}>
-                  {selectedExample.code[selectedLang].before}
-                </code>
-              </pre>
+            <div className="diff-container" ref={beforeRef} onScroll={() => handleSyncScroll('before')} key={`before-${selectedExample.id}-${selectedLang}`}>
+              {diffData.beforeLines.map((line) => {
+                const highlightedHtml = highlightLine(line.text, selectedLang);
+                const isRemoved = line.type === 'removed';
+
+                return (
+                  <div
+                    key={`b-${line.lineNumber}`}
+                    className={`diff-line ${isRemoved ? 'diff-line-removed' : ''}`}
+                  >
+                    <span className="diff-gutter">{line.lineNumber}</span>
+                    <span className={`diff-marker ${isRemoved ? 'diff-marker-removed' : ''}`}>
+                      {isRemoved ? '-' : ' '}
+                    </span>
+                    <span
+                      className={`diff-code-text language-${selectedLang}`}
+                      dangerouslySetInnerHTML={{ __html: highlightedHtml }}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
 
           {/* DESPUÉS: REFACTORIZADO */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', color: '#10b981', fontSize: '12.5px', fontWeight: 'bold' }}>
-              <CheckCircle size={15} />
-              <span>CÓDIGO REFACTORIZADO (Después / Patrón o Limpieza)</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#10b981', fontSize: '12.5px', fontWeight: 'bold' }}>
+                <CheckCircle size={15} />
+                <span>CÓDIGO REFACTORIZADO (Después / Patrón o Limpieza)</span>
+              </div>
+              <span className="diff-badge diff-badge-added">
+                +{diffData.addedCount} líneas añadidas
+              </span>
             </div>
-            <div className="code-container" style={{ margin: 0 }}>
-              <pre className={getPrismLangClass(selectedLang)} style={{ maxHeight: '380px', overflowY: 'auto' }}>
-                <code className={getPrismLangClass(selectedLang)}>
-                  {selectedExample.code[selectedLang].after}
-                </code>
-              </pre>
+            <div className="diff-container" ref={afterRef} onScroll={() => handleSyncScroll('after')} key={`after-${selectedExample.id}-${selectedLang}`}>
+              {diffData.afterLines.map((line) => {
+                const highlightedHtml = highlightLine(line.text, selectedLang);
+                const isAdded = line.type === 'added';
+
+                return (
+                  <div
+                    key={`a-${line.lineNumber}`}
+                    className={`diff-line ${isAdded ? 'diff-line-added' : ''}`}
+                  >
+                    <span className="diff-gutter">{line.lineNumber}</span>
+                    <span className={`diff-marker ${isAdded ? 'diff-marker-added' : ''}`}>
+                      {isAdded ? '+' : ' '}
+                    </span>
+                    <span
+                      className={`diff-code-text language-${selectedLang}`}
+                      dangerouslySetInnerHTML={{ __html: highlightedHtml }}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
 

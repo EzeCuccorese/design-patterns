@@ -12,7 +12,7 @@ export const AnalogyCard: React.FC<AnalogyCardProps> = ({ pattern }) => {
     <div className="bento-card card-analogy">
       <div className="card-header">
         <Lightbulb />
-        <span>Mi Granito de Java (Analogía)</span>
+        <span>Analogía del Mundo Real</span>
       </div>
       <div className="card-body" style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
         <div>

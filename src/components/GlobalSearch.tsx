@@ -29,7 +29,9 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({
   onNavigateView,
 }) => {
   const [query, setQuery] = useState('');
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -38,6 +40,17 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({
       setQuery('');
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    setHighlightedIndex(-1);
+  }, [query]);
+
+  useEffect(() => {
+    if (highlightedIndex >= 0 && resultsRef.current) {
+      const items = resultsRef.current.querySelectorAll('[data-search-result]');
+      items[highlightedIndex]?.scrollIntoView({ block: 'nearest' });
+    }
+  }, [highlightedIndex]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -103,6 +116,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({
 
     // 3. Filter tools
     const tools = [
+      { id: 'algorithms', title: 'Catálogo de Algoritmos & Estructuras de Datos', category: 'Herramientas', targetView: 'algorithms' },
       { id: 'quiz', title: 'Simulador de Quiz & Evaluaciones', category: 'Herramientas', targetView: 'quiz' },
       { id: 'flashcards', title: 'Mazo de Flashcards de Ingeniería', category: 'Herramientas', targetView: 'flashcards' },
       { id: 'refactor', title: 'Catálogo e Introducción a Refactorización', category: 'Herramientas', targetView: 'refactor' },
@@ -188,6 +202,18 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({
             placeholder="Buscar patrón, principio (SOLID, GRASP), quiz, flashcard..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                setHighlightedIndex((prev) => (prev + 1 >= results.length ? 0 : prev + 1));
+              } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                setHighlightedIndex((prev) => (prev - 1 < 0 ? results.length - 1 : prev - 1));
+              } else if (e.key === 'Enter' && highlightedIndex >= 0 && highlightedIndex < results.length) {
+                e.preventDefault();
+                handleSelectResult(results[highlightedIndex]);
+              }
+            }}
             style={{
               flex: 1,
               background: 'transparent',
@@ -220,7 +246,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({
         </div>
 
         {/* Results Body */}
-        <div style={{ maxHeight: '420px', overflowY: 'auto', padding: '8px' }}>
+        <div ref={resultsRef} style={{ maxHeight: '420px', overflowY: 'auto', padding: '8px' }}>
           {normalizedQuery.length === 0 ? (
             <div style={{ padding: '32px 20px', textAlign: 'center', color: '#888' }}>
               <Terminal size={32} style={{ margin: '0 auto 12px auto', opacity: 0.5 }} />
@@ -233,25 +259,25 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              {results.map((item) => (
+              {results.map((item, index) => (
                 <button
                   key={item.id}
+                  data-search-result
                   onClick={() => handleSelectResult(item)}
+                  onMouseEnter={() => setHighlightedIndex(index)}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     padding: '12px 16px',
                     borderRadius: '8px',
-                    background: 'transparent',
+                    background: highlightedIndex === index ? 'var(--bg-hover, rgba(255,255,255,0.05))' : 'transparent',
                     border: 'none',
                     textAlign: 'left',
                     cursor: 'pointer',
                     color: 'inherit',
                     transition: 'background-color 0.15s ease',
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--bg-hover, rgba(255,255,255,0.05))')}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     {item.type === 'pattern' && <Layers size={18} className="text-indigo-400" />}

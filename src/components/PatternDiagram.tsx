@@ -63,6 +63,7 @@ export const PatternDiagram: React.FC<PatternDiagramProps> = ({ patternId }) => 
           </svg>
         );
 
+      case 'factory':
       case 'factory-method':
         return (
           <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full">
@@ -103,6 +104,7 @@ export const PatternDiagram: React.FC<PatternDiagramProps> = ({ patternId }) => 
           </svg>
         );
 
+      case 'abstractfactory':
       case 'abstract-factory':
         return (
           <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full">
@@ -212,6 +214,7 @@ export const PatternDiagram: React.FC<PatternDiagramProps> = ({ patternId }) => 
           </svg>
         );
 
+      case 'objectpool':
       case 'object-pool':
         return (
           <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full">
@@ -455,6 +458,101 @@ export const PatternDiagram: React.FC<PatternDiagramProps> = ({ patternId }) => 
           </svg>
         );
 
+      case 'adapter':
+        return (
+          <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full">
+            {renderGrid()}
+            {/* Target Interface (Cliente / Interfaz Esperada) */}
+            <rect x="25" y="55" width="130" height="110" rx="6" fill={boxBg} stroke={strokeColor} strokeWidth="2" className="diagram-class-box" />
+            <text x="90" y="80" textAnchor="middle" fill={textColor} fontWeight="bold" fontSize="11">«interface» Target</text>
+            <line x1="25" y1="90" x2="155" y2="90" stroke={gridColor} strokeWidth="1" />
+            <text x="35" y="110" fill={textMuted} fontSize="9">Interfaz esperada</text>
+            <line x1="25" y1="120" x2="155" y2="120" stroke={gridColor} strokeWidth="1" />
+            <text x="35" y="140" fill={textColor} fontSize="10">+ request()</text>
+
+            {/* Herencia/Implementación de Target */}
+            <path d="M 155 110 L 205 110" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeDasharray="4 4" className="animate-pulse-flow" markerEnd="url(#hollow-arrow)" />
+
+            {/* Adapter */}
+            <rect x="205" y="45" width="145" height="135" rx="6" fill={boxBg} stroke={strokeColor} strokeWidth="2" className="diagram-class-box" />
+            <text x="277" y="70" textAnchor="middle" fill={textColor} fontWeight="bold" fontSize="12">Adapter (Adaptador)</text>
+            <line x1="205" y1="80" x2="350" y2="80" stroke={gridColor} strokeWidth="1" />
+            <text x="215" y="98" fill={textColor} fontSize="9">- adaptee: Adaptee</text>
+            <line x1="205" y1="108" x2="350" y2="108" stroke={gridColor} strokeWidth="1" />
+            <text x="215" y="126" fill={textColor} fontSize="9.5">+ request() &#123;</text>
+            <text x="225" y="143" fill={textMuted} fontSize="9">  adaptee.specificReq()</text>
+            <text x="215" y="160" fill={textColor} fontSize="9.5">&#125;</text>
+
+            {/* Enlace/Asociación Adaptee */}
+            <path d="M 350 110 L 385 110" fill="none" stroke={strokeColor} strokeWidth="1.5" className="animate-pulse-flow" markerEnd="url(#arrow)" />
+
+            {/* Adaptee */}
+            <rect x="385" y="55" width="105" height="110" rx="6" fill={boxBg} stroke={strokeColor} strokeWidth="2" className="diagram-class-box" />
+            <text x="437" y="80" textAnchor="middle" fill={textColor} fontWeight="bold" fontSize="11">Adaptee</text>
+            <line x1="385" y1="90" x2="490" y2="90" stroke={gridColor} strokeWidth="1" />
+            <text x="395" y="110" fill={textMuted} fontSize="9">Código legado / 3rd party</text>
+            <line x1="385" y1="120" x2="490" y2="120" stroke={gridColor} strokeWidth="1" />
+            <text x="395" y="140" fill={textColor} fontSize="9.5">+ specificReq()</text>
+
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill={strokeColor} />
+              </marker>
+              <marker id="hollow-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 Z" fill="var(--bg-card)" stroke={strokeColor} strokeWidth="1.5" />
+              </marker>
+            </defs>
+          </svg>
+        );
+
+      case 'decorator':
+        return (
+          <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full">
+            {renderGrid()}
+            {/* Interface Componente */}
+            <rect x="185" y="20" width="130" height="55" rx="6" fill={boxBg} stroke={strokeColor} strokeWidth="2" className="diagram-class-box" />
+            <text x="250" y="42" textAnchor="middle" fill={textColor} fontWeight="bold" fontSize="11">«interface» Component</text>
+            <text x="250" y="60" textAnchor="middle" fill={textColor} fontSize="10">+ execute()</text>
+
+            {/* Ramas de herencia */}
+            <path d="M 185 47 L 90 47 L 90 95" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeDasharray="3" markerEnd="url(#hollow-arrow)" />
+            <path d="M 315 47 L 410 47 L 410 95" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeDasharray="3" markerEnd="url(#hollow-arrow)" />
+
+            {/* Componente Concreto */}
+            <rect x="25" y="105" width="130" height="55" rx="6" fill={boxBg} stroke={strokeColor} strokeWidth="1.5" className="diagram-class-box" />
+            <text x="90" y="128" textAnchor="middle" fill={textColor} fontWeight="bold" fontSize="11">ConcreteComponent</text>
+            <text x="90" y="146" textAnchor="middle" fill={textMuted} fontSize="9">+ execute()</text>
+
+            {/* Base Decorator */}
+            <rect x="345" y="105" width="130" height="65" rx="6" fill={boxBg} stroke={strokeColor} strokeWidth="2" className="diagram-class-box" />
+            <text x="410" y="125" textAnchor="middle" fill={textColor} fontWeight="bold" fontSize="11">BaseDecorator</text>
+            <text x="410" y="142" textAnchor="middle" fill={textMuted} fontSize="9">- wrappee: Component</text>
+            <text x="410" y="158" textAnchor="middle" fill={textColor} fontSize="9">+ execute()</text>
+
+            {/* Agregación de Decorator a Component (Wrappee) */}
+            <path d="M 475 137 C 505 137, 505 30, 325 30" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeDasharray="4 4" className="animate-pulse-flow" markerStart="url(#diamond)" markerEnd="url(#arrow)" />
+
+            {/* Concrete Decorator */}
+            <path d="M 410 170 L 410 185" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeDasharray="3" markerEnd="url(#hollow-arrow)" />
+            <rect x="330" y="192" width="160" height="40" rx="6" fill={boxBg} stroke={strokeColor} strokeWidth="1.5" className="diagram-class-box" />
+            <text x="410" y="210" textAnchor="middle" fill={textColor} fontWeight="bold" fontSize="10">ConcreteDecorator (Auth/Log)</text>
+            <text x="410" y="224" textAnchor="middle" fill={textMuted} fontSize="8.5">+ execute() &#123; super + extra() &#125;</text>
+
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill={strokeColor} />
+              </marker>
+              <marker id="hollow-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 Z" fill="var(--bg-card)" stroke={strokeColor} strokeWidth="1.5" />
+              </marker>
+              <marker id="diamond" viewBox="0 0 12 12" refX="0" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                <path d="M 6 0 L 12 6 L 6 12 L 0 6 Z" fill="var(--bg-card)" stroke={strokeColor} strokeWidth="1.5" />
+              </marker>
+            </defs>
+          </svg>
+        );
+
+      case 'chain':
       case 'chain-of-responsibility':
         return (
           <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full">
@@ -694,6 +792,51 @@ export const PatternDiagram: React.FC<PatternDiagramProps> = ({ patternId }) => 
           </svg>
         );
 
+      case 'observer':
+        return (
+          <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full">
+            {renderGrid()}
+            {/* Sujeto / Publisher */}
+            <rect x="25" y="45" width="150" height="135" rx="6" fill={boxBg} stroke={strokeColor} strokeWidth="2" className="diagram-class-box" />
+            <text x="100" y="70" textAnchor="middle" fill={textColor} fontWeight="bold" fontSize="12">Subject (Publicador)</text>
+            <line x1="25" y1="80" x2="175" y2="80" stroke={gridColor} strokeWidth="1" />
+            <text x="35" y="98" fill={textColor} fontSize="9.5">- observers: Observer[]</text>
+            <text x="35" y="114" fill={textColor} fontSize="9.5">- mainState: State</text>
+            <line x1="25" y1="124" x2="175" y2="124" stroke={gridColor} strokeWidth="1" />
+            <text x="35" y="142" fill={textColor} fontSize="9">+ subscribe(o) / unsubscribe(o)</text>
+            <text x="35" y="160" fill={textColor} fontSize="9.5" fontWeight="bold">+ notifySubscribers()</text>
+
+            {/* Notificación (Flecha de flujo) */}
+            <path d="M 175 100 L 285 100" fill="none" stroke={strokeColor} strokeWidth="2" strokeDasharray="4 4" className="animate-pulse-flow" markerEnd="url(#arrow)" />
+            <text x="230" y="90" textAnchor="middle" fill={textColor} fontSize="9" fontWeight="bold">notify()</text>
+
+            {/* Observer Interface */}
+            <rect x="295" y="45" width="170" height="75" rx="6" fill={boxBg} stroke={strokeColor} strokeWidth="2" className="diagram-class-box" />
+            <text x="380" y="70" textAnchor="middle" fill={textColor} fontWeight="bold" fontSize="11">«interface» Observer</text>
+            <line x1="295" y1="80" x2="465" y2="80" stroke={gridColor} strokeWidth="1" />
+            <text x="305" y="98" fill={textColor} fontSize="10">+ update(context)</text>
+            <text x="305" y="112" fill={textMuted} fontSize="8.5">(Escucha cambios de estado)</text>
+
+            {/* Herencia / Implementación */}
+            <path d="M 380 120 L 380 150" fill="none" stroke={strokeColor} strokeWidth="1.5" strokeDasharray="3" markerEnd="url(#hollow-arrow)" />
+
+            {/* Concrete Observer */}
+            <rect x="295" y="160" width="170" height="60" rx="6" fill={boxBg} stroke={strokeColor} strokeWidth="1.5" className="diagram-class-box" />
+            <text x="380" y="182" textAnchor="middle" fill={textColor} fontWeight="bold" fontSize="11">ConcreteObserver</text>
+            <line x1="295" y1="192" x2="465" y2="192" stroke={gridColor} strokeWidth="1" />
+            <text x="305" y="210" fill={textColor} fontSize="9.5">+ update() &#123; react() &#125;</text>
+
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill={strokeColor} />
+              </marker>
+              <marker id="hollow-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 Z" fill="var(--bg-card)" stroke={strokeColor} strokeWidth="1.5" />
+              </marker>
+            </defs>
+          </svg>
+        );
+
       case 'state':
         return (
           <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full">
@@ -774,6 +917,7 @@ export const PatternDiagram: React.FC<PatternDiagramProps> = ({ patternId }) => 
           </svg>
         );
 
+      case 'template':
       case 'template-method':
         return (
           <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full">

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { studyGuide } from '../data/studyGuide';
 import { Shield, Layout, CheckCircle, Activity, Terminal, Info, BookOpen, Binary } from 'lucide-react';
+import Prism from '../utils/prismLoader';
 
 interface TopicDetailProps {
   topicId: string;
@@ -17,6 +18,10 @@ const iconMap: Record<string, React.ComponentType<any>> = {
 
 export const TopicDetail: React.FC<TopicDetailProps> = ({ topicId }) => {
   const topic = studyGuide.find((s) => s.id === topicId);
+
+  useEffect(() => {
+    Prism.highlightAll();
+  }, [topicId]);
 
   if (!topic) {
     return (
@@ -108,9 +113,9 @@ export const TopicDetail: React.FC<TopicDetailProps> = ({ topicId }) => {
               )}
 
               {sub.code && (
-                <div className="code-container" style={{ margin: '8px 0 12px 0', padding: '10px' }}>
-                  <pre style={{ margin: 0, overflowX: 'auto' }}>
-                    <code style={{ fontSize: '11px', fontFamily: 'monospace', color: 'var(--text-primary)' }}>
+                <div className="code-container" style={{ margin: '8px 0 12px 0', padding: '4px' }}>
+                  <pre className="language-typescript" style={{ margin: 0, overflowX: 'auto', background: 'transparent' }}>
+                    <code className="language-typescript" style={{ fontSize: '11.5px', fontFamily: 'var(--font-mono)', color: '#f8f8f2' }}>
                       {sub.code}
                     </code>
                   </pre>
