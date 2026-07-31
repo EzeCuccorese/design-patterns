@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Pattern } from '../data/types';
 import { CategoryAccordion } from './CategoryAccordion';
-import { Layers, Activity, Settings, Code, ChevronDown, ChevronRight, BookOpen, Terminal, HelpCircle, Award, Shield, Cpu, Binary, Search, FolderTree } from 'lucide-react';
+import { Layers, Activity, Settings, Code, ChevronDown, ChevronRight, BookOpen, Terminal, HelpCircle, Award, Shield, Cpu, Binary, Search, FolderTree, Home, X } from 'lucide-react';
 import { flashcards } from '../data/flashcards';
 
 interface SidebarProps {
@@ -18,6 +18,8 @@ interface SidebarProps {
   onSelectTopic: (topicId: string) => void;
   onOpenSearch?: () => void;
   progressPercentage?: number;
+  isMobileOpen?: boolean;
+  onCloseMobile?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -34,9 +36,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectTopic,
   onOpenSearch,
   progressPercentage,
+  isMobileOpen,
+  onCloseMobile,
 }) => {
-  // Estados de acordeón colapsables
-  const [showPatternsSubmenu, setShowPatternsSubmenu] = useState(true);
+  // Cierra el drawer mobile al navegar
+  const handleMobileNav = (callback: () => void) => {
+    callback();
+    onCloseMobile?.();
+  };
+
+  // Estados de acordeón colapsables (colapsados por defecto en la portada)
+  const [showPatternsSubmenu, setShowPatternsSubmenu] = useState(activeView === 'pattern' || activeView === 'category');
   const [showPrinciplesSubmenu, setShowPrinciplesSubmenu] = useState(false);
   const [showArchitectureSubmenu, setShowArchitectureSubmenu] = useState(false);
 
@@ -52,7 +62,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
   }, [activeView]);
 
   return (
-    <aside className="sidebar" role="navigation" aria-label="Menú principal">
+    <aside className={`sidebar ${isMobileOpen ? 'mobile-open' : ''}`} role="navigation" aria-label="Menú principal">
+      {/* Botón cerrar mobile */}
+      <button className="sidebar-close-btn" onClick={onCloseMobile} aria-label="Cerrar menú">
+        <X size={18} />
+      </button>
+
       {/* Nombre general de la plataforma */}
       <div className="sidebar-header">
         <div className="logo">
@@ -108,12 +123,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       <div className="sidebar-content" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         
+        {/* BOTÓN: INICIO / PORTADA */}
+        <button
+          onClick={() => handleMobileNav(() => onSelectTopic('home'))}
+          className={`pattern-item ${activeView === 'home' ? 'active' : ''}`}
+          style={{ 
+            fontWeight: '600', 
+            border: '1px solid var(--border-color)',
+            boxShadow: 'var(--shadow-sm)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}
+        >
+          <Home size={16} />
+          <span>Inicio / Portada</span>
+        </button>
+
         {/* SECCIÓN: PATRONES DE DISEÑO */}
         <button
           onClick={() => {
             setShowPatternsSubmenu(!showPatternsSubmenu);
             if (activeView !== 'pattern' && activeView !== 'category') {
-              onSelectPattern(selectedPattern || patterns[0]);
+              handleMobileNav(() => onSelectPattern(selectedPattern || patterns[0]));
             }
           }}
           className={`pattern-item ${(activeView === 'pattern' || activeView === 'category') ? 'active' : ''}`}
@@ -145,8 +177,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               selectedPattern={selectedPattern}
               selectedCategory={selectedCategory}
               activeView={activeView}
-              onSelectPattern={onSelectPattern}
-              onSelectCategory={onSelectCategory}
+              onSelectPattern={(p) => handleMobileNav(() => onSelectPattern(p))}
+              onSelectCategory={(c) => handleMobileNav(() => onSelectCategory(c))}
             />
 
             <CategoryAccordion
@@ -157,8 +189,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               selectedPattern={selectedPattern}
               selectedCategory={selectedCategory}
               activeView={activeView}
-              onSelectPattern={onSelectPattern}
-              onSelectCategory={onSelectCategory}
+              onSelectPattern={(p) => handleMobileNav(() => onSelectPattern(p))}
+              onSelectCategory={(c) => handleMobileNav(() => onSelectCategory(c))}
             />
 
             <CategoryAccordion
@@ -169,8 +201,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               selectedPattern={selectedPattern}
               selectedCategory={selectedCategory}
               activeView={activeView}
-              onSelectPattern={onSelectPattern}
-              onSelectCategory={onSelectCategory}
+              onSelectPattern={(p) => handleMobileNav(() => onSelectPattern(p))}
+              onSelectCategory={(c) => handleMobileNav(() => onSelectCategory(c))}
             />
           </div>
         )}
@@ -206,28 +238,28 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {showPrinciplesSubmenu && (
           <div style={{ paddingLeft: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <button
-              onClick={() => onSelectTopic('solid-clean')}
+              onClick={() => handleMobileNav(() => onSelectTopic('solid-clean'))}
               className={`pattern-item ${activeView === 'solid-clean' ? 'active' : ''}`}
               style={{ fontSize: '13px', padding: '6px 10px' }}
             >
               SOLID & Código Limpio
             </button>
             <button
-              onClick={() => onSelectTopic('grasp')}
+              onClick={() => handleMobileNav(() => onSelectTopic('grasp'))}
               className={`pattern-item ${activeView === 'grasp' ? 'active' : ''}`}
               style={{ fontSize: '13px', padding: '6px 10px' }}
             >
               Principios GRASP
             </button>
             <button
-              onClick={() => onSelectTopic('testing')}
+              onClick={() => handleMobileNav(() => onSelectTopic('testing'))}
               className={`pattern-item ${activeView === 'testing' ? 'active' : ''}`}
               style={{ fontSize: '13px', padding: '6px 10px' }}
             >
               Estrategias de Testing
             </button>
             <button
-              onClick={onSelectRefactor}
+              onClick={() => handleMobileNav(onSelectRefactor)}
               className={`pattern-item ${activeView === 'refactor' ? 'active' : ''}`}
               style={{ fontSize: '13px', padding: '6px 10px' }}
             >
@@ -267,21 +299,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {showArchitectureSubmenu && (
           <div style={{ paddingLeft: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <button
-              onClick={() => onSelectTopic('resilience-eda')}
+              onClick={() => handleMobileNav(() => onSelectTopic('resilience-eda'))}
               className={`pattern-item ${activeView === 'resilience-eda' ? 'active' : ''}`}
               style={{ fontSize: '13px', padding: '6px 10px' }}
             >
               Resiliencia Distribuida
             </button>
             <button
-              onClick={() => onSelectTopic('sre-devops')}
+              onClick={() => handleMobileNav(() => onSelectTopic('sre-devops'))}
               className={`pattern-item ${activeView === 'sre-devops' ? 'active' : ''}`}
               style={{ fontSize: '13px', padding: '6px 10px' }}
             >
               SRE & Infraestructura
             </button>
             <button
-              onClick={() => onSelectTopic('tooling-dev')}
+              onClick={() => handleMobileNav(() => onSelectTopic('tooling-dev'))}
               className={`pattern-item ${activeView === 'tooling-dev' ? 'active' : ''}`}
               style={{ fontSize: '13px', padding: '6px 10px' }}
             >
@@ -292,7 +324,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* BOTÓN GLOBAL: CIENCIAS DE LA COMPUTACIÓN */}
         <button
-          onClick={() => onSelectTopic('computer-science')}
+          onClick={() => handleMobileNav(() => onSelectTopic('computer-science'))}
           className={`pattern-item ${activeView === 'computer-science' ? 'active' : ''}`}
           style={{ 
             fontWeight: '600', 
@@ -307,7 +339,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* BOTÓN GLOBAL: ALGORITMOS & ESTRUCTURAS */}
         <button
-          onClick={() => onSelectTopic('algorithms')}
+          onClick={() => handleMobileNav(() => onSelectTopic('algorithms'))}
           className={`pattern-item ${activeView === 'algorithms' ? 'active' : ''}`}
           style={{ 
             fontWeight: '600', 
@@ -322,7 +354,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* BOTÓN GLOBAL: FUENTES DE ESTUDIO */}
         <button
-          onClick={onSelectSources}
+          onClick={() => handleMobileNav(onSelectSources)}
           className={`pattern-item ${activeView === 'sources' ? 'active' : ''}`}
           style={{ 
             fontWeight: '600', 
@@ -349,7 +381,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* BOTÓN GLOBAL: FLASHCARDS */}
         <button
-          onClick={onSelectFlashcards}
+          onClick={() => handleMobileNav(onSelectFlashcards)}
           className={`pattern-item ${activeView === 'flashcards' ? 'active' : ''}`}
           style={{ 
             fontWeight: '600', 
@@ -363,7 +395,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* BOTÓN GLOBAL: SIMULADOR DE EXAMEN */}
         <button
-          onClick={onSelectQuiz}
+          onClick={() => handleMobileNav(onSelectQuiz)}
           className={`pattern-item ${activeView === 'quiz' ? 'active' : ''}`}
           style={{ 
             fontWeight: '600', 
@@ -377,7 +409,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* BOTÓN GLOBAL: EXAMEN SR / STAFF */}
         <button
-          onClick={() => onSelectTopic('senior-staff')}
+          onClick={() => handleMobileNav(() => onSelectTopic('senior-staff'))}
           className={`pattern-item ${activeView === 'senior-staff' ? 'active' : ''}`}
           style={{ 
             fontWeight: '600', 

@@ -59,6 +59,11 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+.bento-card, .pattern-item, .tab-btn, .theme-switch,
+.flashcard-inner, .quiz-option-button, .control-btn,
+.sidebar, .sidebar-overlay, .hamburger-btn {
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease;
 }
 
@@ -362,20 +367,23 @@ body {
   overflow: auto;
   border-radius: 12px;
   background-color: #0f1422; /* Fondo de código oscuro */
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f8f8f2;
 }
 
 .code-container pre {
   margin: 0;
-  padding: 20px;
+  padding: 16px;
   font-family: var(--font-mono);
-  font-size: 14px;
+  font-size: 13.5px;
   line-height: 1.5;
   background: transparent !important;
+  color: #f8f8f2;
 }
 
 .code-container code {
   font-family: var(--font-mono);
+  color: #f8f8f2;
 }
 
 /* Consola Simulada */
@@ -431,19 +439,39 @@ body {
 
 /* Responsividad para Bento Grid */
 @media (max-width: 1024px) {
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .sidebar-close-btn {
+    display: flex;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 320px;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+    border-right: 1px solid var(--border-color);
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
   .app-container {
     flex-direction: column;
   }
-  .sidebar {
-    width: 100%;
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
-  }
+
   .bento-grid {
     grid-template-columns: 1fr;
     grid-auto-rows: auto;
   }
+
   .bento-card {
     grid-column: span 12 !important;
     grid-row: span 1 !important;
@@ -1345,3 +1373,389 @@ pre[class*="language-"] {
   color: var(--text-primary);
 }
 
+/* ==========================================================================
+   MICRO-ANIMACIONES CSS VECTORIALES (DIAGRAMAS SVG)
+   ========================================================================== */
+
+@keyframes pulse-flow {
+  from {
+    stroke-dashoffset: 20;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-pulse-flow {
+  stroke-dasharray: 6, 4;
+  animation: pulse-flow 1.5s linear infinite;
+}
+
+.diagram-class-box {
+  transition: transform 0.2s ease, stroke 0.2s ease, stroke-width 0.2s ease, filter 0.2s ease;
+}
+
+.diagram-class-box:hover {
+  stroke: var(--accent);
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 6px rgba(99, 102, 241, 0.5));
+}
+
+svg rect:not([fill*="url"]):not([fill="none"]) {
+  transition: stroke 0.2s ease, stroke-width 0.2s ease, filter 0.2s ease;
+}
+
+svg rect:not([fill*="url"]):not([fill="none"]):hover {
+  stroke: var(--accent);
+  filter: drop-shadow(0 0 6px rgba(99, 102, 241, 0.4));
+}
+
+/* ==========================================================================
+   MEJORAS VISUALES UI: DIFFS ANIMADOS, TIMER SVG Y CHIPS DE PATRONES
+   ========================================================================== */
+
+/* 1. Diffs Visuales Animados */
+@keyframes diff-fade-red {
+  0% {
+    background-color: rgba(239, 68, 68, 0.45);
+    transform: translateX(-4px);
+  }
+  100% {
+    background-color: rgba(239, 68, 68, 0.15);
+    transform: translateX(0);
+  }
+}
+
+@keyframes diff-fade-green {
+  0% {
+    background-color: rgba(16, 185, 129, 0.45);
+    transform: translateX(-4px);
+  }
+  100% {
+    background-color: rgba(16, 185, 129, 0.15);
+    transform: translateX(0);
+  }
+}
+
+.diff-container {
+  background-color: #0d1117;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  overflow-x: auto;
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  line-height: 1.6;
+  max-height: 400px;
+  padding: 8px 0;
+}
+
+.diff-line {
+  display: flex;
+  align-items: center;
+  padding: 2px 12px;
+  min-height: 24px;
+  white-space: pre;
+  transition: background-color 0.2s ease;
+}
+
+.diff-line-removed {
+  background-color: rgba(239, 68, 68, 0.15);
+  border-left: 3px solid #ef4444;
+  color: #fca5a5;
+  animation: diff-fade-red 0.5s ease-out;
+}
+
+.diff-line-added {
+  background-color: rgba(16, 185, 129, 0.15);
+  border-left: 3px solid #10b981;
+  color: #6ee7b7;
+  animation: diff-fade-green 0.5s ease-out;
+}
+
+.diff-gutter {
+  width: 32px;
+  user-select: none;
+  opacity: 0.4;
+  font-size: 11px;
+  text-align: right;
+  padding-right: 10px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+.diff-marker {
+  width: 16px;
+  user-select: none;
+  font-weight: bold;
+  flex-shrink: 0;
+  display: inline-block;
+  font-size: 12px;
+}
+
+.diff-marker-removed {
+  color: #ef4444;
+}
+
+.diff-marker-added {
+  color: #10b981;
+}
+
+.diff-code-text {
+  flex: 1;
+}
+
+.diff-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.diff-badge-removed {
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.diff-badge-added {
+  background-color: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+/* 2. Chips Visuales de Complejidad y Frecuencia Industrial */
+.pattern-chips-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pattern-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+/* Complejidad */
+.chip-complexity-low {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.chip-complexity-medium {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.chip-complexity-high {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+/* Frecuencia Industrial */
+.chip-frequency-high {
+  background-color: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+.chip-frequency-medium {
+  background-color: rgba(14, 165, 233, 0.1);
+  color: #0ea5e9;
+  border-color: rgba(14, 165, 233, 0.25);
+}
+
+.chip-frequency-low {
+  background-color: rgba(100, 116, 139, 0.1);
+  color: #64748b;
+  border-color: rgba(100, 116, 139, 0.25);
+}
+
+/* Mobile Sidebar Drawer */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 99;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.visible {
+  display: block;
+  opacity: 1;
+}
+
+.hamburger-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.hamburger-btn:hover {
+  background-color: var(--border-color);
+}
+
+.sidebar-close-btn {
+  display: none;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* Accessibility: Focus Visible */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .quiz-modules-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-header {
+    padding: 0 16px;
+    height: 60px;
+  }
+
+  .dashboard-title h1 {
+    font-size: 17px;
+  }
+
+  .dashboard-content {
+    padding: 16px;
+  }
+
+  .bento-card {
+    padding: 18px;
+  }
+
+  .card-body h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-header {
+    padding: 0 12px;
+    height: 56px;
+    gap: 8px;
+  }
+
+  .dashboard-title h1 {
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dashboard-content {
+    padding: 12px;
+  }
+
+  .bento-card {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .bento-grid {
+    gap: 12px;
+  }
+
+  .card-body h2 {
+    font-size: 18px;
+  }
+
+  .card-body p {
+    font-size: 14px;
+  }
+
+  .code-container pre {
+    font-size: 12px;
+    padding: 12px;
+  }
+
+  .console-box {
+    font-size: 11.5px;
+    padding: 14px;
+  }
+
+  .flashcard-container {
+    height: auto;
+    min-height: 280px;
+    padding: 24px;
+  }
+
+  .card-face-text {
+    font-size: 16px !important;
+  }
+
+  .results-card,
+  .quiz-intro-card {
+    padding: 20px;
+  }
+
+  .code-tabs {
+    gap: 4px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}

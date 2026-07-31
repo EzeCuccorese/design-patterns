@@ -2,6 +2,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { env } from './config/env';
 import { patterns } from './data/index';
 import { categoryOverviews } from './data/categories';
+import { Menu } from 'lucide-react';
 import { Sidebar } from './components/Sidebar';
 import { BentoGrid } from './components/BentoGrid';
 import { CategoryDetail } from './components/CategoryDetail';
@@ -9,6 +10,8 @@ import { ThemeToggle } from './components/ThemeToggle';
 import { GlobalSearch } from './components/GlobalSearch';
 import { useHashRoute } from './hooks/useHashRoute';
 import { useStudyProgress } from './hooks/useStudyProgress';
+
+import { HomeLanding } from './components/HomeLanding';
 
 // Lazy loading de vistas secundarias y componentes pesados
 const RefactorDetail = React.lazy(() =>
@@ -47,6 +50,9 @@ export const App: React.FC = () => {
   const { activeView, selectedPattern, selectedCategory } = routeState;
   const { progressPercentage } = useStudyProgress();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const closeSidebar = () => setIsSidebarOpen(false);
 
   useEffect(() => {
     document.title = env.VITE_APP_TITLE;
@@ -55,6 +61,8 @@ export const App: React.FC = () => {
   // Determinar título de cabecera
   const getHeaderTitle = () => {
     switch (activeView) {
+      case 'home':
+        return "Portada & Panel de Control de Ingeniería";
       case 'refactor':
         return "Introducción a la Refactorización";
       case 'sources':
@@ -91,6 +99,10 @@ export const App: React.FC = () => {
 
   return (
     <div className="app-container">
+      {/* Overlay Mobile Sidebar */}
+      {isSidebarOpen && (
+        <div className="sidebar-overlay visible" onClick={closeSidebar} />
+      )}
       {/* Modal de Búsqueda Global */}
       <GlobalSearch
         isOpen={isSearchOpen}
@@ -115,11 +127,16 @@ export const App: React.FC = () => {
         onSelectTopic={(topicId) => navigateView(topicId)}
         onOpenSearch={() => setIsSearchOpen(true)}
         progressPercentage={progressPercentage}
+        isMobileOpen={isSidebarOpen}
+        onCloseMobile={closeSidebar}
       />
 
       {/* Panel de Contenido Principal */}
       <main className="dashboard">
         <header className="dashboard-header">
+          <button className="hamburger-btn" onClick={() => setIsSidebarOpen(true)} aria-label="Abrir menú">
+            <Menu size={20} />
+          </button>
           <div className="dashboard-title">
             <h1>{getHeaderTitle()}</h1>
           </div>
@@ -130,6 +147,15 @@ export const App: React.FC = () => {
 
         <div className="dashboard-content">
           <Suspense fallback={<LoadingFallback />}>
+            {activeView === 'home' && (
+              <HomeLanding
+                onNavigateView={(v) => navigateView(v)}
+                onSelectCategory={(c) => navigateCategory(c)}
+                progressPercentage={progressPercentage}
+                patternsCount={patterns.length}
+              />
+            )}
+
             {activeView === 'category' && selectedCategory && (
               <CategoryDetail category={categoryOverviews[selectedCategory]} />
             )}
