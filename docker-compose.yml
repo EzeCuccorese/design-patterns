@@ -5,5 +5,5 @@ services:
       dockerfile: Dockerfile
     container_name: design_patterns_bento_grid
     ports:
-      - "8080:80"
+      - "8085:80"
     restart: unless-stopped

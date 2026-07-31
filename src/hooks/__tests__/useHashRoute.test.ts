@@ -1,17 +1,16 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useHashRoute, parseHash } from '../useHashRoute';
-import { patterns } from '../../data/index';
 
 describe('useHashRoute Hook', () => {
   beforeEach(() => {
     window.location.hash = '';
   });
 
-  it('parses empty hash as default pattern', () => {
+  it('parses empty hash as default home view', () => {
     const route = parseHash();
-    expect(route.activeView).toBe('pattern');
-    expect(route.selectedPattern?.id).toBe(patterns[0].id);
+    expect(route.activeView).toBe('home');
+    expect(route.selectedPattern).toBeNull();
   });
 
   it('parses pattern hash correctly', () => {
@@ -19,6 +18,12 @@ describe('useHashRoute Hook', () => {
     const route = parseHash();
     expect(route.activeView).toBe('pattern');
     expect(route.selectedPattern?.id).toBe('factory');
+  });
+
+  it('parses algorithms hash correctly', () => {
+    window.location.hash = 'algorithms';
+    const route = parseHash();
+    expect(route.activeView).toBe('algorithms');
   });
 
   it('updates state on navigateView', () => {

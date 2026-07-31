@@ -10,10 +10,10 @@ export interface RouteState {
 
 export const parseHash = (): RouteState => {
   const hash = window.location.hash.replace('#', '');
-  if (!hash) {
+  if (!hash || hash === 'home') {
     return {
-      activeView: 'pattern',
-      selectedPattern: patterns[0],
+      activeView: 'home',
+      selectedPattern: null,
       selectedCategory: null,
     };
   }
@@ -47,7 +47,7 @@ export const parseHash = (): RouteState => {
     };
   }
 
-  if (['refactor', 'sources', 'quiz', 'flashcards', 'algorithms', 'senior-staff'].includes(prefix)) {
+  if (['home', 'refactor', 'sources', 'quiz', 'flashcards', 'algorithms', 'senior-staff'].includes(prefix)) {
     return {
       activeView: prefix,
       selectedPattern: null,
@@ -56,8 +56,8 @@ export const parseHash = (): RouteState => {
   }
 
   return {
-    activeView: 'pattern',
-    selectedPattern: patterns[0],
+    activeView: 'home',
+    selectedPattern: null,
     selectedCategory: null,
   };
 };
