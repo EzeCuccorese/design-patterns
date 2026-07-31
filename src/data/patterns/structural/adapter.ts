@@ -10,7 +10,7 @@ export const adapter: Pattern = {
     'Principio de Abierto/Cerrado (OCP): introduce nuevos adaptadores sin modificar el código de los clientes o servicios existentes.',
     'Permite reutilizar clases existentes que no tienen la interfaz exacta requerida.'
   ],
-  analogy: 'Rescatado de *Mi granito de Java*, piensa en la conversión entre Entidades de Dominio (User) y Objetos de Transferencia de Datos (UserDto). El cliente necesita mostrar datos simplificados en la vista, pero la base de datos devuelve una entidad compleja. El Adaptador (UserConverter) traduce una interfaz en otra de forma transparente.',
+  analogy: 'Piensa en la conversión entre Entidades de Dominio (User) y Objetos de Transferencia de Datos (UserDto). El cliente necesita mostrar datos simplificados en la vista, pero la base de datos devuelve una entidad compleja. El Adaptador (UserConverter) traduce una interfaz en otra de forma transparente.',
   code: {
     java: `// Java 21 - Adaptador / Convertidor entre Entidades y DTOs (Records)
 import java.util.List;

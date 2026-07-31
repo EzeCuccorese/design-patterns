@@ -320,6 +320,10 @@ class UserSessionManager {
     ],
     deepTheory: [
       {
+        title: 'Diagnóstico de P99 Latency & Tail Latency en Producción',
+        content: 'El P99 (Percentil 99) refleja la experiencia del 99% de las peticiones. En este incidente, mientras el promedio ocultaba la degradación inicial, el P99 escaló de 120ms a 14.000ms debido a la amplificación de llamadas por el Event Loop bloqueado y el memory leak. Medir P99 mediante PromQL histogram_quantile es fundamental para la observabilidad SRE.'
+      },
+      {
         title: 'Gestión de Memoria: Pila (Stack) vs Montón (Heap)',
         content: 'La Pila (Stack) almacena variables locales y punteros de ejecución de ciclo corto (rápida, LIFO, auto-liberada). El Montón (Heap) almacena objetos instanciados dinámicamente. Si se retienen referencias en variables globales o closures sin limpiar, el Recolector de Basura (Garbage Collector) jamás los liberará, causando OOM.'
       },

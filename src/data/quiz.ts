@@ -853,6 +853,110 @@ export const modulo3Questions: Question[] = [
     ],
     correctIndex: 1,
     feedback: "Husky automatiza los Git Hooks y Lint-Staged asegura que no perdamos tiempo analizando todo el proyecto: solo valida y formatea los archivos que modificaste y estás a punto de commitear."
+  },
+  {
+    id: 26,
+    topic: "Observabilidad - Latencia P99 vs Promedio",
+    question: "Al monitorear la latencia de una API crítica en producción, ¿por qué es peligroso basar las alertas SRE únicamente en el promedio (media)?",
+    answers: [
+      "Porque el promedio requiere más uso de CPU en Prometheus que el cálculo de percentiles.",
+      "Porque en distribuciones de latencia asimétricas (Long-Tail), el promedio oculta colas graves donde un 1% de peticiones sufre bloqueos masivos (ej. 99 peticiones de 1ms y 1 de 10.000ms dan un promedio engañoso de ~100ms).",
+      "Porque el promedio no se puede graficar en tableros de Grafana.",
+      "Porque el promedio solo mide errores HTTP 500 y omite las peticiones HTTP 200 OK."
+    ],
+    correctIndex: 1,
+    feedback: "El promedio es una trampa en sistemas distribuidos. Un P99 de 1.2ms garantiza que el 99% de las peticiones tardaron 1.2ms o menos, permitiendo aislar la cola de latencia (tail latency) y reflejar la experiencia real del usuario."
+  },
+  {
+    id: 27,
+    topic: "System Design - Fan-out Tail Latency",
+    question: "En una arquitectura de microservicios donde 1 petición cliente realiza 100 llamadas distribuidas en paralelo, si cada microservicio individual tiene un P99 de 10ms (1% de chance de lentitud), ¿cuál es la probabilidad aproximada de que la petición del cliente sufra retrasos de latencia P99?",
+    answers: [
+      "Exactamente 1%, porque la métrica P99 se mantiene constante independientemente del número de microservicios.",
+      "Aproximadamente 63.4%, debido a la amplificación exponencial de la cola de latencia P(lento) = 1 - (0.99)^100 en llamadas paralelas (Fan-out effect).",
+      "0.01%, porque la paralelización cancela los retrasos individuales.",
+      "100%, ya que los microservicios distribuidos siempre fallan sincrónicamente."
+    ],
+    correctIndex: 1,
+    feedback: "El efecto Fan-out demuestra por qué el P99 de microservicios individuales es crítico: al combinar 100 llamadas distribuidas paralelas con 99% de éxito en velocidad, la probabilidad de que al menos una llamada caiga en la cola lenta es 1 - (0.99)^100 ≈ 63.4%."
+  },
+  {
+    id: 28,
+    topic: "SOLID - Liskov Substitution Principle (LSP)",
+    question: "Si una subclase 'Avestruz' extiende de 'Ave' pero al invocar el método heredado 'volar()' lanza una excepción 'Error(\"No puedo volar\")' rompiendo la aplicación en ejecución, ¿qué principio de diseño se vulnera directamente?",
+    answers: [
+      "Principio Abierto/Cerrado (OCP).",
+      "Principio de Sustitución de Liskov (LSP).",
+      "Principio de Segregación de Interfaces (ISP).",
+      "Principio de Inversión de Dependencias (DIP)."
+    ],
+    correctIndex: 1,
+    feedback: "LSP exige que cualquier subclase deba ser capaz de sustituir a su clase base sin alterar la corrección del programa ni lanzar excepciones inesperadas que rompan el contrato preestablecido."
+  },
+  {
+    id: 29,
+    topic: "Clean Code - Ley de Demeter",
+    question: "Al inspeccionar una base de código legacy, encuentras la siguiente línea: 'usuario.getCuenta().getDireccionFacturacion().getCiudad().getNombre()'. ¿Qué regla de diseño de código limpio viola directamente esta instrucción?",
+    answers: [
+      "Ley de Demeter (Principio del Menor Conocimiento / 'Train Wreck').",
+      "Principio de Responsabilidad Única (SRP).",
+      "Patrón Transaccional Outbox.",
+      "Métrica de Observabilidad OpenTelemetry."
+    ],
+    correctIndex: 0,
+    feedback: "La Ley de Demeter prohíbe la navegación profunda navegando por grafos de objetos internos ('Train Wrecks'). La solución es encapsular el acceso en un método de alto nivel como 'usuario.getCiudadFacturacion()'."
+  },
+  {
+    id: 30,
+    topic: "GRASP - Pure Fabrication",
+    question: "¿Cuándo es apropiado crear una 'Fabricación Pura' (Pure Fabrication) bajo los principios GRASP?",
+    answers: [
+      "Únicamente cuando se utiliza una base de datos NoSQL como MongoDB.",
+      "Cuando se crea una clase artificial que no representa un concepto del dominio del negocio (ej. PdfExporter, Logger), con el objetivo de mantener alta la cohesión y no contaminar los objetos de negocio con infraestructura.",
+      "Para implementar el patrón Singleton mediante variables globales en Node.js.",
+      "Cuando se requiere duplicar código en múltiples controladores para acelerar el desarrollo."
+    ],
+    correctIndex: 1,
+    feedback: "Pure Fabrication inventa un concepto de software artificial que no existe en el mundo real (como un exportador de PDF o un logger) para evitar sobrecargar los objetos de dominio reales con responsabilidades de infraestructura."
+  },
+  {
+    id: 31,
+    topic: "Python & Ruff / uv",
+    question: "¿Por qué herramientas como Ruff y uv (desarrolladas en Rust) han revolucionado el ecosistema de tooling y gestión de paquetes en Python frente a soluciones tradicionales como Flake8, Black y pip?",
+    answers: [
+      "Porque compilan el código Python a binarios nativos C++ antes de ejecutarse en el servidor.",
+      "Porque al estar escritas en Rust reemplazan múltiples herramientas fragmentadas con una velocidad entre 10x y 100x superior, aprovechando la paralelización nativa y ASTs unificados sin la sobrecarga del intérprete de Python.",
+      "Porque eliminan la necesidad de usar tipos en Python y deshabilitan el recolector de basura.",
+      "Porque son exclusivamente para proyectos alojados en AWS Lambda y no funcionan localmente."
+    ],
+    correctIndex: 1,
+    feedback: "Ruff y uv reescribieron la cadena de herramientas de Python en Rust. Ruff consolida linters y formateadores (Flake8, Black, isort) funcionando hasta 100 veces más rápido al evitar instanciar el intérprete de Python en cada ejecución y procesar en paralelo."
+  },
+  {
+    id: 32,
+    topic: "pnpm Content-Addressable Store",
+    question: "¿De qué manera el gestor de paquetes pnpm optimiza el almacenamiento en disco y evita el problema de las 'dependencias fantasma' (phantom dependencies) en comparación con npm o Yarn v1?",
+    answers: [
+      "Almacena todos los paquetes en una base de datos SQLite encriptada en la nube y los descarga solo en tiempo de ejecución.",
+      "Utiliza un almacén global direccionable por contenido (Content-Addressable Store) con hard links al disco local y crea una estructura de `node_modules` anidada mediante symlinks que solo expone las dependencias declaradas en `package.json`.",
+      "Elimina los archivos `.js` de `node_modules` y compila todo a WebAssembly.",
+      "Obliga a instalar todas las dependencias de forma global en el sistema operativo mediante privilegios de administrador."
+    ],
+    correctIndex: 1,
+    feedback: "pnpm guarda una única copia física de cada versión de paquete en un Content-Addressable Store global y conecta los proyectos mediante hard links. Además, su estructura no plana de node_modules basada en symlinks impide que un módulo importe dependencias transitivas no declaradas en su package.json (evitando dependencias fantasma)."
+  },
+  {
+    id: 33,
+    topic: "Devcontainers",
+    question: "¿Qué ventaja estratégica aporta la especificación `.devcontainer/devcontainer.json` en proyectos de desarrollo con equipos políglotas (TypeScript, Python, Go, Java)?",
+    answers: [
+      "Reemplaza el código fuente del proyecto con binarios precompilados de Docker.",
+      "Estandariza entornos de desarrollo completamente aislados en contenedores Docker, definiendo extensiones de IDE, linters, variables de entorno y runtimes para garantizar la regla de 'funciona en mi máquina' de forma consistente entre desarrolladores.",
+      "Compila automáticamente todas las aplicaciones políglotas a un único ejecutable de Kubernetes.",
+      "Sirve como script de despliegue directo a producción en clusters de AWS ECS."
+    ],
+    correctIndex: 1,
+    feedback: "Devcontainers (.devcontainer/devcontainer.json) permiten codificar y compartir la configuración exacta del entorno de desarrollo (runtimes, herramientas de CLI, extensiones del editor y configuraciones) dentro de contenedores Docker, garantizando paridad total entre los entornos de trabajo de todos los integrantes del equipo."
   }
 ];
 

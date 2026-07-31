@@ -10,7 +10,7 @@ export const observer: Pattern = {
     'Principio de Abierto/Cerrado (OCP): puedes introducir nuevos suscriptores sin cambiar el código del sujeto principal.',
     'Soporta el modelo de comunicación orientada a eventos (Event-Driven).'
   ],
-  analogy: 'Rescatado de *Mi granito de Java*, piensa en una Subasta. El subastador (Subject) tiene un estado: el valor de la oferta actual. Los postores (Observers) se registran con el subastador. Cuando hay una nueva oferta, el subastador difunde la notificación a todos los postores registrados para que se actualicen y decidan si contraofertar.',
+  analogy: 'Piensa en una Subasta. El subastador (Subject) tiene un estado: el valor de la oferta actual. Los postores (Observers) se registran con el subastador. Cuando hay una nueva oferta, el subastador difunde la notificación a todos los postores registrados para que se actualicen y decidan si contraofertar.',
   code: {
     java: `// Java 21 - Evento y Subastas (Hilo-Seguro con CopyOnWriteArrayList)
 import java.util.List;

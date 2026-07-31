@@ -33,18 +33,34 @@ public class ConfigManager {
         System.out.println("Config: db_host = localhost");
     }
 }`,
-    python: `# Python 3 - Singleton usando una Metaclase
+    python: `# Python 3 - Singleton usando una Metaclase (Metaclass)
+# ¿Cómo funciona internamente?
+# 1. En Python, las clases son objetos creados por una "metaclase" (por defecto, 'type').
+# 2. Cuando ejecutas 'ConfigManager()', Python llama al método __call__() de su metaclase (SingletonMeta).
+# 3. La metaclase intercepta la creación de objetos ANTES de que se ejecute ConfigManager.__init__().
+
 class SingletonMeta(type):
+    # Diccionario estático para almacenar la instancia única de cada clase
     _instances = {}
 
     def __call__(cls, *args, **kwargs):
+        """
+        'cls' hace referencia a la clase que se intenta instanciar (ej: ConfigManager).
+        Este método intercepta el operador de llamada 'ConfigManager()'.
+        """
         if cls not in cls._instances:
-            # Crea la instancia si no existe
-            cls._instances[cls] = super().__call__(*args, **kwargs)
+            # 1. Si la clase NO ha sido instanciada antes, llamamos a super().__call__()
+            #    que ejecuta internamente ConfigManager.__new__() y ConfigManager.__init__().
+            instance = super().__call__(*args, **kwargs)
+            # 2. Guardamos la instancia en el diccionario centralizado.
+            cls._instances[cls] = instance
+        
+        # 3. Si ya existía, retornamos la misma instancia almacenada (evitando re-ejecutar __init__).
         return cls._instances[cls]
 
 class ConfigManager(metaclass=SingletonMeta):
     def __init__(self):
+        # Este método SOLO se ejecutará 1 sola vez en todo el ciclo de vida de la app
         print("Cargando configuraciones del sistema...")
 
     def show_setting(self):

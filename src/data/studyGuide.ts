@@ -33,31 +33,152 @@ export const studyGuide: StudySection[] = [
     introduction: "Los pilares fundamentales para el diseño, desarrollo y mantenimiento de software escalable, modular y tolerante a fallos.",
     subsections: [
       {
-        title: "Cohesión y Acoplamiento",
-        description: "El diseño de software de calidad busca siempre lograr una alta cohesión interna y un bajo acoplamiento entre los distintos componentes.",
+        title: "Cohesión y Acoplamiento: La Piedra Angular del Diseño",
+        description: "El diseño de software de calidad busca siempre lograr una alta cohesión interna y un bajo acoplamiento entre los distintos componentes del sistema.",
         details: [
-          "Alta Cohesión: Significa que cada módulo o clase tiene una sola tarea lógica muy enfocada. Esto facilita su entendimiento, mantenimiento y pruebas.",
-          "Bajo Acoplamiento: Representa la independencia que existe entre módulos. Si los módulos están desacoplados, los cambios internos en uno de ellos no repercuten en los demás."
+          "Alta Cohesión: Cada módulo o clase tiene un único objetivo lógico muy enfocado. Facilita el entendimiento, mantenimiento y las pruebas unitarias.",
+          "Bajo Acoplamiento: Mide el grado de independencia entre módulos. Si están desacoplados, los cambios internos en uno de ellos no repercuten en los demás.",
+          "Relación con SOLID: SOLID es el conjunto de directrices prácticas diseñadas específicamente para maximizar la cohesión y minimizar el acoplamiento."
         ]
       },
       {
-        title: "Inyección de Dependencias (DI) vs Inversión de Dependencias (DIP)",
-        description: "Es común confundir el principio abstracto con el patrón técnico que lo implementa.",
+        title: "SOLID 1: Principio de Responsabilidad Única (SRP)",
+        description: "Una clase debe tener una sola razón para sufrir modificaciones, lo que significa que debe resolver una única tarea enfocada a un solo actor o rol del negocio.",
         details: [
-          `DIP (Dependency Inversion Principle): ${technicalDefinitions.dip.description}`,
-          "DI (Dependency Injection): Es el patrón de diseño técnico que materializa DIP. Consiste en proveer (inyectar) las dependencias requeridas a un objeto desde el exterior, usualmente a través de su constructor, en lugar de que el propio objeto las instancie con 'new'."
-        ]
+          `SRP: ${technicalDefinitions.srp.description}`,
+          "Code Smells Relacionados: God Class (clases gigantes con miles de líneas), Divergent Change (modificar la misma clase por requerimientos de distintos departamentos), Shotgun Surgery (un solo cambio requiere modificar decenas de clases).",
+          "Beneficio: Pruebas unitarias hiper-enfocadas, refactorizaciones seguras y nulo riesgo de romper lógica no relacionada."
+        ],
+        code: "// ❌ VIOLACIÓN: Clase 'God Object' con múltiples razones de cambio\n" +
+              "class InvoiceService {\n" +
+              "  calculateTax(invoice: Invoice) { /* Lógica fiscal */ }\n" +
+              "  saveToDatabase(invoice: Invoice) { /* SQL Query */ }\n" +
+              "  generatePdf(invoice: Invoice) { /* Formateo PDF */ }\n" +
+              "  sendEmail(invoice: Invoice) { /* Protocolo SMTP */ }\n" +
+              "}\n\n" +
+              "// ✅ SOLUCIÓN SRP: Clases cohesivas con un solo rol de negocio\n" +
+              "class TaxCalculator { calculate(invoice: Invoice) { /* ... */ } }\n" +
+              "class InvoiceRepository { save(invoice: Invoice) { /* ... */ } }\n" +
+              "class InvoicePdfGenerator { generate(invoice: Invoice) { /* ... */ } }\n" +
+              "class EmailNotifier { send(invoice: Invoice) { /* ... */ } }"
       },
       {
-        title: "SOLID (Resumen Rápido)",
-        description: "Las cinco directrices indispensables para crear software mantenible y extensible:",
+        title: "SOLID 2: Principio Abierto/Cerrado (OCP)",
+        description: "Las entidades de software (clases, módulos) deben estar abiertas para su extensión pero estrictamente cerradas para su modificación directa.",
         details: [
-          `SRP (Single Responsibility Principle): ${technicalDefinitions.srp.description}`,
-          `OCP (Open/Closed Principle): ${technicalDefinitions.ocp.description}`,
-          `LSP (Liskov Substitution Principle): ${technicalDefinitions.lsp.description}`,
-          `ISP (Interface Segregation Principle): ${technicalDefinitions.isp.description}`,
-          `DIP (Dependency Inversion Principle): ${technicalDefinitions.dip.description}`
-        ]
+          `OCP: ${technicalDefinitions.ocp.description}`,
+          "Code Smell Relacionado: Escaleras `switch` o `if/else` condicionales comprobando tipos de objetos para alterar el flujo.",
+          "Mecanismo de Resolución: Programar contra interfaces o contratos abstractos y utilizar polimorfismo o el patrón Strategy para inyectar nuevos comportamientos."
+        ],
+        code: "// ❌ VIOLACIÓN: Modificar la clase ante cada nuevo método de pago\n" +
+              "class PaymentProcessor {\n" +
+              "  process(payment: any) {\n" +
+              "    if (payment.type === 'CREDIT') { /* Lógica Tarjeta */ }\n" +
+              "    else if (payment.type === 'PAYPAL') { /* Lógica Paypal */ }\n" +
+              "    else if (payment.type === 'CRYPTO') { /* ¡Tuvimos que editar código testeado! */ }\n" +
+              "  }\n" +
+              "}\n\n" +
+              "// ✅ SOLUCIÓN OCP: Extensión mediante contratos sin editar código existente\n" +
+              "interface PaymentMethod { process(amount: number): void; }\n" +
+              "class CreditCardPayment implements PaymentMethod { process(amount: number) { /* ... */ } }\n" +
+              "class CryptoPayment implements PaymentMethod { process(amount: number) { /* ... */ } }\n\n" +
+              "class PaymentProcessor {\n" +
+              "  process(method: PaymentMethod, amount: number) { method.process(amount); }\n" +
+              "}"
+      },
+      {
+        title: "SOLID 3: Principio de Sustitución de Liskov (LSP)",
+        description: "Las subclases o tipos derivados deben poder sustituir a sus clases base sin alterar el comportamiento esperado ni la corrección del programa.",
+        details: [
+          `LSP: ${technicalDefinitions.lsp.description}`,
+          "Code Smell Relacionado: Subclases que lanzan `UnsupportedOperationException`, sobreescriben métodos dejándolos vacíos o fortalecen las precondiciones del padre.",
+          "Regla de Oro: Si `B` hereda de `A`, cualquier programa que use `A` debe funcionar exactamente igual si se le pasa una instancia de `B`."
+        ],
+        code: "// ❌ VIOLACIÓN: Subclase rompe el contrato y la expectativa del tipo padre\n" +
+              "class Bird { fly() { console.log('Volando...'); } }\n" +
+              "class Ostrich extends Bird {\n" +
+              "  fly() { throw new Error('¡Las avestruces no vuelan!'); } // ❌ Crash inesperado en runtime\n" +
+              "}\n\n" +
+              "// ✅ SOLUCIÓN LSP: Jerarquía de contratos coherente que respeta capacidades realistas\n" +
+              "interface Bird { eat(): void; }\n" +
+              "interface FlyingBird extends Bird { fly(): void; }\n\n" +
+              "class Goldfinch implements FlyingBird { eat() { /* ... */ } fly() { /* ... */ } }\n" +
+              "class Ostrich implements Bird { eat() { /* ... */ } } // No promete lo que no puede cumplir"
+      },
+      {
+        title: "SOLID 4: Principio de Segregación de Interfaces (ISP)",
+        description: "Es preferible diseñar muchas interfaces específicas y delgadas a tener una sola interfaz gigantesca y monolítica.",
+        details: [
+          `ISP: ${technicalDefinitions.isp.description}`,
+          "Code Smell Relacionado: Fat Interfaces (interfaces 'gordas' que fuerzan a las clases cliente a implementar métodos con firmas vacías o lanzar excepciones).",
+          "Mecanismo: Dividir contratos extensos en interfaces atómicas orientadas a roles específicos de consumo."
+        ],
+        code: "// ❌ VIOLACIÓN: Interfaz monolítica que obliga a implementar métodos inútiles\n" +
+              "interface MultiFunctionDevice {\n" +
+              "  print(): void;\n" +
+              "  scan(): void;\n" +
+              "  fax(): void;\n" +
+              "}\n" +
+              "class SimplePrinter implements MultiFunctionDevice {\n" +
+              "  print() { /* ok */ }\n" +
+              "  scan() { throw new Error('No soportado'); } // ❌ Obligado a implementar\n" +
+              "  fax() { throw new Error('No soportado'); }\n" +
+              "}\n\n" +
+              "// ✅ SOLUCIÓN ISP: Interfaces segredadas y enfocadas a capacidades reales\n" +
+              "interface Printer { print(): void; }\n" +
+              "interface Scanner { scan(): void; }\n\n" +
+              "class BasicPrinter implements Printer { print() { /* ... */ } }\n" +
+              "class SmartCopier implements Printer, Scanner { print() { /* ... */ } scan() { /* ... */ } }"
+      },
+      {
+        title: "SOLID 5: Principio de Inversión de Dependencias (DIP)",
+        description: "Los módulos de alto nivel no deben depender de módulos de bajo nivel; ambos deben depender exclusivamente de abstracciones (interfaces).",
+        details: [
+          `DIP: ${technicalDefinitions.dip.description}`,
+          "Distinción conceptual clave: DIP es el principio abstracto de diseño. DI (Inyección de Dependencias) es la técnica concreta de inyección. IoC Container es el framework/tooling que automatiza la creación e inyección."
+        ],
+        table: {
+          headers: ["Concepto", "Naturaleza", "Propósito Principal"],
+          rows: [
+            ["DIP (Dependency Inversion)", "Principio de Diseño (Abstracto)", "Establece que el dominio no debe depender de detalles de infraestructura."],
+            ["DI (Dependency Injection)", "Patrón Técnico (Concreto)", "Técnica de pasar dependencias al constructor en lugar de hacer 'new'."],
+            ["IoC Container", "Tooling / Framework", "Contenedor (ej. Spring, NestJS, Inversify) que orquesta la instanciación e inyección."]
+          ]
+        },
+        code: "// ❌ VIOLACIÓN: Lógica de negocio (Alto Nivel) acoplada a infraestructura (Bajo Nivel)\n" +
+              "class OrderService {\n" +
+              "  private db = new MySQLDatabase(); // ❌ Acoplado rígidamente a MySQL con 'new'\n" +
+              "  saveOrder(order: any) { this.db.query('INSERT INTO...'); }\n" +
+              "}\n\n" +
+              "// ✅ SOLUCIÓN DIP: Inyección del contrato abstracto por constructor\n" +
+              "interface OrderRepository { save(order: any): void; }\n" +
+              "class PostgresRepository implements OrderRepository { save(order: any) { /* ... */ } }\n\n" +
+              "class OrderService {\n" +
+              "  constructor(private repo: OrderRepository) {} // Abstracción inyectada\n" +
+              "  saveOrder(order: any) { this.repo.save(order); }\n" +
+              "}"
+      },
+      {
+        title: "Principios Pragmáticos: DRY, KISS, YAGNI & Ley de Demeter",
+        description: "Guías fundamentales de ingeniería de software para evitar la sobre-ingeniería y mantener la simplicidad operativa.",
+        details: [
+          `DRY: ${technicalDefinitions.dry.description}`,
+          `KISS: ${technicalDefinitions.kiss.description}`,
+          `YAGNI: ${technicalDefinitions.yagni.description}`,
+          `Ley de Demeter: ${technicalDefinitions.lawOfDemeter.description}`,
+          `Composición sobre Herencia: ${technicalDefinitions.compositionOverInheritance.description}`
+        ],
+        code: "// ❌ VIOLACIÓN Ley de Demeter: 'Train Wreck' navegando grafos de objetos internos\n" +
+              "const city = user.getAccount().getBillingAddress().getCity().getName();\n\n" +
+              "// ✅ SOLUCIÓN Ley de Demeter: Encapsulación con método directo de alto nivel\n" +
+              "const city = user.getBillingCity();\n\n" +
+              "// ❌ VIOLACIÓN Composición vs Herencia: Jerarquía de herencia rígida y frágil\n" +
+              "class SuperAdminUser extends AdminUser { /* herencia profunda */ }\n\n" +
+              "// ✅ SOLUCIÓN Composición: Objeto compuesto que recibe estrategias/roles dinámicos\n" +
+              "class User {\n" +
+              "  constructor(private permissions: Permission[]) {}\n" +
+              "  hasAccess(perm: Permission) { return this.permissions.includes(perm); }\n" +
+              "}"
       },
       {
         title: "Prácticas de Code Review & Boy Scout Rule",
@@ -74,32 +195,132 @@ export const studyGuide: StudySection[] = [
     id: "grasp",
     title: "Principios GRASP",
     icon: "Layout",
-    introduction: "General Responsibility Assignment Software Patterns. Directrices esenciales enfocadas en la asignación básica de responsabilidades de las clases durante el modelado de dominio.",
+    introduction: "General Responsibility Assignment Software Patterns. Las 9 directrices fundamentales desarrolladas por Craig Larman para la asignación de responsabilidades a clases en el modelado orientado a objetos.",
     subsections: [
       {
         title: technicalDefinitions.informationExpert.title,
         description: technicalDefinitions.informationExpert.description,
-        details: technicalDefinitions.informationExpert.details
+        details: technicalDefinitions.informationExpert.details,
+        code: "// ❌ VIOLACIÓN: Un servicio externo calcula el total navegando datos ajenos\n" +
+              "class CheckoutService {\n" +
+              "  calculateTotal(cart: ShoppingCart) {\n" +
+              "    return cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);\n" +
+              "  }\n" +
+              "}\n\n" +
+              "// ✅ SOLUCIÓN GRASP Information Expert: El Carrito calcula su total porque POSEE la información\n" +
+              "class ShoppingCart {\n" +
+              "  private items: CartItem[] = [];\n" +
+              "  calculateTotal(): number {\n" +
+              "    return this.items.reduce((sum, item) => sum + item.getSubtotal(), 0);\n" +
+              "  }\n" +
+              "}"
       },
       {
         title: technicalDefinitions.creator.title,
         description: technicalDefinitions.creator.description,
-        details: technicalDefinitions.creator.details
-      },
-      {
-        title: technicalDefinitions.pureFabrication.title,
-        description: technicalDefinitions.pureFabrication.description,
-        details: technicalDefinitions.pureFabrication.details
+        details: technicalDefinitions.creator.details,
+        code: "// ❌ VIOLACIÓN: Un controlador externo crea las líneas del pedido sin tener relación directa\n" +
+              "const item = new OrderItem(product, quantity);\n" +
+              "order.addItem(item);\n\n" +
+              "// ✅ SOLUCIÓN GRASP Creator: El Order crea sus OrderItems porque los CONTIENE y AGREGA\n" +
+              "class Order {\n" +
+              "  private items: OrderItem[] = [];\n" +
+              "  createItem(product: Product, quantity: number) {\n" +
+              "    const item = new OrderItem(product, quantity);\n" +
+              "    this.items.push(item);\n" +
+              "  }\n" +
+              "}"
       },
       {
         title: technicalDefinitions.controller.title,
         description: technicalDefinitions.controller.description,
-        details: technicalDefinitions.controller.details
+        details: technicalDefinitions.controller.details,
+        code: "// ❌ VIOLACIÓN: Lógica de negocio en la capa gráfica o de presentación\n" +
+              "button.onClick = () => { /* validar stock, cobrar tarjeta, actualizar DB */ };\n\n" +
+              "// ✅ SOLUCIÓN GRASP Controller: Un UseCase/Controlador orquesta el flujo de negocio\n" +
+              "class CreateOrderController {\n" +
+              "  constructor(private useCase: CreateOrderUseCase) {}\n" +
+              "  handleRequest(req: Request) {\n" +
+              "    return this.useCase.execute(req.body);\n" +
+              "  }\n" +
+              "}"
+      },
+      {
+        title: technicalDefinitions.lowCoupling.title,
+        description: technicalDefinitions.lowCoupling.description,
+        details: technicalDefinitions.lowCoupling.details,
+        code: "// ❌ VIOLACIÓN: Alto acoplamiento a una clase concreta de base de datos\n" +
+              "class OrderManager {\n" +
+              "  private db = new OracleDatabase(); // Si cambia la DB, rompe OrderManager\n" +
+              "}\n\n" +
+              "// ✅ SOLUCIÓN GRASP Low Coupling: Acoplamiento hacia una interfaz estable\n" +
+              "class OrderManager {\n" +
+              "  constructor(private db: DatabaseConnection) {} // Dependencia abstracta\n" +
+              "}"
+      },
+      {
+        title: technicalDefinitions.highCohesion.title,
+        description: technicalDefinitions.highCohesion.description,
+        details: technicalDefinitions.highCohesion.details,
+        code: "// ❌ VIOLACIÓN: Baja cohesión (Clase mezclando envío de emails con procesamiento matemático)\n" +
+              "class UserManager {\n" +
+              "  registerUser() { /* ... */ }\n" +
+              "  sendSMSToken() { /* ... */ }\n" +
+              "  renderUserProfileHTML() { /* UI Rendering */ }\n" +
+              "}\n\n" +
+              "// ✅ SOLUCIÓN GRASP High Cohesion: Módulos hiper-enfocados\n" +
+              "class UserRegistrationService { register() { /* ... */ } }\n" +
+              "class SmsNotificationService { sendToken() { /* ... */ } }"
+      },
+      {
+        title: technicalDefinitions.pureFabrication.title,
+        description: technicalDefinitions.pureFabrication.description,
+        details: technicalDefinitions.pureFabrication.details,
+        code: "// ❌ VIOLACIÓN: Contaminar el objeto de dominio User con lógica de exportación física\n" +
+              "class User {\n" +
+              "  exportToPDF() { /* Lógica compleja de renderizado PDF */ }\n" +
+              "}\n\n" +
+              "// ✅ SOLUCIÓN GRASP Pure Fabrication: Fabricar una clase artificial de servicio\n" +
+              "class UserPdfExporter {\n" +
+              "  export(user: User): Buffer { /* Lógica de PDF aislada del dominio */ }\n" +
+              "}"
+      },
+      {
+        title: technicalDefinitions.indirection.title,
+        description: technicalDefinitions.indirection.description,
+        details: technicalDefinitions.indirection.details,
+        code: "// ❌ VIOLACIÓN: Servicio de ventas acoplado directamente al servicio de inventario y facturación\n" +
+              "class SalesService { /* llama a InventoryService y BillingService directamente */ }\n\n" +
+              "// ✅ SOLUCIÓN GRASP Indirection: Introducir un Mediador o Event Bus intermedio\n" +
+              "class EventBus {\n" +
+              "  publish(event: DomainEvent) { /* desacopla emisor de receptores */ }\n" +
+              "}"
+      },
+      {
+        title: technicalDefinitions.graspPolymorphism.title,
+        description: technicalDefinitions.graspPolymorphism.description,
+        details: technicalDefinitions.graspPolymorphism.details,
+        code: "// ❌ VIOLACIÓN: Estructuras condicionales para manejar variaciones por tipo\n" +
+              "function getTax(user: User) {\n" +
+              "  if (user.type === 'RETAIL') return user.amount * 0.21;\n" +
+              "  if (user.type === 'WHOLESALE') return user.amount * 0.10;\n" +
+              "}\n\n" +
+              "// ✅ SOLUCIÓN GRASP Polymorphism: Delegar el comportamiento al tipo específico\n" +
+              "interface UserTaxStrategy { calculateTax(amount: number): number; }\n" +
+              "class RetailTax implements UserTaxStrategy { calculateTax(amount: number) { return amount * 0.21; } }\n" +
+              "class WholesaleTax implements UserTaxStrategy { calculateTax(amount: number) { return amount * 0.10; } }"
       },
       {
         title: technicalDefinitions.protectedVariations.title,
         description: technicalDefinitions.protectedVariations.description,
-        details: technicalDefinitions.protectedVariations.details
+        details: technicalDefinitions.protectedVariations.details,
+        code: "// ❌ VIOLACIÓN: Consumir la API directa inestable de un proveedor de pagos de terceros\n" +
+              "import { UnstableStripeSDK } from 'third-party-sdk';\n\n" +
+              "// ✅ SOLUCIÓN GRASP Protected Variations: Envolver la API inestable con una interfaz estable propia\n" +
+              "interface PaymentGateway { charge(amount: number): Promise<boolean>; }\n" +
+              "class StripeAdapter implements PaymentGateway {\n" +
+              "  async charge(amount: number) { /* aísla cambios del SDK de terceros */ return true; }\n" +
+              "}"
       }
     ]
   },
@@ -273,6 +494,27 @@ export const studyGuide: StudySection[] = [
               "                            └──> Trazas ────> [Jaeger / APM]"
       },
       {
+        title: "Análisis Profundo de Latencia: Percentil 99 (P99) vs Promedio & Tail Latency",
+        description: "Estándar de ingeniería y System Design para medir latencia real en arquitecturas distribuidas a escala.",
+        details: [
+          `P99 (Percentil 99): ${technicalDefinitions.p99Latency.description}`,
+          "¿Por qué el promedio es engañoso?: En distribuciones no-Gaussianas (asimétricas), el promedio enmascara picos catastróficos. Si 99 usuarios responden en 1ms y 1 usuario sufre un bloqueo de 10.000ms (10s), el promedio dará ~100ms (parece aceptable), ocultando que 1 de cada 100 clientes experimentó un fallo grave.",
+          "Causas de la Cola de Latencia (Long-Tail Latency): Pausas del Garbage Collector (Stop-the-World), contención de locks en Base de Datos, reintentos de red por pérdida de paquetes, I/O saturation y cold starts de Serverless/Kubernetes.",
+          "Amplificación de Tail Latency (Efecto Fan-out en Microservicios): Si un request del usuario dispara 100 llamadas en paralelo a backend microservices y cada uno tiene un P99 de 10ms (1% de chance de lentitud), la probabilidad de que la petición completa se retrase es P(lento) = 1 - (0.99)^100 ≈ 63.4%. ¡Más de la mitad de los usuarios sufrirán la latencia P99!",
+          "Instrumentación PromQL en Prometheus: Se calcula analizando histogramas con la función `histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))`. Para reducir overhead en producción se emplean algoritmos de aproximación como HDR Histogram o t-digest.",
+          "Técnicas de Mitigación (Speculative Retries / Hedged Requests): Estrategia pionera de Google (Jeffrey Dean) donde si una solicitud no responde en su percentil P95, se envía una segunda petición idéntica 'hedged' a réplica y se toma el resultado de la primera en responder, eliminando el P99 tail.",
+          "Impacto en SLAs/SLOs: Definir contratos de nivel de servicio basados en percentiles (ej. P99 < 100ms) garantiza la estabilidad de la experiencia de usuario a escala, evitando falsos positivos de salud por métricas promedio."
+        ],
+        code: "// Cálculo de P99 PromQL en Prometheus:\n" +
+              "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))\n\n" +
+              "// Efecto Fan-out en Microservicios (Amplificación de Tail Latency):\n" +
+              "[Request Cliente] ───> [Gateway] ──┬──> Subservicio 1 (P99 = 10ms)\n" +
+              "                                  ├──> Subservicio 2 (P99 = 10ms)\n" +
+              "                                  │    ...\n" +
+              "                                  └──> Subservicio 100 (P99 = 10ms)\n" +
+              "Probabilidad de Latencia Alta Total = 1 - (0.99)^100 ≈ 63.4%"
+      },
+      {
         title: "Estrategias de Despliegue Canary con Service Mesh (Istio)",
         description: "Cómo implementar ruteo dinámico de red para lanzamientos seguros de software.",
         details: [
@@ -296,44 +538,172 @@ export const studyGuide: StudySection[] = [
     id: "tooling-dev",
     title: "Tooling de Desarrollo Moderno",
     icon: "Terminal",
-    introduction: "Las herramientas y flujos de automatización que hoy maximizan la velocidad y calidad del desarrollo local en la industria.",
+    introduction: "Las herramientas y flujos de automatización de alto rendimiento que maximizan la velocidad y calidad del desarrollo local en TypeScript, Python, Go y Java.",
     subsections: [
       {
-        title: "Branching Patterns: Trunk-Based vs Git Flow",
-        description: "La velocidad de despliegue en la industria moderna está directamente ligada al patrón de control de versiones elegido.",
+        title: "Branching Patterns & Feature Flags (Multi-Lenguaje)",
+        description: "Estrategias de ramificación modernas (Trunk-Based vs Git Flow) y desacoplamiento de despliegue mediante Feature Toggles en TypeScript, Python, Go y Java.",
         details: [
           `Trunk-Based Development: ${technicalDefinitions.trunkBased.description}`,
-          "Git Flow: Enfoque clásico con múltiples ramas de larga duración (develop, master, release, hotfix). Tiende a generar integraciones complejas o cuellos de botella en equipos ágiles.",
-          "Cuándo usar: Trunk-Based es ideal para equipos con alta cobertura de tests y despliegue continuo; Git Flow se prefiere en software de lanzamientos programados o regulados."
-        ]
-      },
-      {
-        title: "Linters & Formateadores en Rust (Biome & Oxlint)",
-        description: "El cambio de paradigma en el análisis de código estático por herramientas nativas de alto rendimiento.",
-        details: [
-          `Biome & Oxlint: ${technicalDefinitions.lintersRust.description}`,
-          "Velocidad: Analizan miles de archivos en milisegundos. Libera la CPU local y acorta drásticamente el feedback loop del programador en su IDE.",
-          "Configuración Simplificada: Reduce la complejidad del ecosistema de JavaScript consolidando formateador y linter en una sola herramienta libre de conflictos."
-        ]
-      },
-      {
-        title: "Husky, Commitlint & Lint-Staged",
-        description: "Validación automatizada local en pre-commit para proteger el repositorio de código erróneo.",
-        details: [
-          `Husky: ${technicalDefinitions.gitHooks.description}`,
-          "Commitlint: Valida que los mensajes de commit sigan especificaciones estándar (ej. Conventional Commits) para automatizar notas de lanzamiento.",
-          "Lint-staged: Ahorra recursos ejecutando el formateo y linter únicamente sobre el conjunto de archivos modificados activos."
+          "Git Flow: Enfoque clásico con múltiples ramas de larga duración (develop, master, release). Presenta alto riesgo de 'merge hell' y cuellos de botella en entornos ágiles.",
+          "Feature Flags / Feature Toggles: Patrón esencial para Trunk-Based que permite fusionar código a 'main' diariamente manteniendo funcionalidades incompletas ocultas mediante banderas en tiempo de ejecución."
         ],
-        code: "git commit -m \"feat: add bff component\"\n" +
+        table: {
+          headers: ["Criterio", "Trunk-Based Development", "Git Flow"],
+          rows: [
+            ["Vida media de rama", "Ultra corta (< 24 horas)", "Larga (semanas o meses)"],
+            ["Frecuencia de despliegue", "Múltiples veces por día", "Por lanzamientos programados (sprints)"],
+            ["Riesgo de Merge Hell", "Casi nulo (integración continua real)", "Muy alto (conflictos masivos en rebase)"],
+            ["Mecanismo de Despliegue", "Feature Flags / Toggles en runtime", "Merge congelado entre ramas de release"]
+          ]
+        },
+        code: "// 1. TYPESCRIPT\n" +
+              "class FeatureFlags {\n" +
+              "  static isEnabled(feature: string): boolean {\n" +
+              "    return process.env[`FEATURE_${feature}`] === 'true';\n" +
+              "  }\n" +
+              "}\n" +
+              "if (FeatureFlags.isEnabled('NEW_CHECKOUT')) { /* nuevo flujo */ }\n\n" +
+              "# 2. PYTHON\n" +
+              "import os\n" +
+              "class FeatureFlags:\n" +
+              "    @staticmethod\n" +
+              "    def is_enabled(feature: str) -> bool:\n" +
+              "        return os.getenv(f'FEATURE_{feature.upper()}', 'false').lower() == 'true'\n\n" +
+              "// 3. GO (Golang - Thread-Safe)\n" +
+              "type FeatureFlags struct { flags map[string]bool }\n" +
+              "func (f *FeatureFlags) IsEnabled(feature string) bool {\n" +
+              "    return f.flags[feature]\n" +
+              "}\n\n" +
+              "// 4. JAVA 21\n" +
+              "public record FeatureFlags(Map<String, Boolean> flags) {\n" +
+              "    public boolean isEnabled(String feature) {\n" +
+              "        return flags.getOrDefault(feature, false);\n" +
+              "    }\n" +
+              "}"
+      },
+      {
+        title: "Linters & Formateadores de Alto Rendimiento (Multi-Lenguaje)",
+        description: "Análisis estático y formateo nativo acelerado en TypeScript (Biome/Oxlint), Python (Ruff), Go (golangci-lint) y Java (Spotless).",
+        details: [
+          `TypeScript (Biome & Oxlint): ${technicalDefinitions.lintersRust.description}`,
+          `Python (Ruff & uv): ${technicalDefinitions.ruffPython.description}`,
+          `Go (golangci-lint): ${technicalDefinitions.golangciLint.description}`,
+          `Java (Spotless): ${technicalDefinitions.spotlessJava.description}`
+        ],
+        table: {
+          headers: ["Lenguaje", "Herramienta Moderna", "Reemplaza a", "Ventaja Clave"],
+          rows: [
+            ["TypeScript/JS", "Biome / Oxlint", "ESLint, Prettier, Babel", "100x más rápido, parseo AST en una sola pasada en Rust."],
+            ["Python", "Ruff & uv", "Flake8, Black, isort, pip", "Linter/formatter y gestor de paquetes escrito en Rust."],
+            ["Go", "golangci-lint", "Linters individuales de Go", "Ejecución concurrente reutilizando el AST de Go."],
+            ["Java", "Spotless & Gradle Cache", "Formateadores IDE manuales", "Integración CI/CD estricta con comprobación incremental."]
+          ]
+        },
+        code: "// 1. TYPESCRIPT (biome.json)\n" +
+              "{\n" +
+              "  \"$schema\": \"https://biomejs.dev/schemas/1.8.3/schema.json\",\n" +
+              "  \"formatter\": { \"enabled\": true, \"indentStyle\": \"space\" },\n" +
+              "  \"linter\": { \"enabled\": true, \"rules\": { \"recommended\": true } }\n" +
+              "}\n\n" +
+              "# 2. PYTHON (pyproject.toml - Ruff Config)\n" +
+              "[tool.ruff]\n" +
+              "line-length = 88\n" +
+              "select = [\"E\", \"F\", \"I\", \"B\"] # Pyflakes, pycodestyle, isort, bugbear\n\n" +
+              "# 3. GO (.golangci.yml)\n" +
+              "linters:\n" +
+              "  enable:\n" +
+              "    - errcheck\n" +
+              "    - gosimple\n" +
+              "    - govet\n" +
+              "    - staticcheck\n\n" +
+              "// 4. JAVA (build.gradle - Spotless Plugin)\n" +
+              "spotless {\n" +
+              "  java { googleJavaFormat('1.17.0') }\n" +
+              "}"
+      },
+      {
+        title: "Git Hooks & Automatización Local Multi-Lenguaje (Husky, Commitlint & pre-commit)",
+        description: "Validación automatizada antes del commit para proteger el repositorio en todos los stacks tecnológicos.",
+        details: [
+          `Husky & Commitlint: ${technicalDefinitions.gitHooks.description}`,
+          "pre-commit Framework (Python/Go/Java/TS): Herramienta agnóstica escrita en Python que gestiona e instala automáticamente hooks en repositorios políglotas.",
+          "Conventional Commits: Especificación estricta para mensajes de commit (ej. `feat(auth): add jwt support`, `fix(api): handle timeout`), permitiendo la generación automática de changelogs y versionado semántico."
+        ],
+        code: "git commit -m \"feat(core): add multi-language support\"\n" +
               "  │\n" +
-              "  ├──> [Husky pre-commit] ──> [Lint-staged] ──> Oxlint / Biome (Solo archivos staged)\n" +
-              "  │                                               └──> Exitoso?\n" +
-              "  │                                                      │ (Sí)\n" +
-              "  ▼                                                      ▼\n" +
-              "  ├──> [Husky commit-msg] ──> [Commitlint] ──> ¿Conventional Commit?\n" +
-              "  │                                                      │ (Sí)\n" +
-              "  ▼                                                      ▼\n" +
-              "[Commit Guardado Exitosamente]"
+              "  ├──> [Pre-commit Hook] ──> [pre-commit / Husky]\n" +
+              "  │                                 │\n" +
+              "  │        ┌────────────────────────┼────────────────────────┐\n" +
+              "  │        ▼                        ▼                        ▼\n" +
+              "  │   [TS/JS: Biome]        [Python: Ruff]         [Go: golangci-lint]\n" +
+              "  │        │                        │                        │\n" +
+              "  │        └────────────────────────┼────────────────────────┘\n" +
+              "  │                                 ▼ Exitoso? (Sí)\n" +
+              "  ├──> [Commitlint] ──────────> ¿Es Conventional Commit?\n" +
+              "  │                                 ▼ Exitoso? (Sí)\n" +
+              "  ▼\n" +
+              "[Commit Guardado en Git]\n\n" +
+              "# Configuración Agnóstica Multi-Lenguaje (.pre-commit-config.yaml):\n" +
+              "repos:\n" +
+              "  - repo: https://github.com/astral-sh/ruff-pre-commit\n" +
+              "    rev: v0.4.0\n" +
+              "    hooks:\n" +
+              "      - id: ruff\n" +
+              "      - id: ruff-format"
+      },
+      {
+        title: "Gestores de Paquetes & Build Systems (pnpm, uv, go mod, Gradle)",
+        description: "Optimización de almacenamiento de dependencias y cachés de compilación en TypeScript, Python, Go y Java.",
+        details: [
+          `TypeScript (pnpm & Turborepo): ${technicalDefinitions.pnpmContentAddressable.description}`,
+          `Python (uv & poetry): ${technicalDefinitions.ruffPython.description}`,
+          `Go (go mod): ${technicalDefinitions.golangciLint.description}`,
+          `Java (Gradle & Maven): ${technicalDefinitions.spotlessJava.description}`
+        ],
+        code: "// ESTRUCTURA DE ENLACES SIMBÓLICOS DE PNPM (Ahorro de RAM/Disco):\n" +
+              "Tienda Global (~/.local/share/pnpm/store/v3)\n" +
+              "  └── [react@18.2.0] <────── Hard Link ──────┐\n" +
+              "                                             │\n" +
+              "Proyecto / node_modules                      │\n" +
+              "  └── .pnpm/react@18.2.0/node_modules/react ─┘ (Symlink aislado)\n\n" +
+              "// CONFIGURACIÓN DE TURBOREPO (turbo.json - Multi-package caching):\n" +
+              "{\n" +
+              "  \"pipeline\": {\n" +
+              "    \"build\": { \"dependsOn\": [\"^build\"], \"outputs\": [\"dist/**\"] },\n" +
+              "    \"test\": { \"dependsOn\": [\"build\"], \"outputs\": [] }\n" +
+              "  }\n" +
+              "}"
+      },
+      {
+        title: "Devcontainers & Entornos Políglotas como Código",
+        description: "Estandarización del entorno completo de desarrollo en Docker para TypeScript, Python, Go y Java 21.",
+        details: [
+          `Devcontainers: ${technicalDefinitions.devcontainers.description}`,
+          "Eliminación de conflictos entre desarrolladores en Mac M-Series, Linux y Windows (WSL2).",
+          "Auto-configuración del IDE con extensiones de lenguaje, SDKs y herramientas pre-instaladas."
+        ],
+        code: "// .devcontainer/devcontainer.json (Entorno Políglota de Producción):\n" +
+              "{\n" +
+              "  \"name\": \"Polyglot Dev Environment (TS, Python, Go, Java)\",\n" +
+              "  \"image\": \"mcr.microsoft.com/devcontainers/base:ubuntu-22.04\",\n" +
+              "  \"features\": {\n" +
+              "    \"ghcr.io/devcontainers/features/node:1\": { \"version\": \"22\" },\n" +
+              "    \"ghcr.io/devcontainers/features/python:1\": { \"version\": \"3.12\" },\n" +
+              "    \"ghcr.io/devcontainers/features/go:1\": { \"version\": \"1.22\" },\n" +
+              "    \"ghcr.io/devcontainers/features/java:1\": { \"version\": \"21\" }\n" +
+              "  },\n" +
+              "  \"customizations\": {\n" +
+              "    \"vscode\": {\n" +
+              "      \"extensions\": [\n" +
+              "        \"biomejs.biome\",\n" +
+              "        \"charliermarsh.ruff\",\n" +
+              "        \"golang.Go\",\n" +
+              "        \"vscjava.vscode-java-pack\"\n" +
+              "      ]\n" +
+              "    }\n" +
+              "  }\n" +
+              "}"
       },
       {
         title: "Local CI/CD con Act (GitHub Actions Local)",
@@ -342,7 +712,11 @@ export const studyGuide: StudySection[] = [
           `Act: ${technicalDefinitions.localCicd.description}`,
           "Funcionamiento: Lee el archivo YAML del workflow y levanta contenedores de Docker idénticos a los del clúster de GitHub para correr cada paso.",
           "Uso: Ideal para depurar variables de entorno, dependencias de compilación y scripts complejos de bash en minutos."
-        ]
+        ],
+        code: "# Ejecución local de GitHub Actions con Act:\n" +
+              "$ act push                              # Ejecuta eventos de push localmente\n" +
+              "$ act -j test                           # Ejecuta únicamente el job 'test'\n" +
+              "$ act -s GITHUB_TOKEN=secret_token_123  # Pasa secretos locales simulados"
       }
     ]
   },

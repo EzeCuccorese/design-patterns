@@ -10,7 +10,7 @@ export const chain: Pattern = {
     'Principio de Responsabilidad Única (SRP): desacopla las clases que invocan operaciones de las que las realizan.',
     'Principio de Abierto/Cerrado (OCP): introduce nuevos manejadores sin romper el código cliente existente.'
   ],
-  analogy: 'Rescatado de *Mi granito de Java*, piensa en el Ejército. Un soldado raso (Soldado) recibe una orden. Si no tiene autoridad para manejarla, la delega a su superior inmediato (Oficial). La solicitud escala por la cadena de mando hasta llegar a un oficial (Smith o Truman) con la autoridad para firmar el comando.',
+  analogy: 'Piensa en el Ejército. Un soldado raso (Soldado) recibe una orden. Si no tiene autoridad para manejarla, la delega a su superior inmediato (Oficial). La solicitud escala por la cadena de mando hasta llegar a un oficial (Smith o Truman) con la autoridad para firmar el comando.',
   code: {
     java: `// Java 21 - Cadena de Mando del Ejército
 public abstract class Unit {

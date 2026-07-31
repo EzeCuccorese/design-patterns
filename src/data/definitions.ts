@@ -109,6 +109,160 @@ export const technicalDefinitions: Record<string, TechnicalDefinition> = {
     ],
     hint: "Concepto similar al OCP pero enfocado en aislar la inestabilidad."
   },
+  lowCoupling: {
+    title: "Bajo Acoplamiento (Low Coupling)",
+    description: "Evaluación del grado de dependencia entre clases. Busca mantener dependencias mínimas, estables y basadas en abstracciones para maximizar la reusabilidad y minimizar el impacto ante cambios.",
+    details: [
+      "Métrica de Independencia: Si una clase cambia, las clases con bajo acoplamiento no se ven afectadas.",
+      "Reducción de Riesgo: Disminuye la probabilidad de fallos en cascada en el sistema.",
+      "Patrón Transversal: Se apoya en la Inyección de Dependencias (DI) e Interfaces."
+    ],
+    hint: "Minimiza dependencias directas para evitar fallos en cascada."
+  },
+  highCohesion: {
+    title: "Alta Cohesión (High Cohesion)",
+    description: "Medida del grado de concentración de las responsabilidades dentro de un mismo módulo o clase. Un componente altamente cohesivo realiza tareas fuertemente relacionadas.",
+    details: [
+      "Foco Operativo: Todas las funciones y propiedades de la clase cooperan para lograr un único objetivo lógico.",
+      "Mantenibilidad: Facilita la lectura y razonamiento sobre el módulo sin distracciones de lógica ajena.",
+      "Relación directa con SRP: SRP es la regla operativa SOLID de la Alta Cohesión."
+    ],
+    hint: "Tareas fuertemente vinculadas dentro de una misma clase."
+  },
+  graspPolymorphism: {
+    title: "Polimorfismo GRASP (Polymorphism)",
+    description: "Asignar la responsabilidad de comportamientos que varían según el tipo a los propios objetos mediante interfaces o contratos polimórficos, en lugar de usar estructuras condicionales (if/switch).",
+    details: [
+      "Eliminación de Condicionales: Reemplaza escaleras `switch(tipo)` por despachos dinámicos polimórficos.",
+      "Facilidad de Extensión: Agregar un nuevo comportamiento no altera el código cliente existente.",
+      "Base esencial del patrón Strategy y State."
+    ],
+    hint: "Despacho dinámico por tipos en lugar de escaleras de `if/switch`."
+  },
+  indirection: {
+    title: "Indirección (Indirection)",
+    description: "Asignar la responsabilidad de mediación entre dos o más componentes a un objeto intermedio, evitando el acoplamiento directo entre ellos.",
+    details: [
+      "Mediador Intermedio: Crea un puente de comunicación para desacoplar emisor y receptor.",
+      "Reutilización: Permite variar los extremos independientemente.",
+      "Ejemplos: Adaptadores, Facades, Bus de Eventos, Mediadores."
+    ],
+    hint: "Introduce un objeto intermedio para evitar que A conozca a B directamente."
+  },
+
+  // CLEAN CODE & PRINCIPIOS PRAGMÁTICOS
+  dry: {
+    title: "DRY (Don't Repeat Yourself)",
+    description: "Todo conocimiento o lógica de negocio debe tener una representación única, inequívoca y autoritativa dentro del sistema.",
+    details: [
+      "Single Source of Truth: Evita la duplicación de reglas de negocio y algoritmos.",
+      "Cuándo NO aplicar DRY: Duplicar código incidental o de pruebas es preferible a una abstracción prematura acoplada.",
+      "Reducción de Bugs: Un cambio de regla se actualiza en un solo punto."
+    ],
+    hint: "Una única fuente de verdad para cada regla de negocio."
+  },
+  kiss: {
+    title: "KISS (Keep It Simple, Stupid)",
+    description: "Los sistemas funcionan mejor si se mantienen simples en lugar de complejos; la simplicidad debe ser una meta clave en el diseño y la sobre-ingeniería debe evitarse.",
+    details: [
+      "Anti Over-engineering: Evita patrones innecesarios o jerarquías complejas para problemas sencillos.",
+      "Legibilidad Primaria: El código se lee 10 veces más de lo que se escribe; priorizar la claridad.",
+      "Refactorización Constante: Simplificar métodos extensos en funciones pequeñas y declarativas."
+    ],
+    hint: "La simplicidad deliberada sobre la complejidad innecesaria."
+  },
+  yagni: {
+    title: "YAGNI (You Aren't Gonna Need It)",
+    description: "No agregues funcionalidad hasta que sea estrictamente necesaria hoy. Evita la sobre-ingeniería basada en especulaciones del futuro.",
+    details: [
+      "Eliminación de Código Muerto: Previene escribir interfaces, parámetros o métodos 'por si acaso' en el futuro.",
+      "Aceleración de Entregas: Reduce la carga de mantenimiento y pruebas sobre código no utilizado.",
+      "Evolución Just-in-Time: Diseña código extensible (OCP), pero implementa únicamente los casos de uso actuales."
+    ],
+    hint: "No construyas soluciones para problemas hipotéticos que aún no existen."
+  },
+  lawOfDemeter: {
+    title: "Ley de Demeter (Principio del Menor Conocimiento)",
+    description: "Un objeto debe hablar únicamente con sus amigos inmediatos (sus campos, sus parámetros y objetos que él mismo instancie), sin navegar por la estructura interna de terceros.",
+    details: [
+      "Evita el encadenamiento de llamadas (Train Wrecks): No hacer `a.getB().getC().getD().doSomething()`.",
+      "Encapsulación Profunda: Exponer métodos de alto nivel (`a.doAction()`) que deleguen internamente.",
+      "Bajo Acoplamiento: Protege al cliente de cambios en el grafo de objetos internos."
+    ],
+    hint: "Solo habla con tus amigos inmediatos; evita cadenas `a.getB().getC().doAction()`."
+  },
+  compositionOverInheritance: {
+    title: "Composición sobre Herencia (Composition Over Inheritance)",
+    description: "Es preferible diseñar clases compuestas que contengan instancias de objetos con las funcionalidades deseadas a heredar de una jerarquía de clases rígida.",
+    details: [
+      "Evita el Fragile Base Class Problem: Cambios en clases padre no rompen subclases insospechadamente.",
+      "Flexibilidad en Tiempo de Ejecución: Permite intercambiar comportamientos dinámicamente inyectando componentes.",
+      "Evita la Explosión Combinatoria de Clases: No necesitas crear `FlyingSwimmingWalkingAnimal` mediante herencia múltiple."
+    ],
+    hint: "Combina comportamientos mediante objetos compuestos en lugar de jerarquías de herencia rígidas."
+  },
+
+  // TOOLING POLÍGLOTA
+  pnpmContentAddressable: {
+    title: "pnpm & Content-Addressable Store",
+    description: "Gestor de paquetes de TypeScript/Node de ultra-alta velocidad que almacena archivos en un almacén global por direccionamiento de contenido y los vincula mediante enlaces duros (hard links / symlinks).",
+    details: [
+      "Ahorro Masivo de Disco: Los paquetes se guardan una sola vez en el sistema global y se enlazan simbólicamente, ahorrando decenas de Gigabytes en `node_modules`.",
+      "Protección contra Dependencias Fantasma: A diferencia del árbol plano vulnerable de npm/yarn, pnpm no permite importar paquetes no declarados en el `package.json`.",
+      "Soporte Nativo de Monorepos: Maneja workspaces con `pnpm-workspace.yaml` de forma atómica."
+    ],
+    hint: "Hard links globales y symlinks para neutralizar dependencias fantasma y ahorrar disco."
+  },
+  turborepoCaching: {
+    title: "Turborepo & Remote Build Caching",
+    description: "Sistema de construcción de alta velocidad para monorepos que calcula hashes de entradas y salidas para omitir tareas ya ejecutadas.",
+    details: [
+      "Caché Incremental: Si el código de un paquete no cambió, Turborepo restaura el resultado en milisegundos sin compilar de nuevo.",
+      "Ejecución Concurrente: Paraleleiza tareas respetando el grafo de dependencias entre paquetes del monorepo.",
+      "Caché Remoto Compartido: Permite que todo el equipo se beneficie de builds previa compilados por CI/CD."
+    ],
+    hint: "Omite ejecuciones de build/test comparando hashes de entrada y salida en monorepos."
+  },
+  devcontainers: {
+    title: "Devcontainers (Entornos de Desarrollo como Código)",
+    description: "Estándar abierto que permite definir y encapsular el entorno completo de desarrollo (herramientas, SDKs de TypeScript/Python/Go/Java, extensiones del IDE) dentro de un contenedor Docker.",
+    details: [
+      "Eliminación de 'En mi máquina funciona': Todos los desarrolladores del equipo trabajan sobre contenedores con idénticas versiones de software e independientemente del OS host (Mac, Windows, Linux).",
+      "Onboarding Instantáneo: Un nuevo miembro clona el repo y abre el Devcontainer; el IDE configura automáticamente linters, formateadores y dependencias.",
+      "Especificación Abierta: Archivo `.devcontainer/devcontainer.json` compatible con VS Code, GitHub Codespaces y DevPod."
+    ],
+    hint: "Entorno de desarrollo idéntico para todo el equipo empaquetado dentro de Docker."
+  },
+  ruffPython: {
+    title: "Ruff & uv (Tooling de Python escrito en Rust)",
+    description: "Nueva generación de herramientas para Python escritas en Rust que reemplazan a Flake8, Black, isort y pip con aceleración de 10x a 100x.",
+    details: [
+      "Consolidación: Ruff reemplaza múltiples linters y formateadores de Python en un único ejecutable sin dependencias.",
+      "uv Package Manager: Administrador de dependencias ultra-rápido que resuelve e instala paquetes en milisegundos usando paralelismo en Rust.",
+      "Configuración Unificada: Todo se configura limpiamente en el archivo estándar `pyproject.toml`."
+    ],
+    hint: "Linter, formateador y gestor de paquetes de Python en Rust de alta velocidad."
+  },
+  golangciLint: {
+    title: "golangci-lint & go mod (Tooling de Go)",
+    description: "Agregador de linters estáticos de Go de alto rendimiento que ejecuta decenas de analizadores de forma paralela usando la memoria AST compartida.",
+    details: [
+      "Análisis Concurrente: Reutiliza el árbol de sintaxis abstracta (AST) de Go para ejecutar más de 40 linters en una sola pasada.",
+      "Gestión Nativa de Módulos: Integración directa con `go mod` y el caché nativo de `go build`.",
+      "Configuración `.golangci.yml`: Permite habilitar analizadores de seguridad (gosec), complejidad (gocyclo) y fugas de memoria."
+    ],
+    hint: "Agregador concurrente de linters de Go que reutiliza el AST en memoria."
+  },
+  spotlessJava: {
+    title: "Spotless & Gradle Build Caching (Tooling de Java)",
+    description: "Formateador de código multitarea para Java/JVM y sistema de construcción incremental acelerado por caché de Gradle y Maven Wrapper.",
+    details: [
+      "Spotless Plugin: Aplica formateo estricto de Java (Google Java Style, Palantir) en pipelines CI y pre-commits sin conflictos de linter.",
+      "Gradle Incremental Build: Compara las entradas y salidas de tareas para evitar recompilar clases no modificadas.",
+      "Wrapper Autocontenido: `./gradlew` o `./mvnw` garantiza que todos los desarrolladores compilen exactamente con la misma versión del SDK de Java."
+    ],
+    hint: "Formateo estricto de Java con Spotless y compilación incremental con Gradle Build Cache."
+  },
 
   // SRE & RESILIENCIA
   circuitBreaker: {
@@ -247,6 +401,16 @@ export const technicalDefinitions: Record<string, TechnicalDefinition> = {
       "Logs: Registros textuales estructurados con contexto temporal e identificadores asociados a la traza actual para depurar fallos específicos."
     ],
     hint: "Instrumentación unificada de Métricas, Trazas y Logs para diagnosticar sistemas distribuidos."
+  },
+  p99Latency: {
+    title: "Percentil 99 de Latencia (P99 Latency & Tail Latency)",
+    description: "Métrica estándar en ingeniería de software y System Design que indica el umbral de tiempo en el que se procesa el 99% de todas las peticiones, aislando el 1% de casos atípicos.",
+    details: [
+      "P99 vs Promedio: En arquitecturas distribuidas el promedio oculta colas graves de latencia (ej. 99 solicitudes de 1ms y 1 de 10.000ms dan un promedio de ~100ms pero arruinan la experiencia del 1%).",
+      "Tail Latency Amplification: En microservicios con abanico de llamadas paralelas (fan-out), si 1 petición depende de 100 servicios con P99 de 10ms, el 63.4% de los usuarios sufrirá la latencia del P99.",
+      "Control de SLAs/SLOs: Permite monitorear el cumplimiento de contratos de servicio y enfocar la optimización en los cuellos de botella reales del sistema."
+    ],
+    hint: "El 99% de los requests tardaron X ms o menos. El promedio miente; el P99 mide la realidad a escala."
   },
   canaryIstio: {
     title: "Despliegues Canary con Service Mesh (Istio)",

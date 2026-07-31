@@ -10,7 +10,7 @@ export const composite: Pattern = {
     'Principio de Abierto/Cerrado (OCP): puedes introducir nuevos tipos de elementos sin romper el código cliente existente.',
     'Simplifica el código cliente al evitar distinguir entre un objeto hoja y un contenedor.'
   ],
-  analogy: 'Rescatado de *Mi granito de Java*, piensa en el Sistema de Archivos de tu computadora. Tienes un elemento base (Componente) que puede ser un archivo individual (Hoja/SimpleFile) o una carpeta (Composite/Folder) que a su vez contiene archivos y otras carpetas. Al calcular el tamaño total, ejecutas la misma acción "getSize()" recursivamente sin importar la ramificación.',
+  analogy: 'Piensa en el Sistema de Archivos de tu computadora. Tienes un elemento base (Componente) que puede ser un archivo individual (Hoja/SimpleFile) o una carpeta (Composite/Folder) que a su vez contiene archivos y otras carpetas. Al calcular el tamaño total, ejecutas la misma acción "getSize()" recursivamente sin importar la ramificación.',
   code: {
     java: `// Java 21 - Estructura de Directorios y Archivos
 import java.util.ArrayList;

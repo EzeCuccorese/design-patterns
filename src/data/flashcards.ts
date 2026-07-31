@@ -295,5 +295,71 @@ export const flashcards: Flashcard[] = [
     front: "¿Qué es un Positive Lookbehind en una expresión regular y cuál es su sintaxis?",
     back: "Es un aserto de búsqueda que permite verificar si un patrón específico está justo antes de la coincidencia actual, sin incluir dichos caracteres en la captura final. Sintaxis: (?<=patrón).",
     hint: "Valida el texto anterior sin consumirlo."
+  },
+  {
+    id: 49,
+    front: "¿Qué representa la métrica P99 de latencia y por qué se prefiere sobre el promedio?",
+    back: technicalDefinitions.p99Latency.description + " El promedio es engañoso en distribuciones asimétricas (Long-Tail), ocultando cuando el 1% de los usuarios sufre bloqueos o retrasos graves.",
+    hint: technicalDefinitions.p99Latency.hint || ""
+  },
+  {
+    id: 50,
+    front: "¿En qué consiste el efecto Fan-out o amplificación de Tail Latency en arquitecturas de microservicios?",
+    back: "Ocurre cuando una sola petición cliente realiza N llamadas distribuidas en paralelo. Si cada servicio tiene un P99 de 10ms, la probabilidad de que la petición completa sufra la latencia del P99 escala a 1 - (0.99)^N. Para 100 llamadas, el 63.4% de los usuarios experimentará la latencia lenta.",
+    hint: "La probabilidad de retraso crece exponencialmente con la cantidad de llamadas distribuidas paralelas."
+  },
+  {
+    id: 51,
+    front: "¿Qué prohíbe la Ley de Demeter (Principio del Menor Conocimiento) en el diseño de clases?",
+    back: "Prohíbe la navegación profunda por grafos de objetos internos ('Train Wrecks' como a.getB().getC().doSomething()). Un objeto solo debe comunicarse con sus campos directos, sus parámetros o los objetos que instancie.",
+    hint: technicalDefinitions.lawOfDemeter.hint || ""
+  },
+  {
+    id: 52,
+    front: "¿Por qué se recomienda favorecer la Composición sobre la Herencia (Composition Over Inheritance)?",
+    back: "Porque la herencia acopla rígidamente las subclases a la implementación de la clase padre (Fragile Base Class Problem). La composición permite combinar comportamientos dinámicamente en tiempo de ejecución inyectando componentes.",
+    hint: technicalDefinitions.compositionOverInheritance.hint || ""
+  },
+  {
+    id: 53,
+    front: "¿Cuál es la distinción exacta entre Inversión de Dependencias (DIP), Inyección de Dependencias (DI) y un Contenedor IoC?",
+    back: "DIP es el principio abstracto (los módulos de alto nivel dependen de interfaces). DI es el patrón técnico concreto de pasar las dependencias por constructor. IoC Container es el framework (Spring, NestJS) que automatiza su ciclo de vida.",
+    hint: "Principio abstracto (DIP) vs Patrón técnico (DI) vs Framework/Tooling (IoC Container)."
+  },
+  {
+    id: 54,
+    front: "¿Qué soluciona el principio GRASP de Indirección (Indirection)?",
+    back: "Introduce un objeto intermedio (Mediador, Adaptador, Bus de Eventos) para actuar como puente de comunicación entre dos componentes, evitando que estén acoplados directamente entre sí.",
+    hint: technicalDefinitions.indirection.hint || ""
+  },
+  {
+    id: 55,
+    front: "¿En qué se diferencian los principios de diseño YAGNI y KISS?",
+    back: "YAGNI se enfoca en NO construir funcionalidades o parámetros 'por si acaso' en el futuro. KISS se enfoca en mantener la solución actual lo más simple posible evitando la sobre-ingeniería.",
+    hint: "YAGNI evita código especulativo futuro; KISS evita sobre-ingeniería en el presente."
+  },
+  {
+    id: 56,
+    front: "¿Por qué Ruff y uv han reemplazado a herramientas tradicionales de Python como Flake8, Black e isort?",
+    back: "Porque están escritos en Rust y analizan/formatean e instalan dependencias entre 10x y 100x más rápido, consolidando múltiples herramientas en un único ejecutable sin dependencias.",
+    hint: technicalDefinitions.ruffPython.hint || ""
+  },
+  {
+    id: 57,
+    front: "¿Cómo pnpm logra ahorrar gigabytes de memoria en disco en comparación con npm y yarn?",
+    back: "Utiliza un almacén global por direccionamiento de contenido (Content-Addressable Store) donde guarda cada versión de un paquete una sola vez en el sistema y crea enlaces simbólicos (symlinks/hard links) en los proyectos.",
+    hint: technicalDefinitions.pnpmContentAddressable.hint || ""
+  },
+  {
+    id: 58,
+    front: "¿Qué problema de ingeniería resuelven los Devcontainers (.devcontainer/devcontainer.json)?",
+    back: "Eliminan la incompatibilidad de entorno ('en mi máquina funciona') aislando y empaquetando todo el entorno de desarrollo (SDKs de TS/Py/Go/Java, extensiones del IDE) dentro de contenedores Docker.",
+    hint: technicalDefinitions.devcontainers.hint || ""
+  },
+  {
+    id: 59,
+    front: "¿Cómo optimiza golangci-lint la ejecución de más de 40 linters en proyectos de Go?",
+    back: "Reutiliza el mismo árbol de sintaxis abstracta (AST) de Go cargado en memoria de forma concurrente, evitando re-parsear el código para cada linter individual.",
+    hint: technicalDefinitions.golangciLint.hint || ""
   }
 ];

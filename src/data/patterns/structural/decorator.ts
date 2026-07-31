@@ -10,7 +10,7 @@ export const decorator: Pattern = {
     'Principio de Responsabilidad Única (SRP): divide una clase que implementa muchas variaciones en clases más pequeñas.',
     'Se pueden añadir o quitar comportamientos en tiempo de ejecución combinando múltiples decoradores.'
   ],
-  analogy: 'Rescatado de *Mi granito de Java*, piensa en preparar un Café. Tienes un café base (Café Solo). Puedes decorarlo (envolverlo) dinámicamente añadiendo ingredientes: Leche, Azúcar, Chocolate, Crema. Cada ingrediente es un Decorador que añade un costo y cambia la descripción, pero sigue siendo un Café.',
+  analogy: 'Piensa en preparar un Café. Tienes un café base (Café Solo). Puedes decorarlo (envolverlo) dinámicamente añadiendo ingredientes: Leche, Azúcar, Chocolate, Crema. Cada ingrediente es un Decorador que añade un costo y cambia la descripción, pero sigue siendo un Café.',
   code: {
     java: `// Java 21 - Decoración de bebidas con envoltorios (Wrappers)
 interface Coffee {
