@@ -70,29 +70,31 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
       
       {/* Header Banner */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%)',
-        border: '1px solid var(--accent-color, #6366f1)',
+        backgroundColor: 'var(--bg-card)',
+        border: '1px solid var(--border-color)',
         borderRadius: '16px',
         padding: '28px',
         marginBottom: '24px',
         position: 'relative',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        boxShadow: 'var(--shadow-md)',
+        backdropFilter: 'var(--glass-blur)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '12px' }}>
           <div style={{
-            background: 'var(--accent-color, #6366f1)',
+            background: 'var(--accent)',
             padding: '12px',
             borderRadius: '12px',
-            color: '#fff',
+            color: '#ffffff',
             display: 'flex'
           }}>
             <Shield size={28} />
           </div>
           <div>
-            <h1 style={{ fontSize: '24px', fontWeight: '800', margin: 0, color: 'var(--text-primary, #fff)' }}>
+            <h1 style={{ fontSize: '24px', fontWeight: '800', margin: 0, color: 'var(--text-primary)' }}>
               Evaluación & Guía de Estudio Nivel Senior / Staff Engineer
             </h1>
-            <p style={{ margin: '4px 0 0 0', color: 'var(--text-secondary, #aaa)', fontSize: '14px' }}>
+            <p style={{ margin: '4px 0 0 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
               Resolución paso a paso, análisis de tradeoffs y arquitectura distribuida sin duplicación (Principio DRY con referencias navegables).
             </p>
           </div>
@@ -105,14 +107,14 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
             style={{
               padding: '10px 20px',
               borderRadius: '8px',
-              border: 'none',
+              border: activeTab === 'study' ? '1px solid var(--accent)' : '1px solid var(--border-color)',
               fontWeight: '600',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              backgroundColor: activeTab === 'study' ? 'var(--accent-color, #6366f1)' : 'var(--bg-secondary, rgba(255,255,255,0.08))',
-              color: activeTab === 'study' ? '#fff' : 'var(--text-secondary, #ccc)',
+              backgroundColor: activeTab === 'study' ? 'var(--accent)' : 'var(--bg-secondary)',
+              color: activeTab === 'study' ? '#ffffff' : 'var(--text-primary)',
               transition: 'all 0.2s ease'
             }}
           >
@@ -125,14 +127,14 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
             style={{
               padding: '10px 20px',
               borderRadius: '8px',
-              border: 'none',
+              border: activeTab === 'simulation' ? '1px solid var(--accent)' : '1px solid var(--border-color)',
               fontWeight: '600',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              backgroundColor: activeTab === 'simulation' ? 'var(--accent-color, #6366f1)' : 'var(--bg-secondary, rgba(255,255,255,0.08))',
-              color: activeTab === 'simulation' ? '#fff' : 'var(--text-secondary, #ccc)',
+              backgroundColor: activeTab === 'simulation' ? 'var(--accent)' : 'var(--bg-secondary)',
+              color: activeTab === 'simulation' ? '#ffffff' : 'var(--text-primary)',
               transition: 'all 0.2s ease'
             }}
           >
@@ -160,12 +162,13 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
                 style={{
                   padding: '6px 14px',
                   borderRadius: '20px',
-                  border: '1px solid var(--border-color, #333)',
+                  border: selectedPillar === filter.id ? '1px solid var(--accent)' : '1px solid var(--border-color)',
                   fontSize: '13px',
                   fontWeight: '500',
                   cursor: 'pointer',
-                  backgroundColor: selectedPillar === filter.id ? 'var(--accent-color, #6366f1)' : 'transparent',
-                  color: selectedPillar === filter.id ? '#fff' : 'var(--text-secondary, #aaa)'
+                  backgroundColor: selectedPillar === filter.id ? 'var(--accent)' : 'var(--bg-card)',
+                  color: selectedPillar === filter.id ? '#ffffff' : 'var(--text-secondary)',
+                  transition: 'all 0.2s ease'
                 }}
               >
                 {filter.label}
@@ -183,11 +186,12 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
                 <div
                   key={item.id}
                   style={{
-                    backgroundColor: 'var(--bg-secondary, #1a1a2e)',
-                    border: isExpanded ? `1px solid ${badge.color}` : '1px solid var(--border-color, #333)',
+                    backgroundColor: 'var(--bg-card)',
+                    border: isExpanded ? `1px solid ${badge.color}` : '1px solid var(--border-color)',
                     borderRadius: '12px',
                     overflow: 'hidden',
-                    transition: 'all 0.2s ease'
+                    transition: 'all 0.2s ease',
+                    boxShadow: 'var(--shadow-sm)'
                   }}
                 >
                   {/* Encabezado del caso */}
@@ -199,7 +203,8 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
                       display: 'flex',
                       alignItems: 'flex-start',
                       justifyContent: 'space-between',
-                      backgroundColor: 'rgba(255, 255, 255, 0.02)'
+                      backgroundColor: isExpanded ? 'var(--accent-light)' : 'transparent',
+                      transition: 'background-color 0.2s ease'
                     }}
                   >
                     <div style={{ flex: 1 }}>
@@ -217,55 +222,63 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
                           {badge.label}
                         </span>
                         {item.tags.map(tag => (
-                          <span key={tag} style={{ fontSize: '11px', color: 'var(--text-muted, #888)', background: 'rgba(255,255,255,0.05)', padding: '2px 6px', borderRadius: '4px' }}>
+                          <span key={tag} style={{
+                            fontSize: '11px',
+                            color: 'var(--text-muted)',
+                            background: 'var(--bg-secondary)',
+                            border: '1px solid var(--border-color)',
+                            padding: '2px 6px',
+                            borderRadius: '4px'
+                          }}>
                             #{tag}
                           </span>
                         ))}
                       </div>
-                      <h3 style={{ margin: '0 0 4px 0', fontSize: '18px', fontWeight: '700', color: 'var(--text-primary, #fff)' }}>
+                      <h3 style={{ margin: '0 0 4px 0', fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)' }}>
                         {item.title}
                       </h3>
-                      <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-secondary, #aaa)' }}>
+                      <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-secondary)' }}>
                         {item.subtitle}
                       </p>
                     </div>
 
-                    <div style={{ marginLeft: '16px', color: 'var(--text-muted, #888)' }}>
+                    <div style={{ marginLeft: '16px', color: 'var(--text-muted)' }}>
                       {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     </div>
                   </div>
 
                   {/* Cuerpo Expandible con Resolución Paso a Paso */}
                   {isExpanded && (
-                    <div style={{ padding: '0 20px 24px 20px', borderTop: '1px solid var(--border-color, #2a2a3c)' }}>
+                    <div style={{ padding: '0 20px 24px 20px', borderTop: '1px solid var(--border-color)' }}>
                       
                       {/* Contexto del Escenario */}
                       <div style={{
                         margin: '20px 0',
                         padding: '16px',
-                        backgroundColor: 'rgba(255,255,255,0.03)',
+                        backgroundColor: 'var(--bg-secondary)',
                         borderRadius: '8px',
-                        borderLeft: '4px solid var(--accent-color, #6366f1)'
+                        border: '1px solid var(--border-color)',
+                        borderLeft: '4px solid var(--accent)'
                       }}>
-                        <h4 style={{ margin: '0 0 6px 0', fontSize: '14px', color: 'var(--text-primary, #fff)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <AlertTriangle size={16} className="text-amber-400" />
+                        <h4 style={{ margin: '0 0 6px 0', fontSize: '14px', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <AlertTriangle size={16} className="text-amber-500" />
                           <span>Escenario de Producción</span>
                         </h4>
-                        <p style={{ margin: '0 0 12px 0', fontSize: '13px', lineHeight: '1.5', color: 'var(--text-secondary, #ccc)' }}>
+                        <p style={{ margin: '0 0 12px 0', fontSize: '13px', lineHeight: '1.5', color: 'var(--text-secondary)' }}>
                           {item.scenario}
                         </p>
-                        <h4 style={{ margin: '12px 0 6px 0', fontSize: '14px', color: 'var(--text-primary, #fff)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <Zap size={16} className="text-indigo-400" />
+                        <h4 style={{ margin: '12px 0 6px 0', fontSize: '14px', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <Zap size={16} className="text-indigo-500" />
                           <span>El Desafío Técnico</span>
                         </h4>
-                        <p style={{ margin: 0, fontSize: '13px', lineHeight: '1.5', color: 'var(--text-secondary, #ccc)', fontWeight: '500' }}>
+                        <p style={{ margin: 0, fontSize: '13px', lineHeight: '1.5', color: 'var(--text-secondary)', fontWeight: '500' }}>
                           {item.challenge}
                         </p>
                       </div>
 
                       {/* Enlaces DRY a la aplicación */}
                       <div style={{ marginBottom: '24px' }}>
-                        <h4 style={{ fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-muted, #888)', margin: '0 0 10px 0' }}>
+                        <h4 style={{ fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-muted)', margin: '0 0 10px 0' }}>
                           Referencias Teóricas en la App (DRY)
                         </h4>
                         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -276,15 +289,16 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
                               style={{
                                 padding: '6px 12px',
                                 borderRadius: '6px',
-                                border: '1px solid var(--accent-color, #6366f1)',
-                                backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                                color: 'var(--accent-color, #818cf8)',
+                                border: '1px solid var(--accent)',
+                                backgroundColor: 'var(--accent-light)',
+                                color: 'var(--accent)',
                                 fontSize: '12px',
                                 fontWeight: '600',
                                 cursor: 'pointer',
                                 display: 'inline-flex',
                                 alignItems: 'center',
-                                gap: '6px'
+                                gap: '6px',
+                                transition: 'all 0.2s ease'
                               }}
                             >
                               <ExternalLink size={12} />
@@ -295,7 +309,7 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
                       </div>
 
                       {/* Paso a Paso */}
-                      <h4 style={{ fontSize: '16px', color: 'var(--text-primary, #fff)', margin: '24px 0 16px 0', borderBottom: '1px solid var(--border-color, #333)', paddingBottom: '8px' }}>
+                      <h4 style={{ fontSize: '16px', color: 'var(--text-primary)', margin: '24px 0 16px 0', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
                         Resolución Arquitectónica Paso a Paso
                       </h4>
 
@@ -304,10 +318,10 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
                           <div
                             key={step.stepNumber}
                             style={{
-                              backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                              backgroundColor: 'var(--bg-secondary)',
                               borderRadius: '8px',
                               padding: '16px',
-                              border: '1px solid var(--border-color, #2a2a3a)'
+                              border: '1px solid var(--border-color)'
                             }}
                           >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
@@ -315,8 +329,8 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
                                 width: '26px',
                                 height: '26px',
                                 borderRadius: '50%',
-                                backgroundColor: 'var(--accent-color, #6366f1)',
-                                color: '#fff',
+                                backgroundColor: 'var(--accent)',
+                                color: '#ffffff',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -325,25 +339,25 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
                               }}>
                                 {step.stepNumber}
                               </span>
-                              <h5 style={{ margin: 0, fontSize: '15px', color: 'var(--text-primary, #fff)' }}>
+                              <h5 style={{ margin: 0, fontSize: '15px', color: 'var(--text-primary)' }}>
                                 {step.title}
                               </h5>
                             </div>
-                            <p style={{ margin: '0 0 10px 0', fontSize: '13px', color: 'var(--text-secondary, #aaa)', lineHeight: '1.4' }}>
+                            <p style={{ margin: '0 0 10px 0', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
                               {step.description}
                             </p>
-                            <ul style={{ margin: 0, paddingLeft: '20px', color: 'var(--text-secondary, #ccc)', fontSize: '13px', lineHeight: '1.5' }}>
+                            <ul style={{ margin: 0, paddingLeft: '20px', color: 'var(--text-secondary)', fontSize: '13px', lineHeight: '1.5' }}>
                               {step.details.map((dt, i) => (
                                 <li key={i} style={{ marginBottom: '4px' }}>{dt}</li>
                               ))}
                             </ul>
 
                             {step.codeSnippet && (
-                              <div style={{ marginTop: '12px', backgroundColor: '#0d1117', padding: '12px', borderRadius: '6px', overflowX: 'auto', border: '1px solid #30363d' }}>
+                              <div style={{ marginTop: '12px', backgroundColor: '#0f1422', padding: '12px', borderRadius: '6px', overflowX: 'auto', border: '1px solid var(--border-color)' }}>
                                 <div style={{ fontSize: '11px', color: '#8b949e', marginBottom: '6px', textTransform: 'uppercase' }}>
                                   Código Explicativo ({step.codeSnippet.language})
                                 </div>
-                                <pre style={{ margin: 0, fontSize: '12px', fontFamily: 'monospace', color: '#e6edf3' }}>
+                                <pre style={{ margin: 0, fontSize: '12px', fontFamily: 'monospace', color: '#f8f8f2' }}>
                                   <code>{step.codeSnippet.code}</code>
                                 </pre>
                               </div>
@@ -355,7 +369,7 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
                       {/* Análisis de Tradeoffs */}
                       {item.tradeoffAnalysis.length > 0 && (
                         <div style={{ marginTop: '28px' }}>
-                          <h4 style={{ fontSize: '16px', color: 'var(--text-primary, #fff)', margin: '0 0 14px 0' }}>
+                          <h4 style={{ fontSize: '16px', color: 'var(--text-primary)', margin: '0 0 14px 0' }}>
                             Análisis de Tradeoffs de Ingeniería
                           </h4>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -366,16 +380,16 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
                                   padding: '14px',
                                   borderRadius: '8px',
                                   border: to.isRecommended ? '1px solid #10b981' : '1px solid #ef4444',
-                                  backgroundColor: to.isRecommended ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)'
+                                  backgroundColor: to.isRecommended ? 'rgba(16, 185, 129, 0.08)' : 'rgba(239, 68, 68, 0.08)'
                                 }}
                               >
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                                  {to.isRecommended ? <CheckCircle size={18} className="text-emerald-400" /> : <AlertTriangle size={18} className="text-red-400" />}
+                                  {to.isRecommended ? <CheckCircle size={18} className="text-emerald-500" /> : <AlertTriangle size={18} className="text-rose-500" />}
                                   <span style={{ fontWeight: '700', fontSize: '14px', color: to.isRecommended ? '#10b981' : '#ef4444' }}>
                                     {to.option}
                                   </span>
                                 </div>
-                                <p style={{ fontSize: '13px', margin: '4px 0 8px 0', color: 'var(--text-secondary, #ccc)' }}>
+                                <p style={{ fontSize: '13px', margin: '4px 0 8px 0', color: 'var(--text-secondary)' }}>
                                   <strong>Veredicto:</strong> {to.verdict}
                                 </p>
                               </div>
@@ -396,17 +410,18 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
       {/* MODO SIMULADOR CRONOMETRADO */}
       {activeTab === 'simulation' && (
         <div style={{
-          backgroundColor: 'var(--bg-secondary, #1a1a2e)',
+          backgroundColor: 'var(--bg-card)',
           borderRadius: '12px',
           padding: '32px',
-          border: '1px solid var(--border-color, #333)',
-          textAlign: 'center'
+          border: '1px solid var(--border-color)',
+          textAlign: 'center',
+          boxShadow: 'var(--shadow-sm)'
         }}>
-          <Award size={48} className="text-indigo-400" style={{ margin: '0 auto 16px auto' }} />
-          <h2 style={{ fontSize: '22px', margin: '0 0 8px 0', color: 'var(--text-primary, #fff)' }}>
+          <Award size={48} className="text-indigo-500" style={{ margin: '0 auto 16px auto' }} />
+          <h2 style={{ fontSize: '22px', margin: '0 0 8px 0', color: 'var(--text-primary)' }}>
             Simulador de Evaluación de Nivel Senior / Staff
           </h2>
-          <p style={{ color: 'var(--text-secondary, #aaa)', fontSize: '14px', maxWidth: '600px', margin: '0 auto 24px auto', lineHeight: '1.5' }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '14px', maxWidth: '600px', margin: '0 auto 24px auto', lineHeight: '1.5' }}>
             Pone a prueba tus habilidades de toma de decisiones bajo tiempo limitado (15 minutos). Recibirás un desglose con enlaces directos para repasar tus puntos débiles.
           </p>
 
@@ -415,15 +430,16 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
             style={{
               padding: '12px 24px',
               borderRadius: '8px',
-              backgroundColor: 'var(--accent-color, #6366f1)',
-              color: '#fff',
+              backgroundColor: 'var(--accent)',
+              color: '#ffffff',
               fontWeight: '700',
               fontSize: '14px',
               border: 'none',
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px'
+              gap: '8px',
+              transition: 'all 0.2s ease'
             }}
           >
             <BookOpen size={16} />
@@ -435,3 +451,5 @@ export const SeniorStaffExam: React.FC<SeniorStaffExamProps> = ({
     </div>
   );
 };
+
+export default SeniorStaffExam;

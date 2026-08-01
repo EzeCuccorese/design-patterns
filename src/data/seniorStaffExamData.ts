@@ -130,7 +130,7 @@ app.post('/api/v1/webhooks/:tenantId', async (req, res) => {
     dryLinks: [
       { label: 'Ver Patrón Observer', targetPatternId: 'observer' },
       { label: 'Ver Patrón Strategy', targetPatternId: 'strategy' },
-      { label: 'Ver Patrón Chain of Responsibility', targetPatternId: 'chain-of-responsibility' },
+      { label: 'Ver Patrón Chain of Responsibility', targetPatternId: 'chain' },
       { label: 'Ver Guía de Arquitecturas Distribuidas & Resiliencia', targetTopicId: 'resilience-eda' },
       { label: 'Ver Guía de SRE, DevOps e Infraestructura', targetTopicId: 'sre-devops' }
     ]
@@ -242,7 +242,7 @@ export class SendNotificationUseCase {
     ],
     dryLinks: [
       { label: 'Ver Patrón Adapter', targetPatternId: 'adapter' },
-      { label: 'Ver Patrón Factory Method', targetPatternId: 'factory-method' },
+      { label: 'Ver Patrón Factory Method', targetPatternId: 'factory' },
       { label: 'Ver Sección SOLID & Código Limpio', targetTopicId: 'solid-clean' },
       { label: 'Ver Catálogo de Refactorización', targetView: 'refactor' }
     ]

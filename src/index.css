@@ -8,6 +8,7 @@
   /* Modo Claro (Predeterminado) */
   --bg-app: #f8fafc;
   --bg-card: rgba(255, 255, 255, 0.85);
+  --bg-secondary: #f1f5f9;
   --bg-sidebar: #ffffff;
   --border-color: #e2e8f0;
   
@@ -38,6 +39,7 @@
   /* Modo Oscuro */
   --bg-app: #090d16;
   --bg-card: rgba(17, 24, 39, 0.7);
+  --bg-secondary: #111827;
   --bg-sidebar: #0f1422;
   --border-color: rgba(255, 255, 255, 0.08);
   
@@ -730,6 +732,15 @@ pre[class*="language-"] {
 }
 .control-btn:hover:not(.btn-primary) {
   background-color: var(--border-color);
+}
+.control-btn.btn-primary {
+  background-color: var(--accent);
+  color: #ffffff !important;
+  border: 1px solid var(--accent);
+}
+.control-btn.btn-primary:hover:not(:disabled) {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
 }
 
 /* 3. Estilos para el Simulador de Examen */
